@@ -88,14 +88,136 @@ export const ThemeModal: React.FC = () => {
         {/* Customization Grid */}
         <div className="space-y-6">
 
-          {/* SECTION 1: UI DESIGN MODE (Image 1 vs Image 2) */}
+          {/* SECTION 1: APPEARANCE & DISPLAY MODE (Light vs Dark vs System) */}
+          <div>
+            <div className="flex items-center justify-between mb-2.5">
+              <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+                isDark ? 'text-slate-300' : 'text-slate-700'
+              }`}>
+                <Sun className="w-4 h-4 text-amber-500" />
+                <span>1. Color &amp; Appearance Theme</span>
+              </span>
+              <span className="text-[11px] font-mono font-bold text-secondary">
+                {appearance === 'light' ? 'Light Theme (Clean White & Slate)' : appearance === 'dark' ? 'Dark Theme (Cyber & Navy Glow)' : 'System Default (Matches OS)'}
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              {/* Option: Light Mode */}
+              <button
+                type="button"
+                onClick={() => setAppearance('light')}
+                className={`p-3.5 rounded-2xl border text-left transition-all relative overflow-hidden ${
+                  appearance === 'light'
+                    ? 'border-amber-500 ring-2 ring-amber-500/40 bg-amber-500/10 shadow-lg shadow-amber-500/10'
+                    : isDark ? 'border-slate-800 bg-slate-900/50 hover:border-slate-700' : 'border-slate-200 bg-slate-50 hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center font-bold text-xs border border-amber-500/30">
+                      <Sun className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className={`text-xs font-bold block ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        Light Mode
+                      </span>
+                      <span className="text-[9px] text-amber-500 font-medium font-mono">
+                        Clean White &amp; Slate
+                      </span>
+                    </div>
+                  </div>
+                  {appearance === 'light' && (
+                    <div className="w-4 h-4 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  )}
+                </div>
+                <p className={`text-[10px] leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Ultra-clean white card backgrounds with high-contrast slate text &amp; clear borders.
+                </p>
+              </button>
+
+              {/* Option: Dark Mode */}
+              <button
+                type="button"
+                onClick={() => setAppearance('dark')}
+                className={`p-3.5 rounded-2xl border text-left transition-all relative overflow-hidden ${
+                  appearance === 'dark'
+                    ? 'border-cyan-400 ring-2 ring-cyan-400/40 bg-cyan-500/10 shadow-lg shadow-cyan-500/10'
+                    : isDark ? 'border-slate-800 bg-slate-900/50 hover:border-slate-700' : 'border-slate-200 bg-slate-50 hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs border border-cyan-500/30">
+                      <Moon className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className={`text-xs font-bold block ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        Dark Mode
+                      </span>
+                      <span className="text-[9px] text-cyan-400 font-medium font-mono">
+                        Cyber &amp; Navy Glow
+                      </span>
+                    </div>
+                  </div>
+                  {appearance === 'dark' && (
+                    <div className="w-4 h-4 rounded-full bg-cyan-400 text-slate-950 flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  )}
+                </div>
+                <p className={`text-[10px] leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Cinematic deep navy, dark glassmorphism, and glowing neon status accents.
+                </p>
+              </button>
+
+              {/* Option: Auto System */}
+              <button
+                type="button"
+                onClick={() => setAppearance('system')}
+                className={`p-3.5 rounded-2xl border text-left transition-all relative overflow-hidden ${
+                  appearance === 'system'
+                    ? 'border-purple-400 ring-2 ring-purple-400/40 bg-purple-500/10 shadow-lg shadow-purple-500/10'
+                    : isDark ? 'border-slate-800 bg-slate-900/50 hover:border-slate-700' : 'border-slate-200 bg-slate-50 hover:border-slate-300'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs border border-purple-500/30">
+                      <Monitor className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <span className={`text-xs font-bold block ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                        System Default
+                      </span>
+                      <span className="text-[9px] text-purple-400 font-medium font-mono">
+                        Matches Device OS
+                      </span>
+                    </div>
+                  </div>
+                  {appearance === 'system' && (
+                    <div className="w-4 h-4 rounded-full bg-purple-400 text-slate-950 flex items-center justify-center shrink-0">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  )}
+                </div>
+                <p className={`text-[10px] leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                  Automatically follows your device operating system preference.
+                </p>
+              </button>
+            </div>
+          </div>
+
+          {/* SECTION 2: UI DESIGN ARCHITECTURE (Image 1 vs Image 2) */}
           <div>
             <div className="flex items-center justify-between mb-2.5">
               <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
                 isDark ? 'text-slate-300' : 'text-slate-700'
               }`}>
                 <Layout className="w-4 h-4 text-amber-400" />
-                <span>1. UI Design Architecture</span>
+                <span>2. UI Design Architecture</span>
               </span>
               <span className="text-[11px] text-slate-400 font-mono">
                 {uiMode === 'bharat' ? 'Enterprise Operations Console' : 'Cyber Neon Ops Matrix'}
@@ -196,10 +318,10 @@ export const ThemeModal: React.FC = () => {
                 isDark ? 'text-slate-300' : 'text-slate-700'
               }`}>
                 <Type className="w-4 h-4 text-secondary" />
-                <span>2. Typography Style</span>
+                <span>3. Typography Style</span>
               </span>
               <span className="text-[11px] text-secondary font-mono font-bold capitalize">
-                {typography === 'linotte' ? 'Linotte (WhatsApp Screenshot)' : typography === 'tech_sans' ? 'Tech Sans' : 'Classic Serif'}
+                {typography === 'linotte' ? 'Linotte (Soft Rounded Quicksand)' : typography === 'tech_sans' ? 'Tech Sans (Plus Jakarta & Inter)' : 'Classic Serif (Devanagari & Serif)'}
               </span>
             </div>
 
@@ -274,10 +396,10 @@ export const ThemeModal: React.FC = () => {
             </div>
           </div>
 
-          {/* SECTION 3: SYSTEM TOGGLES (From WhatsApp Screenshot: Pure Black, Dynamic Island, Apple Nav) */}
+          {/* SECTION 4: SYSTEM TOGGLES (Pure Black, Dynamic Island, Apple Nav) */}
           <div className="p-4 rounded-2xl border bg-surface-container/50 border-outline-variant/30 space-y-3.5">
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block mb-1">
-              Interface Switches (From Mobile App Specification)
+              4. Interface Switches &amp; Navigation
             </span>
 
             {/* Toggle 1: Pure Black OLED */}
@@ -356,47 +478,6 @@ export const ThemeModal: React.FC = () => {
                   dynamicIsland ? 'translate-x-6' : 'translate-x-0'
                 }`} />
               </button>
-            </div>
-
-            {/* Toggle 4: Appearance Mode */}
-            <div className="flex items-center justify-between py-1 border-t border-outline-variant/20 pt-2.5">
-              <div>
-                <span className={`text-xs font-bold block ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Dark / Light Theme
-                </span>
-                <span className="text-[11px] text-slate-400">
-                  Current: {appearance.toUpperCase()} ({effectiveAppearance} active)
-                </span>
-              </div>
-              <div className="flex items-center gap-1 bg-surface-container-high p-1 rounded-xl border border-outline-variant/30">
-                <button
-                  type="button"
-                  onClick={() => setAppearance('dark')}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${
-                    appearance === 'dark' ? 'bg-cyan-500 text-slate-950' : 'text-slate-400'
-                  }`}
-                >
-                  Dark
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAppearance('light')}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${
-                    appearance === 'light' ? 'bg-orange-500 text-white' : 'text-slate-400'
-                  }`}
-                >
-                  Light
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAppearance('system')}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold ${
-                    appearance === 'system' ? 'bg-purple-500 text-white' : 'text-slate-400'
-                  }`}
-                >
-                  Auto
-                </button>
-              </div>
             </div>
 
           </div>

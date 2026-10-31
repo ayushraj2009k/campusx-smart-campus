@@ -1,12 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Quicksand:wght@500;600;700&family=Nunito:wght@400;600;700;800;900&family=Noto+Serif+Devanagari:wght@400;600;700&family=Merriweather:wght@400;700;900&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  :root {
+  :root,
+  html.dark {
     --bg-primary: #070e1f;
+    --color-surface: #0c1324;
+    --color-surface-lowest: #050a17;
+    --color-surface-low: #0f172a;
+    --color-surface-container: #141f36;
+    --color-surface-high: #1e293b;
+    --color-surface-highest: #283548;
+    --color-on-surface: #f1f5f9;
+    --color-on-surface-variant: #94a3b8;
+    --color-outline: #475569;
+    --color-outline-variant: rgba(255, 255, 255, 0.12);
     --card-bg: rgba(14, 21, 37, 0.7);
     --border-color: rgba(76, 215, 246, 0.2);
     --accent-color: #4cd7f6;
@@ -14,13 +25,33 @@
 
   html.light {
     --bg-primary: #f8fafc;
+    --color-surface: #ffffff;
+    --color-surface-lowest: #ffffff;
+    --color-surface-low: #ffffff;
+    --color-surface-container: #f1f5f9;
+    --color-surface-high: #e2e8f0;
+    --color-surface-highest: #cbd5e1;
+    --color-on-surface: #0f172a;
+    --color-on-surface-variant: #334155;
+    --color-outline: #94a3b8;
+    --color-outline-variant: #e2e8f0;
     --card-bg: #ffffff;
     --border-color: #e2e8f0;
     --accent-color: #0284c7;
   }
 
   html.light[data-ui-mode="bharat"] {
-    --bg-primary: #fdfbf7;
+    --bg-primary: #faf8f5;
+    --color-surface: #ffffff;
+    --color-surface-lowest: #ffffff;
+    --color-surface-low: #ffffff;
+    --color-surface-container: #f5f0e6;
+    --color-surface-high: #ebdcc8;
+    --color-surface-highest: #decaa8;
+    --color-on-surface: #1e293b;
+    --color-on-surface-variant: #475569;
+    --color-outline: #cbd5e1;
+    --color-outline-variant: #fed7aa;
     --card-bg: #ffffff;
     --border-color: #fed7aa;
     --accent-color: #f97316;
@@ -30,11 +61,43 @@
     @apply antialiased selection:bg-secondary/30 selection:text-secondary;
     overflow-x: hidden;
     background-color: var(--bg-primary);
+    color: var(--color-on-surface);
   }
 
   html.light body {
     background-color: var(--bg-primary);
     color: #0f172a;
+  }
+
+  /* Make sure headings are dark and readable in light mode */
+  html.light h1:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]),
+  html.light h2:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]),
+  html.light h3:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]),
+  html.light h4:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]),
+  html.light h5:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]),
+  html.light h6:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]) {
+    color: #0f172a;
+  }
+
+  /* In light mode, turn white text on white cards into dark slate */
+  html.light .text-white:not(button):not(button *):not(a[class*="bg-"]):not([class*="bg-gradient"]):not([class*="bg-red-"]):not([class*="bg-blue-"]):not([class*="bg-amber-"]):not([class*="bg-emerald-"]):not([class*="bg-purple-"]):not([class*="bg-orange-"]):not([class*="bg-primary"]):not([class*="bg-secondary"]):not([class*="bg-cyan-"]):not([class*="bg-slate-9"]):not([class*="bg-black"]) {
+    color: #0f172a;
+  }
+
+  html.light .text-surface-variant {
+    color: #475569 !important;
+  }
+
+  html.light .text-slate-300,
+  html.light .text-slate-400 {
+    color: #475569;
+  }
+
+  /* Give cards clean shadows in light mode */
+  html.light .bg-surface-container-low,
+  html.light .bg-surface-container,
+  html.light .bg-surface-container-high {
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px 0 rgba(15, 23, 42, 0.04);
   }
 
   /* Typography mode: Modern Tech Sans */
@@ -54,7 +117,7 @@
   /* Typography mode: Linotte (Soft Rounded Modern from WhatsApp screenshot) */
   [data-typography="linotte"],
   [data-typography="linotte"] body {
-    font-family: 'Nunito', 'Quicksand', 'Linotte', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-family: 'Quicksand', 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   }
   [data-typography="linotte"] h1,
   [data-typography="linotte"] h2,
@@ -62,7 +125,7 @@
   [data-typography="linotte"] h4,
   [data-typography="linotte"] h5,
   [data-typography="linotte"] h6 {
-    font-family: 'Quicksand', 'Nunito', 'Linotte', sans-serif !important;
+    font-family: 'Quicksand', 'Nunito', sans-serif !important;
     font-weight: 700;
   }
 
@@ -86,6 +149,12 @@
   html.pure-black body {
     background-color: #000000 !important;
     --bg-primary: #000000 !important;
+    --color-surface: #000000 !important;
+    --color-surface-lowest: #000000 !important;
+    --color-surface-low: #0a0a0a !important;
+    --color-surface-container: #121212 !important;
+    --color-surface-high: #1a1a1a !important;
+    --color-surface-highest: #242424 !important;
   }
   html.pure-black .bg-surface-container-lowest,
   html.pure-black .bg-surface,

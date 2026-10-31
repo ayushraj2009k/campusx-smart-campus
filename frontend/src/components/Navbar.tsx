@@ -65,8 +65,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="font-extrabold text-lg tracking-tight text-white font-display flex items-center gap-1">
                 CAMPUS<span className="text-secondary">X</span>
               </span>
-              <span className="text-[9px] text-secondary font-mono tracking-wider hidden sm:block uppercase">
-                IIT Bhubaneswar
+              <span className="text-[9px] text-secondary font-mono tracking-wider hidden sm:block uppercase font-bold">
+                Indian Institute of Technology Bhubaneswar
               </span>
             </div>
           </div>

@@ -21,7 +21,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onOpenNavigation,
   onOpenAI,
 }) => {
-  const { uiMode, effectiveAppearance } = useTheme();
+  const { uiMode, setUiMode, effectiveAppearance } = useTheme();
   const isBharat = uiMode === 'bharat';
   const isDark = effectiveAppearance === 'dark';
 
@@ -323,9 +323,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }}
             className="w-full h-full object-cover object-center filter brightness-50 scale-105 transition-transform duration-1000 ease-out"
           />
-          {/* Netflix-style Multi-Layer Vignette */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#070e1f] via-[#070e1f]/80 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#070e1f] via-[#070e1f]/60 to-transparent" />
+          {/* Multi-Layer Adaptive Vignette */}
+          <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-t from-[#070e1f] via-[#070e1f]/80 to-transparent' : 'bg-gradient-to-t from-slate-50 via-slate-50/85 to-transparent'}`} />
+          <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-r from-[#070e1f] via-[#070e1f]/60 to-transparent' : 'bg-gradient-to-r from-slate-50 via-slate-50/65 to-transparent'}`} />
         </div>
 
         {/* Hero Content Stage */}
@@ -333,18 +333,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           
           {/* Accreditation Pills */}
           <div className="flex flex-wrap items-center gap-2.5 mb-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high border border-amber-500/40 backdrop-blur-xl shadow-lg">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface-container-high border border-amber-500/50 backdrop-blur-xl shadow-lg shadow-amber-500/10">
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
-              <span className="text-xs font-bold text-amber-300 font-mono tracking-wide uppercase">
-                CIT Semester &amp; Venue Management Platform
+              <span className="text-xs font-bold text-amber-400 font-mono tracking-wide uppercase">
+                CAMPUS SCHEDULING AND VENUE MANAGEMENT
               </span>
             </div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface-container-high/90 border border-secondary/40 backdrop-blur-xl shadow-lg shadow-cyan-500/10">
               <img src="/iit-logo.png" alt="IIT Crest" onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }} className="w-6 h-6 object-contain" />
-              <div className="flex items-center gap-2 text-xs">
-                <span className="font-bold text-white uppercase tracking-wider font-mono">Chilika Institute of Technology</span>
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <span className="font-bold text-white uppercase tracking-wider font-mono">
+                  Chilika Institute of Technology (CIT) &bull; Indian Institute of Technology Bhubaneswar
+                </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-                <span className="text-secondary font-mono">1,000 Students &bull; 5 Branches</span>
+                <span className="text-secondary font-mono font-bold">1,000 Students &bull; 5 Engineering Branches</span>
               </div>
             </div>
           </div>
@@ -471,103 +473,186 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </section>
 
-      {/* 3. CYBER NEON TELEMETRY & CAREGRID OPERATIONS CONSOLE (Inspired by Image 1 & Image 2) */}
+      {/* 3. CYBER NEON TELEMETRY & ENTERPRISE OPERATIONS CONSOLE (Selectable Modes) */}
       <section className="mb-16 space-y-6">
+        
+        {/* Dynamic UI Architecture Mode Bar & Quick Switcher */}
+        <div className={`p-4 sm:p-5 rounded-3xl border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all ${
+          isBharat
+            ? isDark
+              ? 'bg-gradient-to-r from-amber-950/40 via-slate-900 to-amber-950/20 border-amber-500/40 text-amber-200 shadow-xl shadow-amber-500/10'
+              : 'bg-gradient-to-r from-amber-50 via-white to-amber-50/50 border-amber-400 text-amber-900 shadow-md'
+            : isDark
+              ? 'bg-gradient-to-r from-cyan-950/40 via-slate-900 to-blue-950/20 border-cyan-500/40 text-cyan-200 shadow-xl shadow-cyan-500/10'
+              : 'bg-gradient-to-r from-cyan-50 via-white to-blue-50/50 border-cyan-400 text-slate-900 shadow-md'
+        }`}>
+          <div className="flex items-center gap-3.5">
+            <div className={`w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-xs shadow-md ${
+              isBharat 
+                ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' 
+                : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40'
+            }`}>
+              {isBharat ? <Cpu className="w-5 h-5" /> : <Sparkles className="w-5 h-5" />}
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs font-mono font-bold uppercase tracking-wider ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  Active UI Design Architecture: {isBharat ? 'Enterprise Operations Console' : 'Cyber Neon Ops Matrix'}
+                </span>
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold border ${
+                  isBharat 
+                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' 
+                    : 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/40'
+                }`}>
+                  {isBharat ? 'MODE A' : 'MODE B'}
+                </span>
+              </div>
+              <p className={`text-[11px] mt-0.5 ${isDark ? 'text-surface-variant' : 'text-slate-600'}`}>
+                {isBharat 
+                  ? 'High-density operational telemetry, priority work queues, and data freshness synchronization' 
+                  : 'Futuristic 4-color metric glow, period acoustic waveform equalizer, and concentric radial gauges'}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 self-stretch sm:self-auto justify-end">
+            <button
+              type="button"
+              onClick={() => setUiMode('bharat')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                isBharat 
+                  ? 'bg-amber-500 text-slate-950 shadow-md ring-2 ring-amber-400/50' 
+                  : isDark ? 'bg-surface-container text-surface-variant hover:text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <Cpu className="w-3.5 h-3.5" />
+              <span>Enterprise Mode A</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setUiMode('liquid_glass')}
+              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                !isBharat 
+                  ? 'bg-cyan-400 text-slate-950 shadow-md ring-2 ring-cyan-300/50' 
+                  : isDark ? 'bg-surface-container text-surface-variant hover:text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Cyber Neon Mode B</span>
+            </button>
+          </div>
+        </div>
         
         {/* --- PART A: 4 GLOWING TOP KPI TILES (IMAGE 1 SPEC) --- */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           
           {/* Tile 1: Amber Glow (#ffb700) */}
-          <div className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg bg-[#0e1626]/90 border-amber-500/30 hover:border-amber-400 hover:shadow-[0_0_25px_rgba(255,183,0,0.25)]">
+          <div className={`relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg ${
+            isDark
+              ? 'bg-[#0e1626]/90 border-amber-500/30 hover:border-amber-400 hover:shadow-[0_0_25px_rgba(255,183,0,0.25)]'
+              : 'bg-white border-amber-300 shadow-md hover:border-amber-500'
+          }`}>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-amber-400/90 flex items-center gap-1.5">
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-amber-500 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
                 Rigor Index
               </span>
-              <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:bg-amber-400 group-hover:text-black transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-500 group-hover:bg-amber-400 group-hover:text-black transition-colors">
                 <Activity className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-4xl font-extrabold text-white font-mono tracking-tight drop-shadow-md">
+            <div className={`text-4xl font-extrabold font-mono tracking-tight drop-shadow-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
               98.5%
             </div>
-            <div className="text-xs font-semibold text-amber-300 mt-1">
+            <div className="text-xs font-semibold text-amber-500 mt-1">
               Schedule Stability / CP-SAT Rigor
             </div>
             <div className="mt-3 pt-2.5 border-t border-amber-500/20 flex items-center justify-between text-[11px]">
-              <span className="text-surface-variant">Target: 98.0%</span>
-              <span className="font-mono font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
+              <span className={isDark ? 'text-surface-variant' : 'text-slate-500'}>Target: 98.0%</span>
+              <span className="font-mono font-bold text-amber-500 bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/20">
                 +0.5% vs Wk 6
               </span>
             </div>
             {/* Progress bar */}
-            <div className="mt-2 w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+            <div className={`mt-2 w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`}>
               <div className="h-full bg-gradient-to-r from-amber-500 to-amber-300 rounded-full" style={{ width: '98.5%' }}></div>
             </div>
           </div>
 
           {/* Tile 2: Royal Blue Glow (#2563eb) */}
-          <div className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg bg-[#0e1626]/90 border-blue-500/30 hover:border-blue-400 hover:shadow-[0_0_25px_rgba(37,99,235,0.25)]">
+          <div className={`relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg ${
+            isDark
+              ? 'bg-[#0e1626]/90 border-blue-500/30 hover:border-blue-400 hover:shadow-[0_0_25px_rgba(37,99,235,0.25)]'
+              : 'bg-white border-blue-300 shadow-md hover:border-blue-500'
+          }`}>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-blue-400/90 flex items-center gap-1.5">
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-blue-500 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-blue-400 animate-ping"></span>
                 Capacity Load
               </span>
-              <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400 group-hover:bg-blue-400 group-hover:text-white transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-500 group-hover:bg-blue-400 group-hover:text-white transition-colors">
                 <Users className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-4xl font-extrabold text-white font-mono tracking-tight drop-shadow-md">
+            <div className={`text-4xl font-extrabold font-mono tracking-tight drop-shadow-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
               2 481
             </div>
-            <div className="text-xs font-semibold text-blue-300 mt-1">
+            <div className="text-xs font-semibold text-blue-500 mt-1">
               Enrolled Seat Hours Scheduled
             </div>
             <div className="mt-3 pt-2.5 border-t border-blue-500/20 flex items-center justify-between text-[11px]">
-              <span className="text-surface-variant">189 Sessions Active</span>
-              <span className="font-mono font-bold text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
+              <span className={isDark ? 'text-surface-variant' : 'text-slate-500'}>189 Sessions Active</span>
+              <span className="font-mono font-bold text-blue-500 bg-blue-500/10 px-2 py-0.5 rounded border border-blue-500/20">
                 0 Clashes
               </span>
             </div>
             {/* Progress bar */}
-            <div className="mt-2 w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+            <div className={`mt-2 w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`}>
               <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 rounded-full" style={{ width: '92%' }}></div>
             </div>
           </div>
 
           {/* Tile 3: Electric Cyan Glow (#00e5ff) */}
-          <div className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg bg-[#0e1626]/90 border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_25px_rgba(0,229,255,0.25)]">
+          <div className={`relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg ${
+            isDark
+              ? 'bg-[#0e1626]/90 border-cyan-500/30 hover:border-cyan-400 hover:shadow-[0_0_25px_rgba(0,229,255,0.25)]'
+              : 'bg-white border-cyan-300 shadow-md hover:border-cyan-500'
+          }`}>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-cyan-400/90 flex items-center gap-1.5">
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-cyan-500 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span>
                 GIS Spatial
               </span>
-              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400 group-hover:bg-cyan-400 group-hover:text-black transition-colors">
+              <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-500 group-hover:bg-cyan-400 group-hover:text-black transition-colors">
                 <Compass className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-4xl font-extrabold text-white font-mono tracking-tight drop-shadow-md">
+            <div className={`text-4xl font-extrabold font-mono tracking-tight drop-shadow-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
               31 124
             </div>
-            <div className="text-xs font-semibold text-cyan-300 mt-1">
-              Campus GIS Footfalls & Queries
+            <div className="text-xs font-semibold text-cyan-500 mt-1">
+              Campus GIS Footfalls &amp; Queries
             </div>
             <div className="mt-3 pt-2.5 border-t border-cyan-500/20 flex items-center justify-between text-[11px]">
-              <span className="text-surface-variant">20 Geocoded Landmarks</span>
-              <span className="font-mono font-bold text-cyan-400 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
+              <span className={isDark ? 'text-surface-variant' : 'text-slate-500'}>20 Geocoded Landmarks</span>
+              <span className="font-mono font-bold text-cyan-500 bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
                 Live GPS
               </span>
             </div>
             {/* Progress bar */}
-            <div className="mt-2 w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+            <div className={`mt-2 w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`}>
               <div className="h-full bg-gradient-to-r from-cyan-600 to-cyan-300 rounded-full" style={{ width: '86%' }}></div>
             </div>
           </div>
 
           {/* Tile 4: Neon Magenta/Pink Glow (#ff2d78) */}
-          <div className="relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg bg-[#0e1626]/90 border-pink-500/30 hover:border-pink-400 hover:shadow-[0_0_25px_rgba(255,45,120,0.25)]">
+          <div className={`relative rounded-2xl p-5 overflow-hidden transition-all duration-300 hover:scale-[1.02] border backdrop-blur-xl group cursor-pointer shadow-lg ${
+            isDark
+              ? 'bg-[#0e1626]/90 border-pink-500/30 hover:border-pink-400 hover:shadow-[0_0_25px_rgba(255,45,120,0.25)]'
+              : 'bg-white border-pink-300 shadow-md hover:border-pink-500'
+          }`}>
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-pink-400/90 flex items-center gap-1.5">
+              <span className="text-xs font-mono font-semibold uppercase tracking-wider text-pink-500 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-pink-400 animate-ping"></span>
                 Spectra Fest
               </span>
@@ -575,20 +660,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <Flame className="w-4 h-4" />
               </div>
             </div>
-            <div className="text-4xl font-extrabold text-white font-mono tracking-tight drop-shadow-md">
+            <div className={`text-4xl font-extrabold font-mono tracking-tight drop-shadow-sm ${isDark ? 'text-white' : 'text-slate-900'}`}>
               21 / 25
             </div>
-            <div className="text-xs font-semibold text-pink-300 mt-1">
+            <div className="text-xs font-semibold text-pink-500 mt-1">
               Spectra Tech Fest Approved Venues
             </div>
             <div className="mt-3 pt-2.5 border-t border-pink-500/20 flex items-center justify-between text-[11px]">
-              <span className="text-surface-variant">4 Alt Offers Ready</span>
-              <span className="font-mono font-bold text-pink-400 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">
+              <span className={isDark ? 'text-surface-variant' : 'text-slate-500'}>4 Alt Offers Ready</span>
+              <span className="font-mono font-bold text-pink-500 bg-pink-500/10 px-2 py-0.5 rounded border border-pink-500/20">
                 84% Fill
               </span>
             </div>
             {/* Progress bar */}
-            <div className="mt-2 w-full h-1.5 rounded-full bg-slate-800 overflow-hidden">
+            <div className={`mt-2 w-full h-1.5 rounded-full overflow-hidden ${isDark ? 'bg-slate-800' : 'bg-slate-200'}`}>
               <div className="h-full bg-gradient-to-r from-pink-600 to-pink-400 rounded-full" style={{ width: '84%' }}></div>
             </div>
           </div>
@@ -599,7 +684,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
           {/* Left: Audio-Style Waveform Frequency Chart with Interactive Period Inspector (7 cols) */}
-          <div className="lg:col-span-7 rounded-3xl p-6 bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#060c18] border border-cyan-500/20 shadow-2xl relative overflow-hidden flex flex-col justify-between">
+          <div className={`lg:col-span-7 rounded-3xl p-6 ${
+            isDark 
+              ? 'bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#060c18] border-cyan-500/20 shadow-2xl' 
+              : 'bg-white border-slate-200 shadow-xl'
+          } border relative overflow-hidden flex flex-col justify-between`}>
             <div>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                 <div>
@@ -877,7 +966,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           {/* Right: Working Scenario Concentric Radial Gauges (5 cols) */}
-          <div className="lg:col-span-5 rounded-3xl p-6 bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#060c18] border border-blue-500/20 shadow-2xl flex flex-col justify-between">
+          <div className={`lg:col-span-5 rounded-3xl p-6 ${
+            isDark 
+              ? 'bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#060c18] border-blue-500/20 shadow-2xl' 
+              : 'bg-white border-slate-200 shadow-xl'
+          } border flex flex-col justify-between`}>
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-base font-bold text-white font-display flex items-center gap-2">
