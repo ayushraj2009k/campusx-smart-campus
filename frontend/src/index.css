@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -9,19 +9,20 @@
     @apply bg-surface text-on-surface antialiased selection:bg-secondary/30 selection:text-secondary;
     font-family: 'Inter', sans-serif;
     overflow-x: hidden;
+    background-color: #070e1f;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
   }
 }
 
-/* Custom modern scrollbar */
+/* Custom Netflix-style sleek dark scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0c1324;
+  background: #070e1f;
 }
 ::-webkit-scrollbar-thumb {
   background: #232a3c;
@@ -31,6 +32,52 @@
   background: #4cd7f6;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Netflix-inspired Cinematic Vignette & Ambient Spotlights */
+.cinematic-vignette {
+  background: radial-gradient(circle at 50% 20%, rgba(37, 99, 235, 0.12) 0%, rgba(7, 14, 31, 0.95) 75%, #070e1f 100%);
+}
+
+.cinematic-card-hover {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cinematic-card-hover:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 16px 40px -12px rgba(76, 215, 246, 0.25), 0 0 0 1px rgba(76, 215, 246, 0.4);
+}
+
+/* Shimmer Light Reflection Effect on Cards */
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-150%) skewX(-20deg); }
+  100% { transform: translateX(250%) skewX(-20deg); }
+}
+
+.shimmer-active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  animation: shimmer-sweep 6s infinite;
+  pointer-events: none;
+}
+
 /* Glowing Neon Card Gradients */
 .neon-border-blue {
   border: 1px solid rgba(76, 215, 246, 0.25);
@@ -38,5 +85,14 @@
 }
 .neon-border-blue:hover {
   border-color: rgba(76, 215, 246, 0.6);
-  box-shadow: 0 0 30px rgba(76, 215, 246, 0.3), inset 0 0 20px rgba(37, 99, 235, 0.1);
+  box-shadow: 0 0 35px rgba(76, 215, 246, 0.35), inset 0 0 20px rgba(37, 99, 235, 0.15);
+}
+
+.neon-border-purple {
+  border: 1px solid rgba(208, 188, 255, 0.25);
+  box-shadow: 0 0 20px rgba(125, 76, 231, 0.15), inset 0 0 15px rgba(208, 188, 255, 0.05);
+}
+.neon-border-purple:hover {
+  border-color: rgba(208, 188, 255, 0.6);
+  box-shadow: 0 0 35px rgba(208, 188, 255, 0.35), inset 0 0 20px rgba(125, 76, 231, 0.15);
 }
