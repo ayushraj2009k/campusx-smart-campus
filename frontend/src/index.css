@@ -5,14 +5,65 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-surface text-on-surface antialiased selection:bg-secondary/30 selection:text-secondary;
-    font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
-    background-color: #070e1f;
+  :root {
+    --bg-primary: #070e1f;
+    --card-bg: rgba(14, 21, 37, 0.7);
+    --border-color: rgba(76, 215, 246, 0.2);
+    --accent-color: #4cd7f6;
   }
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Plus Jakarta Sans', sans-serif;
+
+  html.light {
+    --bg-primary: #f8fafc;
+    --card-bg: #ffffff;
+    --border-color: #e2e8f0;
+    --accent-color: #0284c7;
+  }
+
+  html.light[data-ui-mode="bharat"] {
+    --bg-primary: #fdfbf7;
+    --card-bg: #ffffff;
+    --border-color: #fed7aa;
+    --accent-color: #f97316;
+  }
+
+  body {
+    @apply antialiased selection:bg-secondary/30 selection:text-secondary;
+    overflow-x: hidden;
+    background-color: var(--bg-primary);
+  }
+
+  html.light body {
+    background-color: var(--bg-primary);
+    color: #0f172a;
+  }
+
+  /* Typography mode: Modern Tech Sans */
+  [data-typography="tech_sans"],
+  [data-typography="tech_sans"] body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  [data-typography="tech_sans"] h1,
+  [data-typography="tech_sans"] h2,
+  [data-typography="tech_sans"] h3,
+  [data-typography="tech_sans"] h4,
+  [data-typography="tech_sans"] h5,
+  [data-typography="tech_sans"] h6 {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+  }
+
+  /* Typography mode: Indian Classic Serif (with Noto Serif Devanagari) */
+  [data-typography="classic_serif"],
+  [data-typography="classic_serif"] body {
+    font-family: 'Noto Serif Devanagari', 'Merriweather', Georgia, serif !important;
+  }
+  [data-typography="classic_serif"] h1,
+  [data-typography="classic_serif"] h2,
+  [data-typography="classic_serif"] h3,
+  [data-typography="classic_serif"] h4,
+  [data-typography="classic_serif"] h5,
+  [data-typography="classic_serif"] h6 {
+    font-family: 'Noto Serif Devanagari', 'Merriweather', Georgia, serif !important;
+    letter-spacing: -0.01em;
   }
 }
 

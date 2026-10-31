@@ -4,9 +4,10 @@ import {
   Info, Building, Phone, Clock, ArrowRight, CornerDownRight, 
   ChevronRight, Sparkles, Eye, Shield, Accessibility, Footprints,
   Maximize2, RotateCcw, AlertTriangle, CheckCircle2, Car, Map,
-  Satellite, Globe
+  Satellite, Globe, Crosshair, Locate, AlertCircle, RefreshCw
 } from 'lucide-react';
 import { CampusBuilding } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 interface CampusNavigationProps {
   initialBuilding?: string | null;
@@ -324,6 +325,10 @@ const EMBEDDED_BUILDINGS: EnhancedBuilding[] = [
 ];
 
 export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuilding }) => {
+  const { uiMode, effectiveAppearance } = useTheme();
+  const isBharat = uiMode === 'bharat';
+  const isDark = effectiveAppearance === 'dark';
+
   const [buildings, setBuildings] = useState<EnhancedBuilding[]>(EMBEDDED_BUILDINGS);
   const [selectedBuilding, setSelectedBuilding] = useState<EnhancedBuilding>(EMBEDDED_BUILDINGS[0]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -337,9 +342,15 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
   const [accessibleOnly, setAccessibleOnly] = useState<boolean>(false);
 
   // Routing state
-  const [routeFrom, setRouteFrom] = useState<string>('BHR');
+  const [routeFrom, setRouteFrom] = useState<string>('GATE');
   const [routeTo, setRouteTo] = useState<string>('LHL');
   const [showRoute, setShowRoute] = useState<boolean>(true);
+
+  // User Geolocation state
+  const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [isLocating, setIsLocating] = useState<boolean>(false);
+  const [geoError, setGeoError] = useState<string | null>(null);
+  const [useUserLocationAsOrigin, setUseUserLocationAsOrigin] = useState<boolean>(false);
 
   // Indoor routing state
   const [indoorFromNode, setIndoorFromNode] = useState('LHL-F1-ENT');
@@ -370,24 +381,69 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
       if (res.ok) {
         const data = await res.json();
         if (data.buildings && data.buildings.length > 0) {
-          // Merge embedded address & department data
-          const merged = data.buildings.map((b: any) => {
-            const emb = EMBEDDED_BUILDINGS.find(e => e.id === b.id);
-            return { ...emb, ...b };
+          // Merge embedded verified details with backend, keeping valid image paths
+          const merged = EMBEDDED_BUILDINGS.map(emb => {
+            const backMatch = data.buildings.find((b: any) => 
+              b.id === emb.id || 
+              b.code === emb.code || 
+              b.name.toLowerCase() === emb.name.toLowerCase()
+            );
+            if (backMatch) {
+              return {
+                ...emb,
+                lat: backMatch.lat || emb.lat,
+                lng: backMatch.lng || emb.lng,
+                // Keep clean embedded path or cleaned backend path
+                image_url: emb.image_url || backMatch.image_url.replace('/static/', '/')
+              };
+            }
+            return emb;
           });
           setBuildings(merged);
         }
       }
     } catch {
-      // Fallback works automatically
+      // Fallback works automatically with EMBEDDED_BUILDINGS
     }
+  };
+
+  const handleDetectLocation = () => {
+    setIsLocating(true);
+    setGeoError(null);
+
+    if (!navigator.geolocation) {
+      setGeoError('Geolocation is not supported by your browser. Using campus landmark fallback.');
+      setIsLocating(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        setUserCoords({ lat: latitude, lng: longitude });
+        setUseUserLocationAsOrigin(true);
+        setIsLocating(false);
+      },
+      (err) => {
+        setIsLocating(false);
+        if (err.code === err.PERMISSION_DENIED) {
+          setGeoError('Location permission denied. Please allow GPS access or choose a campus origin landmark below.');
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          setGeoError('GPS position unavailable on this network. Please pick a campus landmark origin.');
+        } else {
+          setGeoError('Location request timed out. Please pick a campus landmark origin.');
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+    );
   };
 
   const filteredBuildings = buildings.filter((b) => 
     b.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     b.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
     b.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    b.address.toLowerCase().includes(searchQuery.toLowerCase())
+    b.address.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (b.rooms && b.rooms.some(r => r.toLowerCase().includes(searchQuery.toLowerCase())))
   );
 
   const fromBuildingObj = buildings.find(b => b.id === routeFrom) || buildings[0];
@@ -406,7 +462,11 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
     return Math.round(R * c);
   };
 
-  const distanceMeters = calculateDistance(fromBuildingObj.lat, fromBuildingObj.lng, toBuildingObj.lat, toBuildingObj.lng);
+  // Determine origin coordinates (user GPS or selected campus origin landmark)
+  const originLat = useUserLocationAsOrigin && userCoords ? userCoords.lat : fromBuildingObj.lat;
+  const originLng = useUserLocationAsOrigin && userCoords ? userCoords.lng : fromBuildingObj.lng;
+
+  const distanceMeters = calculateDistance(originLat, originLng, toBuildingObj.lat, toBuildingObj.lng);
   const walkMinutes = Math.max(1, Math.round(distanceMeters / 80));
 
   const handleIndoorRoute = (to: string) => {
@@ -420,23 +480,37 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
     }
   };
 
-  // Google Maps Embed URL centered on selected building
+  // Google Maps Embed URL centered on selected building with verified Argul GPS
   const googleMapEmbedUrl = `https://maps.google.com/maps?q=${selectedBuilding.lat},${selectedBuilding.lng}&hl=en&z=17&t=${mapType === 'satellite' ? 'k' : 'm'}&output=embed`;
-  const googleMapDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${fromBuildingObj.lat},${fromBuildingObj.lng}&destination=${toBuildingObj.lat},${toBuildingObj.lng}&travelmode=walking`;
+  
+  // Accurate directions URL from user's GPS or selected landmark
+  const googleMapDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${toBuildingObj.lat},${toBuildingObj.lng}&travelmode=walking`;
 
   return (
     <div className="flex flex-col w-full max-w-7xl mx-auto px-4 sm:px-6 py-6 text-on-surface">
       
       {/* Top Banner */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl bg-surface-container-low border border-outline-variant/30 mb-8 shadow-xl">
+      <div className={`flex flex-col md:flex-row md:items-center justify-between gap-4 p-6 rounded-3xl border mb-8 shadow-xl transition-all ${
+        isBharat
+          ? 'bg-gradient-to-r from-orange-950/30 via-slate-900/80 to-slate-900/90 border-orange-500/40'
+          : 'bg-surface-container-low border-outline-variant/30'
+      }`}>
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400 shrink-0 shadow-lg shadow-cyan-500/20">
+          <div className={`w-14 h-14 rounded-2xl border flex items-center justify-center shrink-0 shadow-lg ${
+            isBharat 
+              ? 'bg-orange-500/20 border-orange-500/40 text-orange-400 shadow-orange-500/20' 
+              : 'bg-cyan-500/20 border-cyan-500/40 text-cyan-400 shadow-cyan-500/20'
+          }`}>
             <Compass className="w-7 h-7" />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-extrabold text-white font-display">Campus GIS & Google Maps Navigation</h1>
-              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono border ${
+                isBharat 
+                  ? 'bg-orange-500/20 text-orange-300 border-orange-500/30' 
+                  : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+              }`}>
                 Argul GPS 20.1482° N
               </span>
             </div>
@@ -496,28 +570,134 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
           <div className="p-5 rounded-3xl bg-surface-container-low border border-outline-variant/30 shadow-lg">
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs font-bold text-white flex items-center gap-1.5 font-display">
-                <Navigation className="w-4 h-4 text-secondary" />
+                <Navigation className={`w-4 h-4 ${isBharat ? 'text-orange-500' : 'text-cyan-400'}`} />
                 <span>Point-to-Point Route Planner</span>
               </span>
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/30">
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                isBharat 
+                  ? 'bg-orange-500/10 text-orange-400 border-orange-500/30' 
+                  : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'
+              }`}>
                 Paved Paths
               </span>
             </div>
 
-            <div className="space-y-3">
-              <div>
-                <label className="text-[10px] text-surface-variant font-mono uppercase block mb-1">From (Origin)</label>
-                <select
-                  value={routeFrom}
-                  onChange={(e) => setRouteFrom(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-surface-container border border-outline-variant/30 text-xs text-white focus:outline-none focus:border-secondary"
+            {/* GPS Geolocation Toggle & State */}
+            <div className="mb-3 p-3 rounded-2xl bg-surface-container border border-outline-variant/30">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center ${
+                    useUserLocationAsOrigin && userCoords 
+                      ? 'bg-emerald-500/20 text-emerald-400' 
+                      : isBharat ? 'bg-orange-500/20 text-orange-400' : 'bg-cyan-500/20 text-cyan-400'
+                  }`}>
+                    <Locate className={`w-4 h-4 ${isLocating ? 'animate-spin' : ''}`} />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-white block">Device Geolocation</span>
+                    <span className="text-[10px] text-surface-variant block">
+                      {useUserLocationAsOrigin && userCoords
+                        ? `GPS: ${userCoords.lat.toFixed(4)}° N, ${userCoords.lng.toFixed(4)}° E`
+                        : 'Navigate from your live device position'}
+                    </span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleDetectLocation}
+                  disabled={isLocating}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 transition-all ${
+                    useUserLocationAsOrigin && userCoords
+                      ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/30'
+                      : isBharat
+                        ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-md shadow-orange-500/20'
+                        : 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-md shadow-cyan-500/20'
+                  }`}
                 >
-                  {buildings.map(b => (
-                    <option key={b.id} value={b.id}>{b.name} ({b.code})</option>
-                  ))}
-                </select>
+                  <Crosshair className="w-3.5 h-3.5" />
+                  <span>{isLocating ? 'Locating...' : userCoords ? 'Refresh GPS' : 'Detect Location'}</span>
+                </button>
               </div>
 
+              {/* Geolocation Notice / Fallback Alert */}
+              {geoError && (
+                <div className="mt-2.5 p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/30 text-[11px] text-amber-300 flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 text-amber-400" />
+                  <div>
+                    <span className="font-semibold block">{geoError}</span>
+                    <div className="mt-1 flex flex-wrap gap-1">
+                      <span className="text-[10px] text-surface-variant">Quick Fallbacks:</span>
+                      <button
+                        type="button"
+                        onClick={() => { setRouteFrom('GATE'); setUseUserLocationAsOrigin(false); setGeoError(null); }}
+                        className="px-1.5 py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-[10px] text-white"
+                      >
+                        Main Gate
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setRouteFrom('BHR'); setUseUserLocationAsOrigin(false); setGeoError(null); }}
+                        className="px-1.5 py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-[10px] text-white"
+                      >
+                        BHR Hostel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => { setRouteFrom('ADM'); setUseUserLocationAsOrigin(false); setGeoError(null); }}
+                        className="px-1.5 py-0.5 rounded bg-surface-container-high hover:bg-surface-container-highest text-[10px] text-white"
+                      >
+                        Directorate
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="space-y-3">
+              {/* Origin Selector (Landmark or GPS indicator) */}
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[10px] text-surface-variant font-mono uppercase">
+                    From (Origin Point)
+                  </label>
+                  {useUserLocationAsOrigin && userCoords && (
+                    <button
+                      type="button"
+                      onClick={() => setUseUserLocationAsOrigin(false)}
+                      className="text-[10px] text-cyan-400 hover:underline"
+                    >
+                      Switch to Landmark
+                    </button>
+                  )}
+                </div>
+
+                {useUserLocationAsOrigin && userCoords ? (
+                  <div className="w-full px-3 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-300 flex items-center justify-between">
+                    <span className="font-bold flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
+                      Your Current Device Location
+                    </span>
+                    <span className="font-mono text-[10px]">Argul Campus Zone</span>
+                  </div>
+                ) : (
+                  <select
+                    value={routeFrom}
+                    onChange={(e) => {
+                      setRouteFrom(e.target.value);
+                      setUseUserLocationAsOrigin(false);
+                    }}
+                    className="w-full px-3 py-2 rounded-xl bg-surface-container border border-outline-variant/30 text-xs text-white focus:outline-none focus:border-secondary"
+                  >
+                    {buildings.map(b => (
+                      <option key={b.id} value={b.id}>{b.name} ({b.code})</option>
+                    ))}
+                  </select>
+                )}
+              </div>
+
+              {/* Destination Selector */}
               <div>
                 <label className="text-[10px] text-surface-variant font-mono uppercase block mb-1">To (Destination)</label>
                 <select
@@ -552,7 +732,9 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
                   href={googleMapDirectionsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-cyan-400 hover:text-white font-bold flex items-center gap-1"
+                  className={`text-xs font-bold flex items-center gap-1 hover:underline ${
+                    isBharat ? 'text-orange-400' : 'text-cyan-400'
+                  }`}
                 >
                   <span>Google Walk</span>
                   <ArrowUpRight className="w-3.5 h-3.5" />
@@ -560,15 +742,23 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
               </div>
 
               {/* Route Summary Box */}
-              <div className="mt-2 p-3.5 rounded-2xl bg-cyan-950/40 border border-cyan-500/30 text-xs flex items-center justify-between text-cyan-200 shadow-inner">
+              <div className={`mt-2 p-3.5 rounded-2xl border text-xs flex items-center justify-between shadow-inner ${
+                isBharat 
+                  ? 'bg-orange-950/30 border-orange-500/30 text-orange-200' 
+                  : 'bg-cyan-950/40 border-cyan-500/30 text-cyan-200'
+              }`}>
                 <div className="flex items-center gap-2.5">
-                  <Footprints className="w-5 h-5 text-cyan-400 shrink-0" />
+                  <Footprints className={`w-5 h-5 shrink-0 ${isBharat ? 'text-orange-400' : 'text-cyan-400'}`} />
                   <div>
                     <div className="font-bold text-white text-xs">Walking Distance: ~{distanceMeters} meters</div>
-                    <div className="text-[11px] text-cyan-300">Est. Time: ~{walkMinutes} min walk via Central Spine</div>
+                    <div className={`text-[11px] ${isBharat ? 'text-orange-300' : 'text-cyan-300'}`}>
+                      Est. Time: ~{walkMinutes} min walk via Central Spine
+                    </div>
                   </div>
                 </div>
-                <span className="text-[10px] bg-cyan-500/20 px-2 py-0.5 rounded font-mono text-cyan-300">
+                <span className={`text-[10px] px-2 py-0.5 rounded font-mono ${
+                  isBharat ? 'bg-orange-500/20 text-orange-300' : 'bg-cyan-500/20 text-cyan-300'
+                }`}>
                   Direct Path
                 </span>
               </div>
@@ -607,6 +797,10 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
                     <img
                       src={b.image_url}
                       alt={b.name}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/campus-gallery.png';
+                      }}
                       className="w-12 h-12 rounded-xl object-cover shrink-0 ring-1 ring-outline-variant/30"
                     />
                     <div className="min-w-0 flex-1">
@@ -861,6 +1055,10 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
             <img
               src={selectedBuilding.image_url}
               alt={selectedBuilding.name}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/campus-gallery.png';
+              }}
               className="w-full md:w-60 h-52 rounded-2xl object-cover ring-1 ring-outline-variant/30 shrink-0"
             />
             <div className="flex-1 flex flex-col justify-between">

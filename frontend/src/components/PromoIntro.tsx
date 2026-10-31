@@ -57,6 +57,7 @@ export const PromoIntro: React.FC<PromoIntroProps> = ({
           <img
             src="/iit-logo.png"
             alt="IIT Bhubaneswar Official Logo"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/iit-crest.png'; }}
             className="w-8 h-8 object-contain"
           />
           <div className="text-left">
@@ -89,6 +90,7 @@ export const PromoIntro: React.FC<PromoIntroProps> = ({
             <img
               src="/campusx-logo.jpg"
               alt="CAMPUSX Brand Logo"
+              onError={(e) => { (e.target as HTMLImageElement).src = '/iit-crest.png'; }}
               className="w-full h-full object-cover rounded-[22px]"
             />
           </div>

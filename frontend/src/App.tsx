@@ -18,14 +18,10 @@ import { ParticipantPortal } from './components/portals/ParticipantPortal';
 import { UserProfile, UserRole } from './types';
 import { Bot, Sparkles, Compass, Shield, Users, GraduationCap, Trophy, BookOpen, Ticket, Layers } from 'lucide-react';
 
-export function App() {
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+
+function AppContent() {
   const [showPromo, setShowPromo] = useState<boolean>(true);
-  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
-    return (localStorage.getItem('campusx_theme') as 'dark' | 'light') || 'dark';
-  });
-  const [themeModalOpen, setThemeModalOpen] = useState<boolean>(() => {
-    return !localStorage.getItem('campusx_theme_set');
-  });
 
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
     try {
@@ -41,17 +37,6 @@ export function App() {
   const [aiDrawerOpen, setAiDrawerOpen] = useState<boolean>(false);
   const [selectedBuildingForNav, setSelectedBuildingForNav] = useState<string | null>(null);
 
-  // Sync theme changes to html element
-  useEffect(() => {
-    localStorage.setItem('campusx_theme', theme);
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
-    } else {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
-    }
-  }, [theme]);
 
   // Sync user changes to localStorage
   useEffect(() => {
@@ -179,12 +164,15 @@ export function App() {
     }
   };
 
+  const { effectiveAppearance, uiMode } = useTheme();
+  const isDark = effectiveAppearance === 'dark';
+
   return (
     <div className={`min-h-screen ${
-      theme === 'dark' 
+      isDark 
         ? 'bg-[#070e1f] text-[#dce2fa]' 
         : 'bg-slate-50 text-slate-900'
-    } font-sans flex flex-col transition-colors duration-200`}>
+    } flex flex-col transition-colors duration-200`}>
       
       {/* 5-Second Cinematic Promo Launch Experience */}
       {showPromo && (
@@ -210,8 +198,6 @@ export function App() {
         onLogout={handleLogout}
         onSelectRole={handleSelectRoleFromLandingOrPromo}
         onToggleAI={() => setAiDrawerOpen(true)}
-        theme={theme}
-        onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
       />
 
       {/* Main Content Area */}
@@ -331,23 +317,20 @@ export function App() {
         onSwitchTab={(tab) => setActiveTab(tab)}
       />
 
-      {/* First-Time Dark/Light Mode Appearance Modal */}
-      <ThemeModal
-        isOpen={themeModalOpen}
-        onClose={() => {
-          setThemeModalOpen(false);
-          localStorage.setItem('campusx_theme_set', 'true');
-        }}
-        currentTheme={theme}
-        onSelectTheme={(t) => {
-          setTheme(t);
-          setThemeModalOpen(false);
-          localStorage.setItem('campusx_theme_set', 'true');
-        }}
-      />
+      {/* Comprehensive UI Design Mode, Appearance, Color Theme & Typography Modal */}
+      <ThemeModal />
 
     </div>
   );
 }
 
+export function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
+  );
+}
+
 export default App;
+

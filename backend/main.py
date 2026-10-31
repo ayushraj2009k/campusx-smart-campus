@@ -29,8 +29,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Serve root campus images
-if os.path.exists("LOGO OF IIT CAMPUS.png"):
+# Serve campus images from frontend/public and root
+if os.path.exists("frontend/public"):
+    app.mount("/static", StaticFiles(directory="frontend/public"), name="static")
+elif os.path.exists("LOGO OF IIT CAMPUS.png"):
     app.mount("/static", StaticFiles(directory="."), name="static")
 
 DATA_PATH = "CrunchWeek_Starter/CrunchWeek_StarterPack/data/cit_public.json"
@@ -491,25 +493,25 @@ def get_buildings():
     
     # Return full verified list of buildings
     buildings_list = [
-        {"id": "Admin Block", "name": "Administrative Building & Director Secretariat", "code": "ADMIN", "category": "administrative", "lat": 20.1492, "lng": 85.6772, "floors": 4, "image_url": "/static/main-building IIT.jpg", "description": "Directorate, Deans, Registrar, and Main Auditorium (AUD)."},
-        {"id": "Lecture Hall Complex", "name": "Lalitgiri & Ratnagiri Lecture Hall Complex", "code": "LHC", "category": "academic", "lat": 20.1505, "lng": 85.6780, "floors": 3, "image_url": "/static/Lalitgiri-Hall-of-Learning-scaled.jpg", "description": "Primary amphitheater halls LH-1 to LH-6."},
-        {"id": "Academic Block A (ground floor)", "name": "Lalitgiri Hall of Learning (Wing A)", "code": "LHL-A", "category": "academic", "lat": 20.1505, "lng": 85.6780, "floors": 1, "image_url": "/static/Lalitgiri-Hall-of-Learning-scaled.jpg", "description": "Ground floor smart classrooms CR-101 to CR-105."},
-        {"id": "Academic Block B (2nd floor, no lift)", "name": "Udaygiri Hall of Learning (Wing B)", "code": "UHL-B", "category": "academic", "lat": 20.1518, "lng": 85.6778, "floors": 3, "image_url": "/static/Udaygiri-hall-of-Learning-scaled.jpg", "description": "Tutorial and classroom suites CR-201 to CR-205."},
-        {"id": "Library Building", "name": "Central Library & Digital Commons", "code": "LIB", "category": "facility", "lat": 20.1500, "lng": 85.6770, "floors": 2, "image_url": "/static/Udaygiri-hall-of-Learning-scaled.jpg", "description": "Seminar Halls SH-1 & SH-2, Reading Halls."},
-        {"id": "Campus Green", "name": "Campus Green & Open Air Theatre", "code": "OAT-ZONE", "category": "cultural", "lat": 20.1470, "lng": 85.6760, "floors": 1, "image_url": "/static/Campus-Gallery-12 IIT.png", "description": "Open Air Amphitheatre (OAT) seating 800."},
-        {"id": "CSE Building", "name": "School of Electrical & Computer Sciences / Lab Complex", "code": "SECS-LAB", "category": "academic", "lat": 20.1510, "lng": 85.6795, "floors": 3, "image_url": "/static/Lab-Complex-scaled IIT.jpg", "description": "Computing Labs CS-LAB-1 and CS-LAB-2."},
-        {"id": "EE-ECE Building", "name": "School of Electrical Sciences (CRIF)", "code": "SES-ELEC", "category": "academic", "lat": 20.1520, "lng": 85.6790, "floors": 3, "image_url": "/static/CRIF-Building-scaled.jpg", "description": "Electronics Labs ELEC-LAB-1 & ELEC-LAB-2."},
-        {"id": "Science Block", "name": "School of Basic Sciences (SBS)", "code": "SBS", "category": "academic", "lat": 20.1525, "lng": 85.6760, "floors": 3, "image_url": "/static/School-of-Basic-Science-scaled.jpg", "description": "Physics Lab (PHY-LAB) & Chemistry Labs."},
-        {"id": "Workshop Shed", "name": "Central Mechanical Workshop", "code": "WS-SHED", "category": "academic", "lat": 20.1535, "lng": 85.6785, "floors": 1, "image_url": "/static/Lab-Complex-scaled IIT.jpg", "description": "Machining, foundry, and welding workshop (MECH-WS)."},
-        {"id": "Civil Building", "name": "School of Infrastructure (SIF)", "code": "SIF", "category": "academic", "lat": 20.1530, "lng": 85.6770, "floors": 3, "image_url": "/static/School-of-Infrastructure-scaled.jpg", "description": "Civil Engineering Lab (CIVIL-LAB)."},
-        {"id": "SAC-Building", "name": "Student Activity Centre (SAC)", "code": "SAC", "category": "sports", "lat": 20.1465, "lng": 85.6750, "floors": 2, "image_url": "/static/SAC-Building-1-scaled.jpg", "description": "Gymnasium, music studio, club rooms."},
-        {"id": "Health-Center", "name": "Sanjeevan Health Centre (Hospital)", "code": "SHC", "category": "medical", "lat": 20.1472, "lng": 85.6740, "floors": 2, "image_url": "/static/Sanjeevan-Health-Center-scaled.jpg", "description": "24/7 doctors, trauma care, pharmacy, ambulance."},
-        {"id": "BHR-Hostel", "name": "Brahmaputra Hall of Residence", "code": "BHR", "category": "hostel", "lat": 20.1440, "lng": 85.6710, "floors": 5, "image_url": "/static/BHR-Boys-Hostel-scaled.jpg", "description": "Undergraduate residence hall."},
-        {"id": "GHR-Hostel", "name": "Ganga Hall of Residence", "code": "GHR", "category": "hostel", "lat": 20.1435, "lng": 85.6730, "floors": 5, "image_url": "/static/GHR-Girls-Hostel-scaled.jpg", "description": "Girls residence hall."},
-        {"id": "RHR-Hostel", "name": "Rushikulya Hall of Residence", "code": "RHR", "category": "hostel", "lat": 20.1445, "lng": 85.6720, "floors": 5, "image_url": "/static/RHR-Boys-Hostel-scaled.jpg", "description": "Senior student residence hall."},
-        {"id": "Sports-Ground", "name": "Athletics Stadium & Play Courts", "code": "SPORTS", "category": "sports", "lat": 20.1455, "lng": 85.6760, "floors": 1, "image_url": "/static/Football-Ground-scaled.jpg", "description": "Football pitch, 400m track, tennis, basketball courts."},
-        {"id": "Aquatic-Center", "name": "Olympic Aquatic Complex", "code": "POOL", "category": "sports", "lat": 20.1460, "lng": 85.6765, "floors": 1, "image_url": "/static/swimming-pool-scaled.jpg", "description": "50m Olympic regulation swimming pool."},
-        {"id": "Commercial-Complex", "name": "Radhika Supermarket & Mall", "code": "RADHIKA", "category": "facility", "lat": 20.1460, "lng": 85.6725, "floors": 2, "image_url": "/static/Radika-Supermarket-scaled.jpg", "description": "Convenience store, cafeteria, SBI Bank & ATM."}
+        {"id": "Admin Block", "name": "Administrative Building & Director Secretariat", "code": "ADMIN", "category": "administrative", "lat": 20.1492, "lng": 85.6772, "floors": 4, "image_url": "/main-building.jpg", "description": "Directorate, Deans, Registrar, and Main Auditorium (AUD)."},
+        {"id": "Lecture Hall Complex", "name": "Lalitgiri & Ratnagiri Lecture Hall Complex", "code": "LHC", "category": "academic", "lat": 20.1505, "lng": 85.6780, "floors": 3, "image_url": "/Lalitgiri-Hall-of-Learning-scaled.jpg", "description": "Primary amphitheater halls LH-1 to LH-6."},
+        {"id": "Academic Block A (ground floor)", "name": "Lalitgiri Hall of Learning (Wing A)", "code": "LHL-A", "category": "academic", "lat": 20.1505, "lng": 85.6780, "floors": 1, "image_url": "/Lalitgiri-Hall-of-Learning-scaled.jpg", "description": "Ground floor smart classrooms CR-101 to CR-105."},
+        {"id": "Academic Block B (2nd floor, no lift)", "name": "Udaygiri Hall of Learning (Wing B)", "code": "UHL-B", "category": "academic", "lat": 20.1518, "lng": 85.6778, "floors": 3, "image_url": "/Udaygiri-hall-of-Learning-scaled.jpg", "description": "Tutorial and classroom suites CR-201 to CR-205."},
+        {"id": "Library Building", "name": "Central Library & Digital Commons", "code": "LIB", "category": "facility", "lat": 20.1500, "lng": 85.6770, "floors": 2, "image_url": "/Ratnagiri-Hall-of-Learning-scaled.jpg", "description": "Seminar Halls SH-1 & SH-2, Reading Halls."},
+        {"id": "Campus Green", "name": "Campus Green & Open Air Theatre", "code": "OAT-ZONE", "category": "cultural", "lat": 20.1470, "lng": 85.6760, "floors": 1, "image_url": "/campus-gallery.png", "description": "Open Air Amphitheatre (OAT) seating 800."},
+        {"id": "CSE Building", "name": "School of Electrical & Computer Sciences / Lab Complex", "code": "SECS-LAB", "category": "academic", "lat": 20.1510, "lng": 85.6795, "floors": 3, "image_url": "/lab-complex.jpg", "description": "Computing Labs CS-LAB-1 and CS-LAB-2."},
+        {"id": "EE-ECE Building", "name": "School of Electrical Sciences (CRIF)", "code": "SES-ELEC", "category": "academic", "lat": 20.1520, "lng": 85.6790, "floors": 3, "image_url": "/CRIF-Building-scaled.jpg", "description": "Electronics Labs ELEC-LAB-1 & ELEC-LAB-2."},
+        {"id": "Science Block", "name": "School of Basic Sciences (SBS)", "code": "SBS", "category": "academic", "lat": 20.1525, "lng": 85.6760, "floors": 3, "image_url": "/School-of-Basic-Science-scaled.jpg", "description": "Physics Lab (PHY-LAB) & Chemistry Labs."},
+        {"id": "Workshop Shed", "name": "Central Mechanical Workshop", "code": "WS-SHED", "category": "academic", "lat": 20.1535, "lng": 85.6785, "floors": 1, "image_url": "/lab-complex.jpg", "description": "Machining, foundry, and welding workshop (MECH-WS)."},
+        {"id": "Civil Building", "name": "School of Infrastructure (SIF)", "code": "SIF", "category": "academic", "lat": 20.1530, "lng": 85.6770, "floors": 3, "image_url": "/School-of-Infrastructure-scaled.jpg", "description": "Civil Engineering Lab (CIVIL-LAB)."},
+        {"id": "SAC-Building", "name": "Student Activity Centre (SAC)", "code": "SAC", "category": "sports", "lat": 20.1465, "lng": 85.6750, "floors": 2, "image_url": "/SAC-Building-1-scaled.jpg", "description": "Gymnasium, music studio, club rooms."},
+        {"id": "Health-Center", "name": "Sanjeevan Health Centre (Hospital)", "code": "SHC", "category": "medical", "lat": 20.1472, "lng": 85.6740, "floors": 2, "image_url": "/Sanjeevan-Health-Center-scaled.jpg", "description": "24/7 doctors, trauma care, pharmacy, ambulance."},
+        {"id": "BHR-Hostel", "name": "Brahmaputra Hall of Residence", "code": "BHR", "category": "hostel", "lat": 20.1440, "lng": 85.6710, "floors": 5, "image_url": "/BHR-Boys-Hostel-scaled.jpg", "description": "Undergraduate residence hall."},
+        {"id": "GHR-Hostel", "name": "Ganga Hall of Residence", "code": "GHR", "category": "hostel", "lat": 20.1435, "lng": 85.6730, "floors": 5, "image_url": "/GHR-Girls-Hostel-scaled.jpg", "description": "Girls residence hall."},
+        {"id": "RHR-Hostel", "name": "Rushikulya Hall of Residence", "code": "RHR", "category": "hostel", "lat": 20.1445, "lng": 85.6720, "floors": 5, "image_url": "/RHR-Boys-Hostel-scaled.jpg", "description": "Senior student residence hall."},
+        {"id": "Sports-Ground", "name": "Athletics Stadium & Play Courts", "code": "SPORTS", "category": "sports", "lat": 20.1455, "lng": 85.6760, "floors": 1, "image_url": "/Football-Ground-scaled.jpg", "description": "Football pitch, 400m track, tennis, basketball courts."},
+        {"id": "Aquatic-Center", "name": "Olympic Aquatic Complex", "code": "POOL", "category": "sports", "lat": 20.1460, "lng": 85.6765, "floors": 1, "image_url": "/swimming-pool-scaled.jpg", "description": "50m Olympic regulation swimming pool."},
+        {"id": "Commercial-Complex", "name": "Radhika Supermarket & Mall", "code": "RADHIKA", "category": "facility", "lat": 20.1460, "lng": 85.6725, "floors": 2, "image_url": "/Radika-Supermarket-scaled.jpg", "description": "Convenience store, cafeteria, SBI Bank & ATM."}
     ]
     return {"buildings": buildings_list}
 
@@ -735,4 +737,4 @@ if os.path.exists("frontend/dist"):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=8000)

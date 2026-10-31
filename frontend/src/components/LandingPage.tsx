@@ -6,6 +6,7 @@ import {
   Play, Radio, Layers, Bot, Zap, Flame, ExternalLink, ShieldAlert
 } from 'lucide-react';
 import { UserRole } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 interface LandingPageProps {
   onSelectRole: (role: UserRole) => void;
@@ -18,6 +19,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onOpenNavigation,
   onOpenAI,
 }) => {
+  const { uiMode, effectiveAppearance } = useTheme();
+  const isBharat = uiMode === 'bharat';
+  const isDark = effectiveAppearance === 'dark';
+
   const [activeCategory, setActiveCategory] = useState<'all' | 'academic' | 'facilities' | 'recreation'>('all');
 
   const portalCards = [
@@ -119,7 +124,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       title: 'Emergency Pipe Maintenance Repaired',
       subtitle: 'CR-102 & LHL-101 Scheduled Shift',
       detail: 'Only 14 sessions displaced • 0 Hard Violations • Stability 92.6%',
-      image: '/Lab-Complex-scaled IIT.jpg',
+      image: '/lab-complex.jpg',
       target: 'LHL'
     },
     {
@@ -139,7 +144,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       title: 'Central Library Commons',
       subtitle: 'Silent Research Pods & Digital RFID Desks',
       detail: 'Air-conditioned digital lounge open 24/7 for exam week',
-      image: '/main-building IIT.jpg',
+      image: '/main-building.jpg',
       target: 'LIB'
     },
     {
@@ -156,7 +161,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
   const campusGalleries = [
     { title: 'Lalitgiri Complex (LHL)', category: 'academic', image: '/Lalitgiri-Hall-of-Learning-scaled.jpg', desc: 'Central academic complex housing Lecture Halls LH-1 through LH-6 with 15 topological indoor nodes.' },
-    { title: 'Administrative Secretariat', category: 'academic', image: '/main-building IIT.jpg', desc: 'Central administrative headquarters, Directorate, Academic Senate Hall, and Registrar offices.' },
+    { title: 'Administrative Secretariat', category: 'academic', image: '/main-building.jpg', desc: 'Central administrative headquarters, Directorate, Academic Senate Hall, and Registrar offices.' },
     { title: 'Community Auditorium', category: 'recreation', image: '/Auditorium-1.png', desc: 'Acoustically treated auditorium seating 600 delegates with professional theatrical lighting.' },
     { title: 'School of Basic Sciences', category: 'academic', image: '/School-of-Basic-Science-scaled.jpg', desc: 'Physics, Chemistry, and Advanced Materials research labs equipped with clean-room bays.' },
     { title: 'Student Activity Centre (SAC)', category: 'recreation', image: '/SAC-Building-1-scaled.jpg', desc: 'Indoor badminton stadiums, state-of-the-art gymnasium, music practice rooms, and student council.' },
@@ -180,6 +185,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <img
             src="/Lalitgiri-Hall-of-Learning-scaled.jpg"
             alt="IIT Bhubaneswar Campus"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }}
             className="w-full h-full object-cover object-center filter brightness-50 scale-105 transition-transform duration-1000 ease-out"
           />
           {/* Netflix-style Multi-Layer Vignette */}
@@ -190,20 +196,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         {/* Hero Content Stage */}
         <div className="relative z-10 px-6 sm:px-12 py-16 sm:py-24 max-w-4xl">
           
-          {/* Official IIT Crest & Accreditation Pill */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-surface-container-high/90 border border-secondary/40 backdrop-blur-xl mb-6 shadow-lg shadow-cyan-500/10">
-            <img src="/iit-logo.png" alt="IIT Crest" className="w-6 h-6 object-contain" />
-            <div className="flex items-center gap-2 text-xs">
-              <span className="font-bold text-white uppercase tracking-wider font-mono">IIT Bhubaneswar</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-              <span className="text-secondary font-mono">CrunchWeek 2026</span>
+          {/* Accreditation Pills */}
+          <div className="flex flex-wrap items-center gap-2.5 mb-6">
+            {isBharat && (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500/25 via-amber-500/20 to-orange-500/25 border border-orange-500/50 backdrop-blur-xl shadow-lg shadow-orange-500/10">
+                <span className="text-xs">🇮🇳</span>
+                <span className="text-xs font-bold text-orange-300 font-mono tracking-wide uppercase">
+                  Bharat Innovation Challenge 2026
+                </span>
+              </div>
+            )}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface-container-high/90 border border-secondary/40 backdrop-blur-xl shadow-lg shadow-cyan-500/10">
+              <img src="/iit-logo.png" alt="IIT Crest" onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }} className="w-6 h-6 object-contain" />
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-bold text-white uppercase tracking-wider font-mono">IIT Bhubaneswar</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+                <span className="text-secondary font-mono">CrunchWeek 2026</span>
+              </div>
             </div>
           </div>
 
           {/* Main Headline */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white mb-4 font-display leading-[1.08] drop-shadow-md">
             ONE CAMPUS.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-primary-fixed to-tertiary">
+            <span className={`text-transparent bg-clip-text ${
+              isBharat
+                ? 'bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-400'
+                : 'bg-gradient-to-r from-secondary via-primary-fixed to-tertiary'
+            }`}>
               ONE CONNECTED EXPERIENCE.
             </span>
           </h1>
@@ -217,7 +237,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="flex flex-wrap items-center gap-3.5">
             <a
               href="#portals"
-              className="flex items-center gap-2.5 px-6 py-3.5 rounded-xl bg-gradient-to-r from-secondary to-primary-container text-on-secondary font-bold text-sm shadow-xl shadow-secondary/25 hover:shadow-secondary/40 transition-all transform hover:scale-105 active:scale-95"
+              className={`flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-sm shadow-xl transition-all transform hover:scale-105 active:scale-95 ${
+                isBharat
+                  ? 'bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white shadow-orange-500/25 hover:shadow-orange-500/40'
+                  : 'bg-gradient-to-r from-secondary to-primary-container text-on-secondary shadow-secondary/25 hover:shadow-secondary/40'
+              }`}
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Enter Portal Workspace</span>
@@ -279,6 +303,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <img
                   src={item.image}
                   alt={item.title}
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-container-low via-surface-container-low/40 to-transparent" />
@@ -460,6 +485,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <img
                   src={item.image}
                   alt={item.title}
+                  onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-surface-container-lowest/30 to-transparent" />
