@@ -3,7 +3,8 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 export type UIMode = 'bharat' | 'liquid_glass';
 export type Appearance = 'dark' | 'light' | 'system';
 export type ColorTheme = 'bharat_saffron' | 'cyber_nexus';
-export type Typography = 'tech_sans' | 'classic_serif';
+export type Typography = 'linotte' | 'tech_sans' | 'classic_serif';
+export type NavStyle = 'apple' | 'classic';
 
 interface ThemeContextType {
   uiMode: UIMode;
@@ -11,11 +12,17 @@ interface ThemeContextType {
   effectiveAppearance: 'dark' | 'light';
   colorTheme: ColorTheme;
   typography: Typography;
+  pureBlack: boolean;
+  navStyle: NavStyle;
+  dynamicIsland: boolean;
   isAppearanceModalOpen: boolean;
   setUiMode: (mode: UIMode) => void;
   setAppearance: (appearance: Appearance) => void;
   setColorTheme: (theme: ColorTheme) => void;
   setTypography: (typography: Typography) => void;
+  setPureBlack: (enabled: boolean) => void;
+  setNavStyle: (style: NavStyle) => void;
+  setDynamicIsland: (enabled: boolean) => void;
   openAppearanceModal: () => void;
   closeAppearanceModal: () => void;
   completeFirstTimeSetup: () => void;
@@ -37,7 +44,19 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   });
 
   const [typography, setTypographyState] = useState<Typography>(() => {
-    return (localStorage.getItem('campusx_typography') as Typography) || 'tech_sans';
+    return (localStorage.getItem('campusx_typography') as Typography) || 'linotte';
+  });
+
+  const [pureBlack, setPureBlackState] = useState<boolean>(() => {
+    return localStorage.getItem('campusx_pure_black') === 'true';
+  });
+
+  const [navStyle, setNavStyleState] = useState<NavStyle>(() => {
+    return (localStorage.getItem('campusx_nav_style') as NavStyle) || 'apple';
+  });
+
+  const [dynamicIsland, setDynamicIslandState] = useState<boolean>(() => {
+    return localStorage.getItem('campusx_dynamic_island') !== 'false';
   });
 
   // First time prompt opens automatically if not configured yet
@@ -78,11 +97,19 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       root.classList.remove('dark');
     }
 
+    // Pure black OLED toggle
+    if (pureBlack && effectiveAppearance === 'dark') {
+      root.classList.add('pure-black');
+    } else {
+      root.classList.remove('pure-black');
+    }
+
     // Data attributes for comprehensive styling hooks
     root.setAttribute('data-ui-mode', uiMode);
     root.setAttribute('data-color-theme', colorTheme);
     root.setAttribute('data-typography', typography);
     root.setAttribute('data-appearance', effectiveAppearance);
+    root.setAttribute('data-nav-style', navStyle);
 
     // Save to localStorage
     localStorage.setItem('campusx_ui_mode', uiMode);
@@ -90,11 +117,13 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     localStorage.setItem('campusx_theme', effectiveAppearance);
     localStorage.setItem('campusx_color_theme', colorTheme);
     localStorage.setItem('campusx_typography', typography);
-  }, [uiMode, appearance, effectiveAppearance, colorTheme, typography]);
+    localStorage.setItem('campusx_pure_black', pureBlack ? 'true' : 'false');
+    localStorage.setItem('campusx_nav_style', navStyle);
+    localStorage.setItem('campusx_dynamic_island', dynamicIsland ? 'true' : 'false');
+  }, [uiMode, appearance, effectiveAppearance, colorTheme, typography, pureBlack, navStyle, dynamicIsland]);
 
   const setUiMode = (mode: UIMode) => {
     setUiModeState(mode);
-    // If switching to bharat, default to saffron theme; if switching to liquid glass, default to cyber nexus
     if (mode === 'bharat' && colorTheme === 'cyber_nexus') {
       setColorThemeState('bharat_saffron');
     } else if (mode === 'liquid_glass' && colorTheme === 'bharat_saffron') {
@@ -114,6 +143,18 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     setTypographyState(typo);
   };
 
+  const setPureBlack = (enabled: boolean) => {
+    setPureBlackState(enabled);
+  };
+
+  const setNavStyle = (style: NavStyle) => {
+    setNavStyleState(style);
+  };
+
+  const setDynamicIsland = (enabled: boolean) => {
+    setDynamicIslandState(enabled);
+  };
+
   const openAppearanceModal = () => setIsAppearanceModalOpen(true);
   const closeAppearanceModal = () => setIsAppearanceModalOpen(false);
 
@@ -130,11 +171,17 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         effectiveAppearance,
         colorTheme,
         typography,
+        pureBlack,
+        navStyle,
+        dynamicIsland,
         isAppearanceModalOpen,
         setUiMode,
         setAppearance,
         setColorTheme,
         setTypography,
+        setPureBlack,
+        setNavStyle,
+        setDynamicIsland,
         openAppearanceModal,
         closeAppearanceModal,
         completeFirstTimeSetup,

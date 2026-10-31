@@ -51,6 +51,21 @@
     font-family: 'Plus Jakarta Sans', sans-serif !important;
   }
 
+  /* Typography mode: Linotte (Soft Rounded Modern from WhatsApp screenshot) */
+  [data-typography="linotte"],
+  [data-typography="linotte"] body {
+    font-family: 'Nunito', 'Quicksand', 'Linotte', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  }
+  [data-typography="linotte"] h1,
+  [data-typography="linotte"] h2,
+  [data-typography="linotte"] h3,
+  [data-typography="linotte"] h4,
+  [data-typography="linotte"] h5,
+  [data-typography="linotte"] h6 {
+    font-family: 'Quicksand', 'Nunito', 'Linotte', sans-serif !important;
+    font-weight: 700;
+  }
+
   /* Typography mode: Indian Classic Serif (with Noto Serif Devanagari) */
   [data-typography="classic_serif"],
   [data-typography="classic_serif"] body {
@@ -64,6 +79,18 @@
   [data-typography="classic_serif"] h6 {
     font-family: 'Noto Serif Devanagari', 'Merriweather', Georgia, serif !important;
     letter-spacing: -0.01em;
+  }
+
+  /* Pure Black OLED Display Mode (from WhatsApp screenshot) */
+  html.pure-black,
+  html.pure-black body {
+    background-color: #000000 !important;
+    --bg-primary: #000000 !important;
+  }
+  html.pure-black .bg-surface-container-lowest,
+  html.pure-black .bg-surface,
+  html.pure-black #root {
+    background-color: #000000 !important;
   }
 }
 

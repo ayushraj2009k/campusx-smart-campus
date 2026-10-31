@@ -6,6 +6,7 @@ import { AuthModal } from './components/AuthModal';
 import { CampusNavigation } from './components/CampusNavigation';
 import { AIAssistantDrawer } from './components/AIAssistantDrawer';
 import { ThemeModal } from './components/ThemeModal';
+import { DynamicIsland } from './components/DynamicIsland';
 
 // Portal views
 import { AdminPortal } from './components/portals/AdminPortal';
@@ -182,6 +183,13 @@ function AppContent() {
           onSelectRole={handleSelectRoleFromLandingOrPromo}
         />
       )}
+
+      {/* Apple-Style Live Status Dynamic Island (from WhatsApp appearance settings) */}
+      <DynamicIsland
+        onOpenNavigation={handleOpenNavigationWithTarget}
+        onOpenAI={() => setAiDrawerOpen(true)}
+        onOpenTimetable={() => setActiveTab('timetable')}
+      />
 
       {/* Global Navigation Bar */}
       <Navbar

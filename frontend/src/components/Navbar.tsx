@@ -41,8 +41,9 @@ export const Navbar: React.FC<NavbarProps> = ({
     { role: 'participant' as UserRole, label: 'Participant (Spectra)', icon: Ticket, color: 'text-fuchsia-400' },
   ];
 
-  const { uiMode, openAppearanceModal, effectiveAppearance, setAppearance } = useTheme();
+  const { uiMode, openAppearanceModal, effectiveAppearance, setAppearance, navStyle } = useTheme();
   const isBharat = uiMode === 'bharat';
+  const isApple = navStyle === 'apple';
 
   return (
     <>
@@ -56,8 +57,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       )}
 
-      <header className="sticky top-0 z-40 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant/20 shadow-md">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <header className={`sticky z-40 transition-all duration-300 ${
+        isApple
+          ? 'top-2.5 max-w-6xl mx-auto my-2 rounded-2xl bg-surface-container-lowest/85 backdrop-blur-2xl border border-outline-variant/40 shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-2'
+          : 'top-0 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant/20 shadow-md'
+      }`}>
+        <div className={`mx-auto h-16 flex items-center justify-between gap-4 ${
+          isApple ? 'px-3 sm:px-4' : 'max-w-7xl px-4 sm:px-6'
+        }`}>
           
           {/* Brand & Crest */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => onTabChange('overview')}>
