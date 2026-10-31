@@ -1,0 +1,98 @@
+{
+  "dataset_id": "cit-public-v1",
+  "schedule_dataset_id": "cit-public-v1",
+  "team": "CAMPUSX Dev Team",
+  "soft_penalties": {
+    "S1": 0,
+    "S2": 59,
+    "S3": 69,
+    "S4": 189,
+    "S5": 25,
+    "S6": 6
+  },
+  "soft_total": 348,
+  "bookings": {
+    "booking_score": 55.5,
+    "booking_score_max_if_all_approved": 70,
+    "approved": 21,
+    "alternatives": 2,
+    "rejected": 2,
+    "session_overrides": 0,
+    "priority_inversions": []
+  },
+  "exam_soft_penalty": 0,
+  "stability": {
+    "sessions_moved": 45,
+    "time_changed": 26,
+    "room_only_changed": 19,
+    "moved_ids": [
+      "CE202-L1",
+      "CE202-L2",
+      "CE202-L3",
+      "CE204-L1",
+      "CE301-L1",
+      "CE302-L1",
+      "CE302-L2",
+      "CE302-L3",
+      "CS101-B-L1",
+      "CS201-L2",
+      "CS201-L3",
+      "CS202-L1",
+      "CS203-L1",
+      "CS203-L2",
+      "CS303-L2",
+      "EC201-L1",
+      "EC201-L2",
+      "EC201-L3",
+      "EC201-T1",
+      "EC203-L2",
+      "EC204-L1",
+      "EC301-L2",
+      "EC301-L3",
+      "EE201-L1",
+      "EE201-L2",
+      "EE201-L3",
+      "EE201-T1",
+      "EE202-L1",
+      "EE202-L2",
+      "EE202-L3",
+      "EE203-L1",
+      "EE204-L1",
+      "EE301-L1",
+      "EE301-L2",
+      "EE301-L3",
+      "HS101-A-L2",
+      "HS101-B-L1",
+      "HS201-H1-L2",
+      "MA101-AB-L2",
+      "MA101-D-T1",
+      "ME203-L2",
+      "OE303-L2",
+      "PH101-B-L3",
+      "PH101-C-L2",
+      "PH101-D-L3"
+    ]
+  },
+  "hard_violations": [
+    {
+      "rule": "H13",
+      "where": "fest_week",
+      "detail": "BR-01: AUD MON P5 already used by HS201-H1-L2"
+    },
+    {
+      "rule": "H13",
+      "where": "fest_week",
+      "detail": "BR-03: AUD WED P6 already used by EE202-L3"
+    },
+    {
+      "rule": "H13",
+      "where": "fest_week",
+      "detail": "BR-03: AUD WED P7 already used by EE202-L2"
+    }
+  ],
+  "hard_violation_count": 3,
+  "hard_by_rule": {
+    "H13": 3
+  },
+  "warnings": []
+}
