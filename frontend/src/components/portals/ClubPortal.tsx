@@ -146,7 +146,8 @@ export const ClubPortal: React.FC = () => {
                 value={naturalText}
                 onChange={(e) => setNaturalText(e.target.value)}
                 placeholder="e.g. seminar hall kal shaam 6 baje, 2 ghante, 100 log, mic chahiye"
-                className="w-full p-3.5 rounded-xl bg-surface-container border border-outline-variant/30 text-xs text-white focus:outline-none focus:border-secondary transition-colors"
+                className="w-full p-3.5 rounded-xl border text-xs focus:outline-none focus:border-secondary transition-colors font-medium shadow-inner"
+                style={{ color: '#ffffff', backgroundColor: '#0b1120', border: '1px solid rgba(76, 215, 246, 0.4)' }}
               />
 
               <button

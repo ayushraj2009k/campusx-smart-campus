@@ -146,7 +146,8 @@ export const FacultyPortal: React.FC<FacultyPortalProps> = ({ onOpenNavigation }
             value={requestText}
             onChange={(e) => setRequestText(e.target.value)}
             placeholder="e.g. Need to move my Friday afternoon analog electronics lab to Thursday 2 PM in ELEC-LAB-1."
-            className="w-full p-3.5 rounded-xl bg-surface-container border border-outline-variant/30 text-xs text-white focus:outline-none focus:border-secondary transition-colors"
+            className="w-full p-3.5 rounded-xl border text-xs focus:outline-none focus:border-secondary transition-colors font-medium shadow-inner"
+            style={{ color: '#ffffff', backgroundColor: '#0b1120', border: '1px solid rgba(76, 215, 246, 0.4)' }}
           />
 
           <div className="flex gap-2">

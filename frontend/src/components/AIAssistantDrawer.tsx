@@ -428,20 +428,25 @@ export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Ask anything or request a booking in English/Hinglish..."
-              className="flex-1 bg-navy-900 border border-navy-700 rounded-xl px-4 py-2.5 text-sm text-white placeholder-navy-500 focus:outline-none focus:border-cyan-500/60 focus:ring-1 focus:ring-cyan-500/40 transition-all"
+              className="flex-1 rounded-xl px-4 py-3 text-sm font-semibold transition-all shadow-inner focus:outline-none focus:ring-2 focus:ring-cyan-400 caret-cyan-400"
+              style={{
+                color: '#ffffff',
+                backgroundColor: '#0b1120',
+                border: '2px solid rgba(76, 215, 246, 0.5)'
+              }}
             />
 
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="p-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-electric-600 hover:from-cyan-400 hover:to-electric-500 text-navy-950 font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md shadow-cyan-500/20"
+              className="p-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md shadow-cyan-500/20"
             >
               <Send className="w-4 h-4" />
             </button>
           </form>
-          <div className="mt-2 flex items-center justify-between text-[11px] text-navy-500">
+          <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400">
             <span>Natural language queries parsed into CP-SAT constraints</span>
-            <span>IIT Bhubaneswar Engine v1.0</span>
+            <span className="text-cyan-400 font-mono">IIT BBS Engine v1.0</span>
           </div>
         </div>
 
