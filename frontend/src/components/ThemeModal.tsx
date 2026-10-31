@@ -65,9 +65,9 @@ export const ThemeModal: React.FC = () => {
         <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-2 border shadow-sm">
             {isBharat ? (
-              <span className="flex items-center gap-1.5 text-orange-400 bg-orange-500/10 border-orange-500/30">
-                <Flag className="w-3.5 h-3.5 text-orange-500" />
-                CareGrid &amp; Bharat Innovation Console
+              <span className="flex items-center gap-1.5 text-amber-400 bg-amber-500/10 border-amber-500/30">
+                <Cpu className="w-3.5 h-3.5 text-amber-400" />
+                CAMPUSX Command Center Architecture
               </span>
             ) : (
               <span className="flex items-center gap-1.5 text-cyan-400 bg-cyan-500/10 border-cyan-500/30">
@@ -78,7 +78,7 @@ export const ThemeModal: React.FC = () => {
           </div>
 
           <h2 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
-            Appearance &amp; Personalization
+            Screen &amp; Appearance Settings
           </h2>
           <p className={`text-xs sm:text-sm mt-1 max-w-lg mx-auto ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
             Customize UI modes, Linotte / Sans / Serif fonts, Apple navigation bar, and OLED black theme.
@@ -94,52 +94,52 @@ export const ThemeModal: React.FC = () => {
               <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
                 isDark ? 'text-slate-300' : 'text-slate-700'
               }`}>
-                <Layout className="w-4 h-4 text-orange-500" />
+                <Layout className="w-4 h-4 text-amber-400" />
                 <span>1. UI Design Architecture</span>
               </span>
               <span className="text-[11px] text-slate-400 font-mono">
-                {uiMode === 'bharat' ? 'CareGrid Enterprise Console' : 'Cyber Neon Ops Matrix'}
+                {uiMode === 'bharat' ? 'Enterprise Operations Console' : 'Cyber Neon Ops Matrix'}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               
-              {/* Option A: CareGrid / Bharat Innovation Console */}
+              {/* Option A: Enterprise Operations Console */}
               <button
                 type="button"
                 onClick={() => setUiMode('bharat')}
                 className={`p-4 rounded-2xl border text-left transition-all relative overflow-hidden ${
                   uiMode === 'bharat'
-                    ? 'border-orange-500 ring-2 ring-orange-500/40 bg-orange-500/10 shadow-lg shadow-orange-500/10'
+                    ? 'border-amber-500 ring-2 ring-amber-500/40 bg-amber-500/10 shadow-lg shadow-amber-500/10'
                     : isDark ? 'border-slate-800 bg-slate-900/50 hover:border-slate-700' : 'border-slate-200 bg-slate-50 hover:border-slate-300'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-xl bg-orange-500/20 text-orange-500 flex items-center justify-center font-bold text-xs border border-orange-500/30">
-                      🇮🇳
+                    <div className="w-8 h-8 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs border border-amber-500/30">
+                      <Cpu className="w-4 h-4" />
                     </div>
                     <div>
                       <span className={`text-sm font-bold block ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                        Enterprise CareGrid Mode
+                        Enterprise Operations Mode
                       </span>
-                      <span className="text-[10px] text-orange-400 font-medium font-mono">
-                        Structured Operations &amp; Queue
+                      <span className="text-[10px] text-amber-400 font-medium font-mono">
+                        Structured Operations &amp; Work Queue
                       </span>
                     </div>
                   </div>
                   {uiMode === 'bharat' && (
-                    <div className="w-5 h-5 rounded-full bg-orange-500 text-white flex items-center justify-center shrink-0">
+                    <div className="w-5 h-5 rounded-full bg-amber-500 text-slate-950 flex items-center justify-center shrink-0">
                       <Check className="w-3.5 h-3.5 stroke-[3]" />
                     </div>
                   )}
                 </div>
                 <p className={`text-[11px] leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
-                  Inspired by modern enterprise operations: data freshness status bar, priority work queue tabs (Needs Action, In Progress), counter badges ([126], [17]), and national hackathon banner.
+                  Inspired by modern enterprise command centers: data freshness status bar, priority work queue tabs (Needs Action, Spectra Week, Exams, Core), counter badges ([4], [25], [14], [189]), and high-density telemetry.
                 </p>
                 <div className="mt-2.5 flex items-center gap-1.5">
-                  <span className="px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-400 text-[9px] font-mono font-bold">126 QUEUE</span>
-                  <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 text-[9px] font-mono font-bold">SPARKLINE</span>
+                  <span className="px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 text-[9px] font-mono font-bold">WORK QUEUE</span>
+                  <span className="px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 text-[9px] font-mono font-bold">DATA FRESHNESS</span>
                   <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[9px] font-mono font-bold">ONLINE</span>
                 </div>
               </button>
@@ -428,8 +428,8 @@ export const ThemeModal: React.FC = () => {
                         : 'CAMPUSX • IIT Bhubaneswar (Tech Sans)'}
                   </h4>
                   <p className="text-[11px] text-slate-400">
-                    Mode: <strong className={isBharat ? 'text-orange-400' : 'text-cyan-400'}>
-                      {uiMode === 'bharat' ? 'CareGrid Enterprise' : 'Cyber Neon'}
+                    Mode: <strong className={isBharat ? 'text-amber-400' : 'text-cyan-400'}>
+                      {uiMode === 'bharat' ? 'Enterprise Operations' : 'Cyber Neon'}
                     </strong> &bull; Nav: {navStyle} &bull; OLED: {pureBlack ? 'ON' : 'OFF'}
                   </p>
                 </div>
@@ -437,7 +437,7 @@ export const ThemeModal: React.FC = () => {
 
               <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                 isBharat 
-                  ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' 
+                  ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' 
                   : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
               }`}>
                 Active

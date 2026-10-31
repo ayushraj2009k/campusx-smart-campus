@@ -28,6 +28,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   const [activeCategory, setActiveCategory] = useState<'all' | 'academic' | 'facilities' | 'recreation'>('all');
   const [queueTab, setQueueTab] = useState<'needs_action' | 'spectra' | 'exams' | 'core'>('needs_action');
   const [queueSearch, setQueueSearch] = useState('');
+  const [selectedPeriod, setSelectedPeriod] = useState<string>('P4');
+  const [gaugeMode, setGaugeMode] = useState<'standard' | 'spectra' | 'midsem'>('spectra');
 
   const queueItems = [
     {
@@ -331,20 +333,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           
           {/* Accreditation Pills */}
           <div className="flex flex-wrap items-center gap-2.5 mb-6">
-            {isBharat && (
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-orange-500/25 via-amber-500/20 to-orange-500/25 border border-orange-500/50 backdrop-blur-xl shadow-lg shadow-orange-500/10">
-                <span className="text-xs">🇮🇳</span>
-                <span className="text-xs font-bold text-orange-300 font-mono tracking-wide uppercase">
-                  Bharat Innovation Challenge 2026
-                </span>
-              </div>
-            )}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high border border-amber-500/40 backdrop-blur-xl shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping"></span>
+              <span className="text-xs font-bold text-amber-300 font-mono tracking-wide uppercase">
+                CIT Semester &amp; Venue Management Platform
+              </span>
+            </div>
             <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface-container-high/90 border border-secondary/40 backdrop-blur-xl shadow-lg shadow-cyan-500/10">
               <img src="/iit-logo.png" alt="IIT Crest" onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }} className="w-6 h-6 object-contain" />
               <div className="flex items-center gap-2 text-xs">
-                <span className="font-bold text-white uppercase tracking-wider font-mono">IIT Bhubaneswar</span>
+                <span className="font-bold text-white uppercase tracking-wider font-mono">Chilika Institute of Technology</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-                <span className="text-secondary font-mono">CrunchWeek 2026</span>
+                <span className="text-secondary font-mono">1,000 Students &bull; 5 Branches</span>
               </div>
             </div>
           </div>
@@ -354,7 +354,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             ONE CAMPUS.<br />
             <span className={`text-transparent bg-clip-text ${
               isBharat
-                ? 'bg-gradient-to-r from-orange-400 via-amber-300 to-yellow-400'
+                ? 'bg-gradient-to-r from-amber-400 via-amber-300 to-yellow-400'
                 : 'bg-gradient-to-r from-secondary via-primary-fixed to-tertiary'
             }`}>
               ONE CONNECTED EXPERIENCE.
@@ -372,7 +372,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               href="#portals"
               className={`flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-sm shadow-xl transition-all transform hover:scale-105 active:scale-95 ${
                 isBharat
-                  ? 'bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white shadow-orange-500/25 hover:shadow-orange-500/40'
+                  ? 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-slate-950 font-extrabold shadow-amber-500/25 hover:shadow-amber-500/40'
                   : 'bg-gradient-to-r from-secondary to-primary-container text-on-secondary shadow-secondary/25 hover:shadow-secondary/40'
               }`}
             >
@@ -595,170 +595,455 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         </div>
 
-        {/* --- PART B: FREQUENCY WAVEFORM & CONCENTRIC RADIAL GAUGES (IMAGE 1 SPEC) --- */}
+        {/* --- PART B: INTERACTIVE FREQUENCY WAVEFORM & DYNAMIC RADIAL GAUGES (IMAGE 1 SPEC) --- */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           
-          {/* Left: Audio-Style Waveform Frequency Chart (7 cols) */}
-          <div className="lg:col-span-7 rounded-3xl p-6 bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#060c18] border border-cyan-500/20 shadow-2xl relative overflow-hidden">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-              <div>
-                <div className="flex items-center gap-2">
-                  <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />
-                  <h3 className="text-base font-bold text-white font-display">
-                    Campus Period Acoustic & Load Frequency
-                  </h3>
-                </div>
-                <p className="text-xs text-surface-variant mt-0.5">
-                  Period-by-period venue utilisation P1 to P13 (08:00 - 22:00)
-                </p>
-              </div>
-              <div className="flex items-center gap-2 text-[11px] font-mono">
-                <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
-                  Peak: P4 (100%)
-                </span>
-                <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                  Lunch Cleared
-                </span>
-              </div>
-            </div>
-
-            {/* Audio Waveform Equalizer Display */}
-            <div className="h-44 flex items-end justify-between gap-1.5 sm:gap-2 px-2 pb-2 pt-6 rounded-2xl bg-black/40 border border-white/5 relative">
-              {/* Background guideline grid */}
-              <div className="absolute inset-0 flex flex-col justify-between p-3 pointer-events-none opacity-20">
-                <div className="border-b border-cyan-500 border-dashed w-full"></div>
-                <div className="border-b border-cyan-500 border-dashed w-full"></div>
-                <div className="border-b border-cyan-500 border-dashed w-full"></div>
-              </div>
-
-              {[
-                { period: 'P1', time: '08:00', height: '62%', color: 'from-blue-500 to-cyan-400', load: '62%' },
-                { period: 'P2', time: '09:00', height: '88%', color: 'from-blue-500 to-cyan-400', load: '88%' },
-                { period: 'P3', time: '10:00', height: '94%', color: 'from-cyan-500 to-teal-300', load: '94%' },
-                { period: 'P4', time: '11:00', height: '100%', color: 'from-teal-400 to-emerald-300', load: '100%' },
-                { period: 'P5', time: '12:00', height: '82%', color: 'from-blue-500 to-cyan-400', load: '82%' },
-                { period: 'Lunch', time: '13:00', height: '15%', color: 'from-amber-500/40 to-amber-400/60', load: '15%' },
-                { period: 'P6', time: '14:00', height: '90%', color: 'from-blue-500 to-cyan-400', load: '90%' },
-                { period: 'P7', time: '15:00', height: '96%', color: 'from-cyan-500 to-teal-300', load: '96%' },
-                { period: 'P8', time: '16:00', height: '84%', color: 'from-blue-500 to-cyan-400', load: '84%' },
-                { period: 'P9', time: '17:00', height: '68%', color: 'from-blue-500 to-cyan-400', load: '68%' },
-                { period: 'P10', time: '18:00', height: '78%', color: 'from-pink-500 to-purple-400', load: 'Fest 78%' },
-                { period: 'P11', time: '19:00', height: '95%', color: 'from-pink-500 to-purple-400', load: 'Fest 95%' },
-                { period: 'P12', time: '20:00', height: '86%', color: 'from-pink-500 to-purple-400', load: 'Fest 86%' },
-                { period: 'P13', time: '21:00', height: '64%', color: 'from-purple-500 to-indigo-400', load: 'Fest 64%' },
-              ].map((bar, i) => (
-                <div key={i} className="flex-1 flex flex-col items-center h-full justify-end group/bar relative">
-                  {/* Tooltip */}
-                  <div className="absolute -top-7 opacity-0 group-hover/bar:opacity-100 transition-opacity pointer-events-none bg-slate-900 text-white text-[10px] font-mono px-2 py-0.5 rounded shadow-lg border border-cyan-500/40 z-20 whitespace-nowrap">
-                    {bar.period} ({bar.time}): {bar.load}
+          {/* Left: Audio-Style Waveform Frequency Chart with Interactive Period Inspector (7 cols) */}
+          <div className="lg:col-span-7 rounded-3xl p-6 bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#060c18] border border-cyan-500/20 shadow-2xl relative overflow-hidden flex flex-col justify-between">
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <Volume2 className="w-4 h-4 text-cyan-400 animate-pulse" />
+                    <h3 className="text-base font-bold text-white font-display">
+                      Campus Period Acoustic &amp; Load Frequency
+                    </h3>
                   </div>
-                  {/* Waveform Column */}
-                  <div 
-                    className={`w-full rounded-t-sm bg-gradient-to-t ${bar.color} transition-all duration-300 group-hover/bar:brightness-125 shadow-[0_0_12px_rgba(76,215,246,0.3)]`}
-                    style={{ height: bar.height }}
-                  ></div>
-                  <span className="text-[9px] font-mono text-slate-400 mt-1 truncate max-w-full">
-                    {bar.period === 'Lunch' ? 'L' : bar.period}
+                  <p className="text-xs text-surface-variant mt-0.5">
+                    Click any period column (P1 &ndash; P13) to inspect live scheduled sessions and constraint compliance
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-[11px] font-mono">
+                  <span className="px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30">
+                    Peak: P4 (100%)
+                  </span>
+                  <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                    Lunch: 0 Classes
                   </span>
                 </div>
-              ))}
+              </div>
+
+              {/* Audio Waveform Equalizer Interactive Display */}
+              <div className="h-44 flex items-end justify-between gap-1.5 sm:gap-2 px-2 pb-2 pt-6 rounded-2xl bg-black/40 border border-white/5 relative">
+                {/* Background guideline grid */}
+                <div className="absolute inset-0 flex flex-col justify-between p-3 pointer-events-none opacity-20">
+                  <div className="border-b border-cyan-500 border-dashed w-full"></div>
+                  <div className="border-b border-cyan-500 border-dashed w-full"></div>
+                  <div className="border-b border-cyan-500 border-dashed w-full"></div>
+                </div>
+
+                {[
+                  { period: 'P1', time: '08:00', height: '62%', color: 'from-blue-600 to-cyan-400', load: '62%', name: 'P1 (08:00)' },
+                  { period: 'P2', time: '09:00', height: '88%', color: 'from-blue-600 to-cyan-400', load: '88%', name: 'P2 (09:00)' },
+                  { period: 'P3', time: '10:00', height: '94%', color: 'from-cyan-500 to-teal-300', load: '94%', name: 'P3 (10:00)' },
+                  { period: 'P4', time: '11:00', height: '100%', color: 'from-teal-400 to-emerald-300', load: '100%', name: 'P4 (11:00)' },
+                  { period: 'P5', time: '12:00', height: '82%', color: 'from-blue-600 to-cyan-400', load: '82%', name: 'P5 (12:00)' },
+                  { period: 'Lunch', time: '13:00', height: '14%', color: 'from-amber-500/40 to-amber-400/60', load: '0%', name: 'Lunch (13:00)' },
+                  { period: 'P6', time: '14:00', height: '90%', color: 'from-blue-600 to-cyan-400', load: '90%', name: 'P6 (14:00)' },
+                  { period: 'P7', time: '15:00', height: '96%', color: 'from-cyan-500 to-teal-300', load: '96%', name: 'P7 (15:00)' },
+                  { period: 'P8', time: '16:00', height: '84%', color: 'from-blue-600 to-cyan-400', load: '84%', name: 'P8 (16:00)' },
+                  { period: 'P9', time: '17:00', height: '68%', color: 'from-blue-600 to-cyan-400', load: '68%', name: 'P9 (17:00)' },
+                  { period: 'P10', time: '18:00', height: '78%', color: 'from-pink-500 to-purple-400', load: 'Fest 78%', name: 'P10 (18:00)' },
+                  { period: 'P11', time: '19:00', height: '95%', color: 'from-pink-500 to-purple-400', load: 'Fest 95%', name: 'P11 (19:00)' },
+                  { period: 'P12', time: '20:00', height: '86%', color: 'from-pink-500 to-purple-400', load: 'Fest 86%', name: 'P12 (20:00)' },
+                  { period: 'P13', time: '21:00', height: '64%', color: 'from-purple-600 to-indigo-400', load: 'Fest 64%', name: 'P13 (21:00)' },
+                ].map((bar, i) => {
+                  const isSelected = selectedPeriod === bar.period;
+                  return (
+                    <div 
+                      key={i} 
+                      onClick={() => setSelectedPeriod(bar.period)}
+                      className={`flex-1 flex flex-col items-center h-full justify-end cursor-pointer group/bar relative transition-all ${
+                        isSelected ? 'scale-105 z-10' : 'hover:scale-102'
+                      }`}
+                    >
+                      {/* Active Indicator Pin */}
+                      {isSelected && (
+                        <div className="absolute -top-6 text-[9px] font-mono font-bold bg-cyan-400 text-slate-950 px-1 rounded shadow animate-bounce">
+                          ACTIVE
+                        </div>
+                      )}
+                      
+                      {/* Waveform Column */}
+                      <div 
+                        className={`w-full rounded-t-sm bg-gradient-to-t ${bar.color} transition-all duration-300 ${
+                          isSelected 
+                            ? 'brightness-150 ring-2 ring-cyan-300 shadow-[0_0_18px_rgba(76,215,246,0.8)]' 
+                            : 'group-hover/bar:brightness-125'
+                        }`}
+                        style={{ height: bar.height }}
+                      ></div>
+                      <span className={`text-[9px] font-mono mt-1 truncate max-w-full font-bold ${
+                        isSelected ? 'text-cyan-300' : 'text-slate-400'
+                      }`}>
+                        {bar.period === 'Lunch' ? 'L' : bar.period}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="mt-4 flex items-center justify-between text-xs text-surface-variant pt-3 border-t border-white/5">
+            {/* Interactive Period Detail Card (Dynamic Inspector) */}
+            {(() => {
+              const details: Record<string, {
+                title: string;
+                time: string;
+                load: string;
+                type: string;
+                badgeColor: string;
+                sessions: string[];
+                constraint: string;
+              }> = {
+                P1: {
+                  title: 'Morning Academic Blocks Begin',
+                  time: '08:00 - 09:00',
+                  load: '62% Load (8 Core Classes)',
+                  type: 'Academic Lecture Block',
+                  badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+                  sessions: ['CS201 Data Structures (LH-1)', 'ME201 Thermodynamics (LH-2)', 'EE301 Network Theory (LH-3)'],
+                  constraint: 'Soft Constraint S1 Checked: No faculty scheduled at avoid times'
+                },
+                P2: {
+                  title: 'Laboratory Blocks Commencing (3-Hour Block)',
+                  time: '09:00 - 10:00',
+                  load: '88% Load (Labs + Lectures)',
+                  type: 'Morning Lab Window (P2-P4)',
+                  badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+                  sessions: ['CS391 Systems Lab (CS-LAB-1)', 'PH191 Physics Lab (PHYS-LAB)', 'EE201 Signals (LH-1)'],
+                  constraint: 'Hard Constraint Enforced: 3-hour labs only allowed in P2-P4 or P6-P8'
+                },
+                P3: {
+                  title: 'Department Core Lecture Roster',
+                  time: '10:00 - 11:00',
+                  load: '94% Load (14 Rooms Occupied)',
+                  type: 'Academic Lecture Block',
+                  badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+                  sessions: ['EC301 Digital Electronics (LH-3)', 'CS391 Systems Lab Cont. (CS-LAB-1)', 'CE201 Mechanics (LH-2)'],
+                  constraint: 'Hard Constraint Enforced: Room capacity matches cohort size'
+                },
+                P4: {
+                  title: 'CS301 Algorithms & Complexity (Peak Load)',
+                  time: '11:00 - 12:00',
+                  load: '100% Peak Academic Capacity',
+                  type: 'Combined Lecture Session',
+                  badgeColor: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+                  sessions: ['CS301 Combined Batch (LH-4, 200 Seats)', 'ME301 Fluid Dynamics (LH-1)', 'CS391 Final Hour (CS-LAB-1)'],
+                  constraint: 'Google CP-SAT Certified: Zero clashes with combined batch students'
+                },
+                P5: {
+                  title: 'Pre-Lunch Tutorials & Lecture Sessions',
+                  time: '12:00 - 13:00',
+                  load: '82% Load (Tutorial Rooms Active)',
+                  type: 'Tutorial & Remedial Block',
+                  badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+                  sessions: ['MA201 Discrete Math (LH-1)', 'EE202 Tutorial (CR-101)', 'ME202 Tutorial (CR-103)'],
+                  constraint: 'Boundary Rule: All sessions terminate promptly before 13:00'
+                },
+                Lunch: {
+                  title: 'MANDATORY CAMPUS LUNCH INTERVAL',
+                  time: '13:00 - 14:00',
+                  load: '0% Load (Strict Zero Classes)',
+                  type: 'Hard Constraint Enforced',
+                  badgeColor: 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+                  sessions: ['No Teaching Sessions Permitted', 'Faculty Dining Hall Open', 'Central Student Mess Active'],
+                  constraint: 'Strict Hard Constraint: No session can run across lunch (P5 & P6 interval)'
+                },
+                P6: {
+                  title: 'Afternoon Laboratory Blocks (3-Hour Block)',
+                  time: '14:00 - 15:00',
+                  load: '90% Load (Labs Commencing)',
+                  type: 'Afternoon Lab Window (P6-P8)',
+                  badgeColor: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
+                  sessions: ['CS391 Systems Lab Batch B (CS-LAB-2)', 'ME291 CAD Lab (CAD-LAB)', 'CH191 Chemistry Lab'],
+                  constraint: 'Hard Constraint Enforced: 3-hour afternoon lab valid in P6-P8'
+                },
+                P7: {
+                  title: 'Open Elective Basket OEB-1 Synchronized',
+                  time: '15:00 - 16:00',
+                  load: '96% Load (Concurrent Slot)',
+                  type: 'Elective Basket Slot',
+                  badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+                  sessions: ['OE-AI (LH-1)', 'OE-FINANCE (LH-2)', 'OE-ROBOTICS (LH-3)', 'OE-ENERGY (LH-4)'],
+                  constraint: 'Hard Constraint: All sessions in elective basket slot run at the same day & period'
+                },
+                P8: {
+                  title: 'Afternoon Lab Evaluations & Vivawork',
+                  time: '16:00 - 17:00',
+                  load: '84% Load (Lab Evaluations)',
+                  type: 'Lab Window Concluding',
+                  badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+                  sessions: ['CS391 Final Hour (CS-LAB-2)', 'CAD Lab Wrap-up', 'EE302 Tutorial (CR-101)'],
+                  constraint: 'Faculty Contact Constraint: Max 4 hours daily teaching respected'
+                },
+                P9: {
+                  title: 'Final Teaching Hour of the Academic Day',
+                  time: '17:00 - 18:00',
+                  load: '68% Load (Doubt Clearance)',
+                  type: 'Faculty Consultation',
+                  badgeColor: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+                  sessions: ['CS Remedial (LH-1)', 'ME Office Hours (LH-2)', 'Student Project Reviews'],
+                  constraint: 'Teaching Week Conclusion: Periods P1 to P9 complete'
+                },
+                P10: {
+                  title: 'Spectra Tech Fest Evening Window Opens',
+                  time: '18:00 - 19:00',
+                  load: '78% Fest Venue Allocation',
+                  type: 'Events Only Window (P10-P13)',
+                  badgeColor: 'bg-pink-500/20 text-pink-300 border-pink-500/40',
+                  sessions: ['BR-07 Stage Play: Andha Yug (AUD)', 'BR-11 Quiz Prelims (CR-101)', 'BR-14 Sound Check (OAT)'],
+                  constraint: 'Hard Constraint Enforced: Periods P10 to P13 are only for events'
+                },
+                P11: {
+                  title: 'Prime Tech Fest Keynote & Hackathon Kickoff',
+                  time: '19:00 - 20:00',
+                  load: '95% Full Fest Venue Fill',
+                  type: 'Major Campus Event',
+                  badgeColor: 'bg-pink-500/20 text-pink-300 border-pink-500/40',
+                  sessions: ['BR-01 Robotics & Drone Keynote (AUD)', 'BR-02 Hackathon 24H (CS-LAB-1 & 2)', 'BR-09 Drone Arena'],
+                  constraint: 'Spectra Priority Rule: Tier 1 Tech Club President approval verified'
+                },
+                P12: {
+                  title: 'Spectra Cultural & Acoustic Jam Night',
+                  time: '20:00 - 21:00',
+                  load: '86% OAT & Outdoor Venue Fill',
+                  type: 'Open Air Theatre Event',
+                  badgeColor: 'bg-pink-500/20 text-pink-300 border-pink-500/40',
+                  sessions: ['BR-14 Acoustic Jam Night (OAT, 1,200 Capacity)', 'BR-02 Hackathon Sprint (CS-LAB-1)'],
+                  constraint: 'Campus Safety & Lighting Telemetry Active'
+                },
+                P13: {
+                  title: 'LAN Gaming Arena & Event Curfew Boundary',
+                  time: '21:00 - 22:00',
+                  load: '64% Final Evening Window',
+                  type: 'Evening Curfew Boundary',
+                  badgeColor: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+                  sessions: ['BR-18 Gaming LAN Arena (LH-2 Alt Offered)', 'BR-02 Hackathon Overnight Pass'],
+                  constraint: 'Alternative Proposal Rule: LH-2 offered to prevent CR-101 capacity overflow'
+                }
+              };
+
+              const active = details[selectedPeriod] || details['P4'];
+
+              return (
+                <div className="mt-4 p-4 rounded-2xl bg-slate-900/80 border border-cyan-500/30 transition-all">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono font-extrabold text-sm text-cyan-300">
+                        {selectedPeriod}
+                      </span>
+                      <span className="text-xs text-slate-400 font-mono">({active.time})</span>
+                      <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${active.badgeColor}`}>
+                        {active.type}
+                      </span>
+                    </div>
+                    <span className="text-xs font-mono font-bold text-white">
+                      {active.load}
+                    </span>
+                  </div>
+
+                  <div className="mt-2.5">
+                    <div className="text-[11px] font-bold text-white mb-1.5 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-secondary" />
+                      <span>{active.title}</span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mb-2">
+                      {active.sessions.map((s, idx) => (
+                        <span key={idx} className="px-2 py-0.5 rounded bg-surface-container text-[10px] text-slate-300 border border-white/5">
+                          {s}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+                      <span>{active.constraint}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
+            <div className="mt-4 flex items-center justify-between text-xs text-surface-variant pt-2 border-t border-white/5">
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400"></span> Academic P1-P9 (LHL & Labs)
+                <span className="w-2.5 h-2.5 rounded-sm bg-cyan-400"></span> Academic P1-P9
               </span>
               <span className="flex items-center gap-1.5">
                 <span className="w-2.5 h-2.5 rounded-sm bg-pink-400"></span> Spectra Tech Fest P10-P13
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="w-2.5 h-2.5 rounded-sm bg-amber-400/60"></span> Zero Class During Lunch
+                <span className="w-2.5 h-2.5 rounded-sm bg-amber-400/60"></span> Mandatory Lunch Interval
               </span>
             </div>
           </div>
 
-          {/* Right: Concentric Radial Gauges (5 cols) */}
+          {/* Right: Working Scenario Concentric Radial Gauges (5 cols) */}
           <div className="lg:col-span-5 rounded-3xl p-6 bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#060c18] border border-blue-500/20 shadow-2xl flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-base font-bold text-white font-display flex items-center gap-2">
                   <Gauge className="w-4 h-4 text-blue-400" />
-                  Concentric Capacity Allocation
+                  Capacity Allocation Matrix
                 </h3>
-                <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">
-                  94.8% OPTIMAL
+                <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold border ${
+                  gaugeMode === 'spectra'
+                    ? 'bg-pink-500/20 text-pink-300 border-pink-500/40'
+                    : gaugeMode === 'midsem'
+                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                      : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                }`}>
+                  {gaugeMode === 'spectra' ? 'WEEK 7 PEAK' : gaugeMode === 'midsem' ? 'EXAM HALVED' : 'REGULAR SEM'}
                 </span>
               </div>
-              <p className="text-xs text-surface-variant">
-                Multi-tier circular breakdown across campus venue types
-              </p>
-            </div>
-
-            {/* SVG Concentric Rings */}
-            <div className="relative py-4 flex items-center justify-center">
-              <svg className="w-48 h-48 -rotate-90 transform" viewBox="0 0 160 160">
-                {/* Background Track 1 */}
-                <circle cx="80" cy="80" r="68" fill="none" stroke="#1e293b" strokeWidth="8" />
-                {/* Outer Ring: Lecture Halls 88% (68K) */}
-                <circle 
-                  cx="80" cy="80" r="68" fill="none" stroke="#00e5ff" strokeWidth="8"
-                  strokeDasharray="427" strokeDashoffset="51" strokeLinecap="round"
-                  className="filter drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]"
-                />
-
-                {/* Background Track 2 */}
-                <circle cx="80" cy="80" r="52" fill="none" stroke="#1e293b" strokeWidth="8" />
-                {/* Middle Ring: Labs 76% (33K) */}
-                <circle 
-                  cx="80" cy="80" r="52" fill="none" stroke="#2563eb" strokeWidth="8"
-                  strokeDasharray="326" strokeDashoffset="78" strokeLinecap="round"
-                  className="filter drop-shadow-[0_0_8px_rgba(37,99,235,0.6)]"
-                />
-
-                {/* Background Track 3 */}
-                <circle cx="80" cy="80" r="36" fill="none" stroke="#1e293b" strokeWidth="8" />
-                {/* Inner Ring: Fest 94% (21K) */}
-                <circle 
-                  cx="80" cy="80" r="36" fill="none" stroke="#ff2d78" strokeWidth="8"
-                  strokeDasharray="226" strokeDashoffset="13" strokeLinecap="round"
-                  className="filter drop-shadow-[0_0_8px_rgba(255,45,120,0.6)]"
-                />
-              </svg>
-
-              {/* Center Metrics */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                <span className="text-2xl font-black font-mono text-white tracking-tight">
-                  94.8%
-                </span>
-                <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
-                  Aggregated
-                </span>
+              
+              {/* 3 Scenario Mode Switcher Tabs */}
+              <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-white/10 my-3 text-[11px] font-semibold">
+                <button
+                  type="button"
+                  onClick={() => setGaugeMode('standard')}
+                  className={`py-1 px-1.5 rounded-lg text-center transition-all ${
+                    gaugeMode === 'standard'
+                      ? 'bg-blue-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Regular Wk
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGaugeMode('spectra')}
+                  className={`py-1 px-1.5 rounded-lg text-center transition-all ${
+                    gaugeMode === 'spectra'
+                      ? 'bg-pink-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Spectra Wk 7
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGaugeMode('midsem')}
+                  className={`py-1 px-1.5 rounded-lg text-center transition-all ${
+                    gaugeMode === 'midsem'
+                      ? 'bg-amber-600 text-white shadow-md'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                >
+                  Midsem Wk 8
+                </button>
               </div>
             </div>
 
-            {/* Legend with Metrics */}
-            <div className="grid grid-cols-3 gap-2 pt-3 border-t border-white/5 text-center">
-              <div className="p-2 rounded-xl bg-slate-900/60 border border-cyan-500/20">
-                <div className="text-[10px] text-cyan-300 font-semibold truncate">Lecture Halls</div>
-                <div className="text-sm font-extrabold text-white font-mono mt-0.5">88%</div>
-                <div className="text-[9px] text-slate-400">68K Seats</div>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-900/60 border border-blue-500/20">
-                <div className="text-[10px] text-blue-300 font-semibold truncate">Science Labs</div>
-                <div className="text-sm font-extrabold text-white font-mono mt-0.5">76%</div>
-                <div className="text-[9px] text-slate-400">33K Hours</div>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-900/60 border border-pink-500/20">
-                <div className="text-[10px] text-pink-300 font-semibold truncate">Spectra Fest</div>
-                <div className="text-sm font-extrabold text-white font-mono mt-0.5">94%</div>
-                <div className="text-[9px] text-slate-400">21K Footfalls</div>
-              </div>
-            </div>
+            {/* Dynamic SVG Concentric Rings */}
+            {(() => {
+              const scenarios = {
+                standard: {
+                  aggregated: '81.4%',
+                  halls: { percent: 88, offset: 51, seats: '68K Seats' },
+                  labs: { percent: 76, offset: 78, hours: '33K Hours' },
+                  events: { percent: 24, offset: 172, footfalls: '5.2K Guests' },
+                  note: 'Normal teaching week: 189 course sessions scheduled with continuous 3-hour lab blocks and zero lunch overlap.'
+                },
+                spectra: {
+                  aggregated: '94.8%',
+                  halls: { percent: 92, offset: 34, seats: '71K Seats' },
+                  labs: { percent: 89, offset: 36, hours: '39K Hours' },
+                  events: { percent: 98, offset: 5, footfalls: '21K Footfalls' },
+                  note: 'Week 7 Peak: Classes run concurrently with annual tech fest. 21 fest requests approved across AUD, OAT & CS Labs.'
+                },
+                midsem: {
+                  aggregated: '89.2%',
+                  halls: { percent: 96, offset: 17, seats: '34K Halved' },
+                  labs: { percent: 45, offset: 179, hours: '18K Hours' },
+                  events: { percent: 12, offset: 199, footfalls: '1.8K Quiet' },
+                  note: 'Hard Constraint Enforced: Effective room capacity is HALVED during exams for single-desk test conditions.'
+                }
+              };
+
+              const current = scenarios[gaugeMode];
+
+              return (
+                <div>
+                  <div className="relative py-2 flex items-center justify-center">
+                    <svg className="w-48 h-48 -rotate-90 transform" viewBox="0 0 160 160">
+                      {/* Background Track 1 */}
+                      <circle cx="80" cy="80" r="68" fill="none" stroke="#1e293b" strokeWidth="8" />
+                      {/* Outer Ring: Lecture Halls */}
+                      <circle 
+                        cx="80" cy="80" r="68" fill="none" stroke="#00e5ff" strokeWidth="8"
+                        strokeDasharray="427" strokeDashoffset={current.halls.offset} strokeLinecap="round"
+                        className="transition-all duration-700 filter drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]"
+                      />
+
+                      {/* Background Track 2 */}
+                      <circle cx="80" cy="80" r="52" fill="none" stroke="#1e293b" strokeWidth="8" />
+                      {/* Middle Ring: Labs */}
+                      <circle 
+                        cx="80" cy="80" r="52" fill="none" stroke="#2563eb" strokeWidth="8"
+                        strokeDasharray="326" strokeDashoffset={current.labs.offset} strokeLinecap="round"
+                        className="transition-all duration-700 filter drop-shadow-[0_0_8px_rgba(37,99,235,0.6)]"
+                      />
+
+                      {/* Background Track 3 */}
+                      <circle cx="80" cy="80" r="36" fill="none" stroke="#1e293b" strokeWidth="8" />
+                      {/* Inner Ring: Fest / Events */}
+                      <circle 
+                        cx="80" cy="80" r="36" fill="none" stroke="#ff2d78" strokeWidth="8"
+                        strokeDasharray="226" strokeDashoffset={current.events.offset} strokeLinecap="round"
+                        className="transition-all duration-700 filter drop-shadow-[0_0_8px_rgba(255,45,120,0.6)]"
+                      />
+                    </svg>
+
+                    {/* Center Metrics */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                      <span className="text-2xl font-black font-mono text-white tracking-tight">
+                        {current.aggregated}
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+                        Aggregated
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Scenario Explanation Notice */}
+                  <div className="p-2.5 rounded-xl bg-slate-900/60 border border-white/5 my-2 text-[11px] text-slate-300 leading-relaxed">
+                    <p className="text-surface-variant line-clamp-2">
+                      <strong className="text-white">Rule Logic: </strong>{current.note}
+                    </p>
+                  </div>
+
+                  {/* Legend with Dynamic Scenario Metrics */}
+                  <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-center">
+                    <div className="p-2 rounded-xl bg-slate-900/60 border border-cyan-500/20">
+                      <div className="text-[10px] text-cyan-300 font-semibold truncate">Lecture Halls</div>
+                      <div className="text-sm font-extrabold text-white font-mono mt-0.5">
+                        {current.halls.percent}%
+                      </div>
+                      <div className="text-[9px] text-slate-400">{current.halls.seats}</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-slate-900/60 border border-blue-500/20">
+                      <div className="text-[10px] text-blue-300 font-semibold truncate">Science Labs</div>
+                      <div className="text-sm font-extrabold text-white font-mono mt-0.5">
+                        {current.labs.percent}%
+                      </div>
+                      <div className="text-[9px] text-slate-400">{current.labs.hours}</div>
+                    </div>
+                    <div className="p-2 rounded-xl bg-slate-900/60 border border-pink-500/20">
+                      <div className="text-[10px] text-pink-300 font-semibold truncate">Event Venues</div>
+                      <div className="text-sm font-extrabold text-white font-mono mt-0.5">
+                        {current.events.percent}%
+                      </div>
+                      <div className="text-[9px] text-slate-400">{current.events.footfalls}</div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
           </div>
 
         </div>
 
-        {/* --- PART C: CAREGRID ENTERPRISE OPERATIONS CONSOLE (IMAGE 2 SPEC) --- */}
+        {/* --- PART C: CIT CAMPUS OPERATIONS CONSOLE & WORK QUEUE --- */}
         <div className="rounded-3xl border border-outline-variant/30 bg-surface-container-low/90 backdrop-blur-xl shadow-2xl p-6 overflow-hidden">
           
           {/* 1. Operational Freshness Banner */}

@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Shield, Users, GraduationCap, Trophy, BookOpen, Ticket, 
   Compass, Sparkles, LogOut, ChevronDown, Bell, Building2, Calendar,
-  Sun, Moon, Palette, Flag
+  Sun, Moon, Palette, SlidersHorizontal
 } from 'lucide-react';
 import { UserProfile, UserRole } from '../types';
 import { useTheme } from '../context/ThemeContext';
@@ -47,16 +47,6 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      {/* Bharat Innovation Challenge Top Ribbon */}
-      {isBharat && (
-        <div className="w-full bg-gradient-to-r from-orange-600 via-amber-600 to-orange-700 text-white text-[11px] font-bold py-1 px-4 text-center flex items-center justify-center gap-2 shadow-sm border-b border-orange-400/30">
-          <Flag className="w-3.5 h-3.5 text-white animate-pulse" />
-          <span>BHARAT INNOVATION CHALLENGE 2026</span>
-          <span className="hidden sm:inline">&bull; CHILIKA INSTITUTE OF TECHNOLOGY &amp; IIT BHUBANESWAR</span>
-          <span className="px-2 py-0.5 rounded-full bg-black/25 text-[10px] font-mono border border-white/20">LIVE FINALS</span>
-        </div>
-      )}
-
       <header className={`sticky z-40 transition-all duration-300 ${
         isApple
           ? 'top-2.5 max-w-6xl mx-auto my-2 rounded-2xl bg-surface-container-lowest/85 backdrop-blur-2xl border border-outline-variant/40 shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-2'
@@ -139,14 +129,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={openAppearanceModal}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all text-xs font-bold ${
                 isBharat 
-                  ? 'bg-orange-500/10 border-orange-500/30 text-orange-400 hover:bg-orange-500/20' 
+                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20' 
                   : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20'
               }`}
-              title="Customize UI Design Mode, Theme Palette & Typography"
+              title="Customize UI Architecture, Theme Palette & Typography"
             >
-              <Palette className="w-3.5 h-3.5" />
+              <SlidersHorizontal className="w-3.5 h-3.5" />
               <span className="hidden md:inline font-mono text-[11px]">
-                {isBharat ? 'Bharat Mode' : 'Liquid Glass'}
+                Screen Settings
               </span>
             </button>
 

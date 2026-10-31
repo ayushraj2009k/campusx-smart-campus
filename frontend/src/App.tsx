@@ -7,6 +7,7 @@ import { CampusNavigation } from './components/CampusNavigation';
 import { AIAssistantDrawer } from './components/AIAssistantDrawer';
 import { ThemeModal } from './components/ThemeModal';
 import { DynamicIsland } from './components/DynamicIsland';
+import { CampusBroadcastTicker } from './components/CampusBroadcastTicker';
 
 // Portal views
 import { AdminPortal } from './components/portals/AdminPortal';
@@ -184,7 +185,12 @@ function AppContent() {
         />
       )}
 
-      {/* Apple-Style Live Status Dynamic Island (from WhatsApp appearance settings) */}
+      {/* High-Tech Campus Live Problem Statement Broadcast Ticker */}
+      <CampusBroadcastTicker
+        onOpenAI={() => setAiDrawerOpen(true)}
+      />
+
+      {/* Apple-Style Live Status Dynamic Island (Refined Sleek Proportions) */}
       <DynamicIsland
         onOpenNavigation={handleOpenNavigationWithTarget}
         onOpenAI={() => setAiDrawerOpen(true)}

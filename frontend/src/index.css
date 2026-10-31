@@ -174,3 +174,24 @@
   border-color: rgba(208, 188, 255, 0.6);
   box-shadow: 0 0 35px rgba(208, 188, 255, 0.35), inset 0 0 20px rgba(125, 76, 231, 0.15);
 }
+
+/* Continuous Smooth Marquee Ticker */
+@keyframes ticker-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee-scroll {
+  display: flex;
+  width: max-content;
+  animation: ticker-marquee 40s linear infinite;
+}
+
+.animate-marquee-scroll:hover {
+  animation-play-state: paused;
+}
+
