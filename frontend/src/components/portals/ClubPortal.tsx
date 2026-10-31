@@ -22,7 +22,7 @@ export const ClubPortal: React.FC = () => {
     setLoading(true);
     setStatusMessage('CAMPUSX AI parsing request into structured parameters...');
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/ai/parse-booking', {
+      const res = await fetch('/api/ai/parse-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: naturalText, user_role: 'club' })
@@ -50,7 +50,7 @@ export const ClubPortal: React.FC = () => {
     if (!parsedBooking) return;
     setLoading(true);
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/bookings/submit', {
+      const res = await fetch('/api/bookings/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

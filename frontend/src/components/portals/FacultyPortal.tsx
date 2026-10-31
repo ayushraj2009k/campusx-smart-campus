@@ -23,7 +23,7 @@ export const FacultyPortal: React.FC<FacultyPortalProps> = ({ onOpenNavigation }
     if (!requestText.trim()) return;
     setStatusMessage('AI analyzing schedule modification...');
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/ai/parse-booking', {
+      const res = await fetch('/api/ai/parse-booking', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text: requestText, user_role: 'faculty' })

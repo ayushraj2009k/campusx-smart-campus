@@ -5,6 +5,7 @@ import { LandingPage } from './components/LandingPage';
 import { AuthModal } from './components/AuthModal';
 import { CampusNavigation } from './components/CampusNavigation';
 import { AIAssistantDrawer } from './components/AIAssistantDrawer';
+import { ThemeModal } from './components/ThemeModal';
 
 // Portal views
 import { AdminPortal } from './components/portals/AdminPortal';
@@ -19,6 +20,13 @@ import { Bot, Sparkles, Compass, Shield, Users, GraduationCap, Trophy, BookOpen,
 
 export function App() {
   const [showPromo, setShowPromo] = useState<boolean>(true);
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem('campusx_theme') as 'dark' | 'light') || 'dark';
+  });
+  const [themeModalOpen, setThemeModalOpen] = useState<boolean>(() => {
+    return !localStorage.getItem('campusx_theme_set');
+  });
+
   const [currentUser, setCurrentUser] = useState<UserProfile | null>(() => {
     try {
       const saved = localStorage.getItem('campusx_user');
@@ -32,6 +40,18 @@ export function App() {
   const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
   const [aiDrawerOpen, setAiDrawerOpen] = useState<boolean>(false);
   const [selectedBuildingForNav, setSelectedBuildingForNav] = useState<string | null>(null);
+
+  // Sync theme changes to html element
+  useEffect(() => {
+    localStorage.setItem('campusx_theme', theme);
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   // Sync user changes to localStorage
   useEffect(() => {
@@ -160,7 +180,12 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-surface-container-lowest text-on-surface font-sans selection:bg-secondary/30 selection:text-white flex flex-col">
+    <div className={`min-h-screen ${
+      theme === 'dark' 
+        ? 'bg-[#070e1f] text-[#dce2fa]' 
+        : 'bg-slate-50 text-slate-900'
+    } font-sans flex flex-col transition-colors duration-200`}>
+      
       {/* 5-Second Cinematic Promo Launch Experience */}
       {showPromo && (
         <PromoIntro
@@ -185,6 +210,8 @@ export function App() {
         onLogout={handleLogout}
         onSelectRole={handleSelectRoleFromLandingOrPromo}
         onToggleAI={() => setAiDrawerOpen(true)}
+        theme={theme}
+        onToggleTheme={() => setTheme(prev => prev === 'dark' ? 'light' : 'dark')}
       />
 
       {/* Main Content Area */}
@@ -205,9 +232,9 @@ export function App() {
 
         {activeTab === 'timetable' && (
           <div className="space-y-6">
-            <div className="bg-surface-container-high/60 backdrop-blur-xl border border-outline-variant/30 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="bg-surface-container-high/60 backdrop-blur-xl border border-outline-variant/30 rounded-3xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xl">
               <div>
-                <h1 className="text-2xl font-bold text-white font-display">Campus Academic Schedule Explorer</h1>
+                <h1 className="text-2xl font-extrabold text-white font-display">Campus Academic Schedule Explorer</h1>
                 <p className="text-surface-variant text-sm mt-1">
                   189 weekly sessions validated against zero conflicts via Google OR-Tools CP-SAT
                 </p>
@@ -215,17 +242,17 @@ export function App() {
               <div className="flex gap-2">
                 <button
                   onClick={() => handleSelectRoleFromLandingOrPromo('student')}
-                  className="px-4 py-2 rounded-xl bg-surface-container border border-outline-variant/40 hover:border-secondary/40 text-xs font-medium text-white transition-all flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-surface-container border border-outline-variant/40 hover:border-secondary/40 text-xs font-semibold text-white transition-all flex items-center gap-1.5"
                 >
                   <BookOpen className="w-3.5 h-3.5 text-cyan-400" />
                   Student View
                 </button>
                 <button
                   onClick={() => handleSelectRoleFromLandingOrPromo('admin')}
-                  className="px-4 py-2 rounded-xl bg-secondary/20 border border-secondary/40 hover:bg-secondary/30 text-xs font-semibold text-secondary transition-all flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-secondary/20 border border-secondary/40 hover:bg-secondary/30 text-xs font-bold text-secondary transition-all flex items-center gap-1.5"
                 >
                   <Shield className="w-3.5 h-3.5 text-secondary" />
-                  Admin Matrix
+                  Admin Directorate Matrix
                 </button>
               </div>
             </div>
@@ -243,23 +270,23 @@ export function App() {
       <footer className="mt-auto border-t border-outline-variant/20 bg-surface-container-lowest/80 py-8 px-4 sm:px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-surface-variant">
           <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg overflow-hidden bg-surface-container flex items-center justify-center p-0.5">
-              <img src="/campusx-logo.jpg" alt="Logo" className="w-full h-full object-cover rounded" />
+            <div className="w-8 h-8 rounded-xl overflow-hidden bg-surface-container flex items-center justify-center p-0.5">
+              <img src="/campusx-logo.jpg" alt="Logo" className="w-full h-full object-cover rounded-lg" />
             </div>
             <div>
               <span className="font-bold text-white tracking-wide">CAMPUSX</span> &mdash; ONE CAMPUS. ONE CONNECTED EXPERIENCE.
-              <p className="text-[10px] text-surface-variant/80">Developed for IIT Bhubaneswar Hackathon 2026</p>
+              <p className="text-[10px] text-surface-variant/80">Chilika Institute of Technology (CIT Public v1) &bull; IIT Bhubaneswar Hackathon 2026</p>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-4 text-[11px]">
-            <span className="px-2 py-0.5 rounded bg-surface-container border border-outline-variant/30 text-secondary font-mono">
+          <div className="flex flex-wrap items-center gap-3 text-[11px]">
+            <span className="px-2.5 py-1 rounded-lg bg-surface-container border border-outline-variant/30 text-secondary font-mono">
               Google OR-Tools CP-SAT
             </span>
-            <span className="px-2 py-0.5 rounded bg-surface-container border border-outline-variant/30 text-purple-400 font-mono">
+            <span className="px-2.5 py-1 rounded-lg bg-surface-container border border-outline-variant/30 text-purple-400 font-mono">
               FastAPI + PostGIS
             </span>
-            <span className="px-2 py-0.5 rounded bg-surface-container border border-outline-variant/30 text-emerald-400 font-mono">
+            <span className="px-2.5 py-1 rounded-lg bg-surface-container border border-outline-variant/30 text-emerald-400 font-mono">
               Supabase PostgreSQL
             </span>
           </div>
@@ -303,6 +330,22 @@ export function App() {
         }}
         onSwitchTab={(tab) => setActiveTab(tab)}
       />
+
+      {/* First-Time Dark/Light Mode Appearance Modal */}
+      <ThemeModal
+        isOpen={themeModalOpen}
+        onClose={() => {
+          setThemeModalOpen(false);
+          localStorage.setItem('campusx_theme_set', 'true');
+        }}
+        currentTheme={theme}
+        onSelectTheme={(t) => {
+          setTheme(t);
+          setThemeModalOpen(false);
+          localStorage.setItem('campusx_theme_set', 'true');
+        }}
+      />
+
     </div>
   );
 }
