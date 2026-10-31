@@ -4,7 +4,8 @@ import {
   Info, Building, Phone, Clock, ArrowRight, CornerDownRight, 
   ChevronRight, Sparkles, Eye, Shield, Accessibility, Footprints,
   Maximize2, RotateCcw, AlertTriangle, CheckCircle2, Car, Map,
-  Satellite, Globe, Crosshair, Locate, AlertCircle, RefreshCw
+  Satellite, Globe, Crosshair, Locate, AlertCircle, RefreshCw,
+  ZoomIn, ZoomOut, Check
 } from 'lucide-react';
 import { CampusBuilding } from '../types';
 import { useTheme } from '../context/ThemeContext';
@@ -324,6 +325,44 @@ const EMBEDDED_BUILDINGS: EnhancedBuilding[] = [
   }
 ];
 
+export type MapViewMode = 'google_map' | 'roadmap' | 'masterplan' | 'schematic' | 'indoor';
+
+export interface RoadmapHotspot {
+  id: string;
+  code: string;
+  name: string;
+  x: number;
+  y: number;
+  category: 'academic' | 'administrative' | 'hostel' | 'sports' | 'cultural';
+  desc: string;
+}
+
+const ROADMAP_HOTSPOTS: RoadmapHotspot[] = [
+  { id: 'GATE', code: 'GATE', name: 'IIT Main Gate (Khordha Road)', x: 13, y: 76, category: 'administrative', desc: 'Main Campus Security, RFID Barriers & E-Rickshaws' },
+  { id: 'SAC', code: 'SAC', name: 'Student Activity Center', x: 26, y: 62, category: 'sports', desc: 'Gymnasium, Indoor Courts & Clubs' },
+  { id: 'SPORTS', code: 'SPORTS', name: 'Play Courts & Football Ground', x: 20, y: 50, category: 'sports', desc: 'Turf Stadium & 400m Track' },
+  { id: 'AUD', code: 'AUD', name: 'Main Auditorium & Arena', x: 36, y: 58, category: 'cultural', desc: '600-Seater Spectra Fest Flagship Venue' },
+  { id: 'ADM', code: 'ADM', name: 'Administrative Building', x: 44, y: 64, category: 'administrative', desc: 'Director Secretariat, Registrar & Senate Hall' },
+  { id: 'SES', code: 'SES', name: 'School of Electrical Sciences', x: 40, y: 44, category: 'academic', desc: 'CSE, CS-LAB-1/2, AI Supercomputer & VLSI' },
+  { id: 'SBS', code: 'SBS', name: 'School of Basic Sciences', x: 48, y: 38, category: 'academic', desc: 'Physics, Chemistry & Math Labs' },
+  { id: 'LHL', code: 'LHL', name: 'Lalitgiri Hall of Learning (LBC)', x: 52, y: 48, category: 'academic', desc: 'Lecture Amphitheaters LH-1 to LH-4' },
+  { id: 'SHSSM', code: 'SHSS', name: 'School of Humanities (SHSS)', x: 54, y: 34, category: 'academic', desc: 'Management & Humanities' },
+  { id: 'SMMME', code: 'SMMME', name: 'School of Minerals & Materials', x: 60, y: 32, category: 'academic', desc: 'Metallurgical & Materials Engineering' },
+  { id: 'SIF', code: 'SIF', name: 'School of Infrastructure', x: 64, y: 38, category: 'academic', desc: 'Civil Engineering & Heavy Structures' },
+  { id: 'SMS', code: 'SMS', name: 'School of Mechanical Sciences', x: 67, y: 46, category: 'academic', desc: 'Thermal & Robotics Engineering' },
+  { id: 'SEOCS', code: 'SEOCS', name: 'School of Earth, Ocean & Climate', x: 74, y: 42, category: 'academic', desc: 'Atmospheric Sciences & GIS' },
+  { id: 'BHR', code: 'BHR', name: 'Brahmaputra Hall of Residence', x: 76, y: 62, category: 'hostel', desc: 'Senior Boys Residence Complex' },
+  { id: 'RHR', code: 'RHR', name: 'Radhakrishnan Hall of Residence', x: 83, y: 58, category: 'hostel', desc: 'Freshman Hostel Complex' },
+  { id: 'MHR', code: 'MHR', name: 'Mahanadi Hall of Residence', x: 80, y: 70, category: 'hostel', desc: 'PG & Doctoral Scholar Residence' }
+];
+
+const MASTERPLAN_ZONES = [
+  { id: 'zone-academic', name: 'Academic Core Spine', color: 'from-blue-600/30 to-cyan-600/30', border: 'border-cyan-500/40', buildings: 'LHL, SES, SBS, SIF, SMS, SEOCS, SHSSM', desc: 'Houses 7 specialized engineering and science schools and central lecture complexes' },
+  { id: 'zone-admin', name: 'Administrative Directorate', color: 'from-purple-600/30 to-indigo-600/30', border: 'border-purple-500/40', buildings: 'ADM, Senate Hall, Registrar', desc: 'Central governance, academic affairs, finance and director secretariat' },
+  { id: 'zone-hostel', name: 'Residential & Hall Complex', color: 'from-amber-600/30 to-orange-600/30', border: 'border-amber-500/40', buildings: 'BHR, RHR, MHR, GHR, Faculty Qtrs', desc: 'Student hostels, dining halls, faculty housing and married scholar quarters' },
+  { id: 'zone-sports', name: 'Sports & Cultural Hub', color: 'from-emerald-600/30 to-teal-600/30', border: 'border-emerald-500/40', buildings: 'AUD, SAC, Football Turf, Swimming Pool', desc: 'Spectra Fest Arena, floodlit play courts, gymnasium and recreation center' }
+];
+
 export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuilding }) => {
   const { uiMode, effectiveAppearance } = useTheme();
   const isBharat = uiMode === 'bharat';
@@ -333,9 +372,12 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
   const [selectedBuilding, setSelectedBuilding] = useState<EnhancedBuilding>(EMBEDDED_BUILDINGS[0]);
   const [searchQuery, setSearchQuery] = useState('');
   
-  // View mode: 'google_map' (real live embedded Google Map) | 'schematic' (2D campus grid) | 'indoor' (Lalitgiri multi-floor)
-  const [mapMode, setMapMode] = useState<'google_map' | 'schematic' | 'indoor'>('google_map');
+  // View mode: 'google_map' | 'roadmap' | 'masterplan' | 'schematic' | 'indoor'
+  const [mapMode, setMapMode] = useState<MapViewMode>('google_map');
   const [mapType, setMapType] = useState<'satellite' | 'roadmap'>('satellite');
+  const [googleMapQueryMode, setGoogleMapQueryMode] = useState<'landmark' | 'exact_gps'>('landmark');
+  const [roadmapZoom, setRoadmapZoom] = useState<number>(1);
+  const [hoveredHotspot, setHoveredHotspot] = useState<RoadmapHotspot | null>(null);
   
   // Floor & Accessibility
   const [selectedFloor, setSelectedFloor] = useState<number>(1);
@@ -480,8 +522,10 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
     }
   };
 
-  // Google Maps Embed URL centered on selected building with verified Argul GPS
-  const googleMapEmbedUrl = `https://maps.google.com/maps?q=${selectedBuilding.lat},${selectedBuilding.lng}&hl=en&z=17&t=${mapType === 'satellite' ? 'k' : 'm'}&output=embed`;
+  // Google Maps Embed URL centered on selected building with verified IIT Bhubaneswar Argul anchor
+  const googleMapEmbedUrl = googleMapQueryMode === 'landmark'
+    ? `https://maps.google.com/maps?q=${encodeURIComponent(selectedBuilding.name + ', IIT Bhubaneswar, Argul, Jatni, Odisha 752050')}&ll=${selectedBuilding.lat},${selectedBuilding.lng}&z=17&t=${mapType === 'satellite' ? 'k' : 'm'}&output=embed`
+    : `https://maps.google.com/maps?q=${selectedBuilding.lat},${selectedBuilding.lng}&hl=en&z=17&t=${mapType === 'satellite' ? 'k' : 'm'}&output=embed`;
   
   // Accurate directions URL from user's GPS or selected landmark
   const googleMapDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${originLat},${originLng}&destination=${toBuildingObj.lat},${toBuildingObj.lng}&travelmode=walking`;
@@ -515,46 +559,71 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
               </span>
             </div>
             <p className="text-xs text-surface-variant mt-1">
-              Real-time Google Maps satellite integration, topological routing, and Lalitgiri multi-floor indoor blueprints
+              Official IIT Bhubaneswar Road Blueprint, Master Plan Zoning, Real-time Satellite GIS &amp; Indoor Blueprints
             </p>
           </div>
         </div>
 
-        {/* 3-Way Mode Switcher */}
+        {/* 5-Way Mode Switcher */}
         <div className="flex flex-wrap items-center p-1.5 rounded-2xl bg-surface-container border border-outline-variant/30 self-start md:self-auto gap-1">
           <button
             onClick={() => setMapMode('google_map')}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
               mapMode === 'google_map'
                 ? 'bg-secondary text-slate-950 shadow-md'
                 : 'text-surface-variant hover:text-white'
             }`}
           >
-            <Globe className="w-4 h-4" />
+            <Globe className="w-3.5 h-3.5" />
             <span>Google Map</span>
           </button>
 
           <button
+            onClick={() => setMapMode('roadmap')}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all relative ${
+              mapMode === 'roadmap'
+                ? 'bg-secondary text-slate-950 shadow-md'
+                : 'text-surface-variant hover:text-white'
+            }`}
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>Official Road Map</span>
+            <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          </button>
+
+          <button
+            onClick={() => setMapMode('masterplan')}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
+              mapMode === 'masterplan'
+                ? 'bg-secondary text-slate-950 shadow-md'
+                : 'text-surface-variant hover:text-white'
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            <span>Master Plan</span>
+          </button>
+
+          <button
             onClick={() => setMapMode('schematic')}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
               mapMode === 'schematic'
                 ? 'bg-secondary text-slate-950 shadow-md'
                 : 'text-surface-variant hover:text-white'
             }`}
           >
-            <Map className="w-4 h-4" />
+            <Map className="w-3.5 h-3.5" />
             <span>2D Schematic</span>
           </button>
 
           <button
             onClick={() => setMapMode('indoor')}
-            className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all ${
               mapMode === 'indoor'
                 ? 'bg-secondary text-slate-950 shadow-md'
                 : 'text-surface-variant hover:text-white'
             }`}
           >
-            <Layers className="w-4 h-4" />
+            <Building className="w-3.5 h-3.5" />
             <span>Indoor Blueprint</span>
           </button>
         </div>
@@ -824,56 +893,323 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
         {/* RIGHT COLUMN: Interactive Map Canvas (Embedded Google Map / Schematic / Indoor) */}
         <div className="lg:col-span-2 space-y-6">
           
-          {/* 1. EMBEDDED GOOGLE MAP (Real interactive satellite view right inside this container!) */}
+          {/* 1. EMBEDDED GOOGLE MAP (Real interactive satellite & ground view with IIT entity anchor) */}
           {mapMode === 'google_map' && (
-            <div className="relative rounded-3xl overflow-hidden border border-outline-variant/30 bg-[#070e1f] shadow-2xl h-[440px] flex flex-col">
+            <div className="relative rounded-3xl overflow-hidden border border-outline-variant/30 bg-[#070e1f] shadow-2xl h-[460px] flex flex-col">
               
-              {/* Map View Sub-controls */}
-              <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-surface-container-lowest/90 backdrop-blur-md p-1.5 rounded-xl border border-outline-variant/30 shadow-lg">
-                <button
-                  onClick={() => setMapType('satellite')}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all ${
-                    mapType === 'satellite' ? 'bg-secondary text-slate-950' : 'text-surface-variant hover:text-white'
-                  }`}
-                >
-                  Satellite
-                </button>
-                <button
-                  onClick={() => setMapType('roadmap')}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all ${
-                    mapType === 'roadmap' ? 'bg-secondary text-slate-950' : 'text-surface-variant hover:text-white'
-                  }`}
-                >
-                  Map View
-                </button>
+              {/* Precision Sub-controls Bar */}
+              <div className="absolute top-3 left-3 right-3 z-10 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+                {/* Precision Anchor Toggle */}
+                <div className="pointer-events-auto flex items-center gap-1 bg-surface-container-lowest/90 backdrop-blur-md p-1 rounded-xl border border-outline-variant/30 shadow-lg text-[10px] font-mono">
+                  <button
+                    onClick={() => setGoogleMapQueryMode('landmark')}
+                    className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                      googleMapQueryMode === 'landmark' 
+                        ? 'bg-secondary text-slate-950 shadow' 
+                        : 'text-surface-variant hover:text-white'
+                    }`}
+                    title="Locks Google Maps directly onto the named IIT Bhubaneswar campus facility"
+                  >
+                    IIT Building Anchor
+                  </button>
+                  <button
+                    onClick={() => setGoogleMapQueryMode('exact_gps')}
+                    className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                      googleMapQueryMode === 'exact_gps' 
+                        ? 'bg-secondary text-slate-950 shadow' 
+                        : 'text-surface-variant hover:text-white'
+                    }`}
+                    title="Pins raw GPS decimal coordinates"
+                  >
+                    Raw GPS Coordinates
+                  </button>
+                </div>
+
+                {/* Satellite vs Map View Toggle */}
+                <div className="pointer-events-auto flex items-center gap-1 bg-surface-container-lowest/90 backdrop-blur-md p-1 rounded-xl border border-outline-variant/30 shadow-lg">
+                  <button
+                    onClick={() => setMapType('satellite')}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all ${
+                      mapType === 'satellite' ? 'bg-secondary text-slate-950' : 'text-surface-variant hover:text-white'
+                    }`}
+                  >
+                    Satellite
+                  </button>
+                  <button
+                    onClick={() => setMapType('roadmap')}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase transition-all ${
+                      mapType === 'roadmap' ? 'bg-secondary text-slate-950' : 'text-surface-variant hover:text-white'
+                    }`}
+                  >
+                    Map View
+                  </button>
+                </div>
               </div>
 
               {/* Real Interactive Google Maps iframe centered on selected building */}
               <iframe
                 title="Google Map Campus"
                 src={googleMapEmbedUrl}
-                className="w-full h-full border-0 rounded-3xl filter saturate-110"
+                className="w-full h-full border-0 rounded-3xl filter saturate-110 pt-10"
                 allowFullScreen
                 loading="lazy"
               />
 
               {/* Bottom Telemetry Bar */}
-              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-surface-variant font-mono bg-surface-container-lowest/85 backdrop-blur-md px-3 py-2 rounded-xl border border-outline-variant/30">
+              <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-surface-variant font-mono bg-surface-container-lowest/90 backdrop-blur-md px-3.5 py-2.5 rounded-xl border border-outline-variant/30 shadow-lg">
                 <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                  <span className="font-bold text-white">{selectedBuilding.name}</span>
-                  <span className="text-[10px] text-cyan-300">({selectedBuilding.lat.toFixed(4)}° N, {selectedBuilding.lng.toFixed(4)}° E)</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping shrink-0" />
+                  <span className="font-bold text-white truncate max-w-[200px] sm:max-w-xs">{selectedBuilding.name}</span>
+                  <span className="text-[10px] text-cyan-300 hidden sm:inline">
+                    ({selectedBuilding.lat.toFixed(4)}° N, {selectedBuilding.lng.toFixed(4)}° E)
+                  </span>
                 </div>
-                <a
-                  href={`https://www.google.com/maps/search/?api=1&query=${selectedBuilding.lat},${selectedBuilding.lng}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-secondary font-bold hover:underline flex items-center gap-1 text-[11px]"
-                >
-                  <span>Open Full Screen</span>
-                  <ArrowUpRight className="w-3.5 h-3.5" />
-                </a>
+                <div className="flex items-center gap-3">
+                  <span className="text-[10px] text-emerald-400 font-mono hidden md:inline">
+                    ✓ Verified Argul Campus Pin
+                  </span>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedBuilding.name + ', IIT Bhubaneswar, Argul, Jatni, Odisha')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-secondary font-bold hover:underline flex items-center gap-1 text-[11px]"
+                  >
+                    <span>Full Screen</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
+            </div>
+          )}
+
+          {/* 2. OFFICIAL ROAD MAP BLUEPRINT (High-Resolution Diagram with Interactive Hotspot Pins) */}
+          {mapMode === 'roadmap' && (
+            <div className="relative rounded-3xl overflow-hidden border border-outline-variant/30 bg-[#070e1f] shadow-2xl h-[500px] flex flex-col">
+              
+              {/* Header Bar with Zoom & Hotspot Status */}
+              <div className="p-3.5 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/30 flex items-center justify-between z-20">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                    <Compass className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white font-display">Official Road Map — IIT Bhubaneswar</h4>
+                    <span className="text-[10px] text-surface-variant">Verified campus road diagram with 16 interactive landmark pins</span>
+                  </div>
+                </div>
+
+                {/* Zoom Controls */}
+                <div className="flex items-center gap-1.5 bg-surface-container p-1 rounded-xl border border-outline-variant/30">
+                  <button
+                    onClick={() => setRoadmapZoom(Math.max(1, roadmapZoom - 0.25))}
+                    className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white transition-all"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="text-[10px] font-mono font-bold text-secondary px-1">
+                    {Math.round(roadmapZoom * 100)}%
+                  </span>
+                  <button
+                    onClick={() => setRoadmapZoom(Math.min(2, roadmapZoom + 0.25))}
+                    className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white transition-all"
+                    title="Zoom In"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setRoadmapZoom(1)}
+                    className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-surface-container-high text-surface-variant hover:text-white transition-all"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              {/* Scrollable / Zoomable Road Map Canvas */}
+              <div className="relative flex-1 overflow-auto bg-[#040814] p-2 flex items-center justify-center">
+                <div 
+                  className="relative transition-transform duration-200"
+                  style={{
+                    width: `${roadmapZoom * 100}%`,
+                    minWidth: '650px',
+                    maxWidth: '1200px'
+                  }}
+                >
+                  <img
+                    src="/iit-bbs-roadmap.png"
+                    alt="Official Road Map IIT Bhubaneswar"
+                    className="w-full h-auto rounded-2xl border border-outline-variant/20 shadow-2xl select-none"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/campus-gallery.png';
+                    }}
+                  />
+
+                  {/* Interactive Hotspot Pins Placed on the Road Map */}
+                  {ROADMAP_HOTSPOTS.map((spot) => {
+                    const isSelected = selectedBuilding.id === spot.id || selectedBuilding.code === spot.code;
+                    const isHovered = hoveredHotspot?.id === spot.id;
+
+                    const colorClass = 
+                      spot.category === 'academic' ? 'bg-cyan-500 border-cyan-300 text-slate-950' :
+                      spot.category === 'administrative' ? 'bg-purple-500 border-purple-300 text-white' :
+                      spot.category === 'cultural' ? 'bg-fuchsia-500 border-fuchsia-300 text-white' :
+                      spot.category === 'hostel' ? 'bg-amber-500 border-amber-300 text-slate-950' :
+                      'bg-emerald-500 border-emerald-300 text-slate-950';
+
+                    return (
+                      <div
+                        key={spot.id}
+                        style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
+                        className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group"
+                        onMouseEnter={() => setHoveredHotspot(spot)}
+                        onMouseLeave={() => setHoveredHotspot(null)}
+                      >
+                        {/* Pin Button */}
+                        <button
+                          onClick={() => {
+                            const match = buildings.find(b => b.id === spot.id || b.code === spot.code);
+                            if (match) {
+                              setSelectedBuilding(match);
+                              setRouteTo(match.id);
+                            }
+                          }}
+                          className={`relative flex items-center justify-center rounded-full p-1 border-2 transition-all duration-200 ${
+                            isSelected 
+                              ? 'scale-125 ring-4 ring-cyan-400/60 shadow-lg shadow-cyan-500/50' 
+                              : 'hover:scale-115 shadow-md'
+                          } ${colorClass}`}
+                        >
+                          <MapPin className="w-3.5 h-3.5" />
+                          <span className="sr-only">{spot.name}</span>
+                        </button>
+
+                        {/* Floating Tooltip Pill */}
+                        <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 rounded-xl bg-slate-950/95 border border-cyan-500/40 backdrop-blur-md shadow-2xl pointer-events-none transition-all duration-200 ${
+                          isHovered || isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                        }`}>
+                          <div className="flex items-center justify-between mb-1">
+                            <span className="text-[10px] font-mono font-bold text-secondary uppercase">{spot.code}</span>
+                            <span className="text-[8px] font-mono px-1 rounded bg-surface-container text-surface-variant uppercase">{spot.category}</span>
+                          </div>
+                          <p className="text-[11px] font-bold text-white leading-tight mb-1">{spot.name}</p>
+                          <p className="text-[9px] text-surface-variant leading-tight">{spot.desc}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Bottom Road Map Legend Bar */}
+              <div className="p-2.5 bg-surface-container-lowest/95 backdrop-blur-md border-t border-outline-variant/30 flex flex-wrap items-center justify-between text-[10px] font-mono text-surface-variant gap-2">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="font-bold text-white flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400"></span> Academic
+                  </span>
+                  <span className="font-bold text-white flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-purple-400"></span> Administration
+                  </span>
+                  <span className="font-bold text-white flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-fuchsia-400"></span> Cultural / Arena
+                  </span>
+                  <span className="font-bold text-white flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-amber-400"></span> Hostels
+                  </span>
+                  <span className="font-bold text-white flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-emerald-400"></span> Sports
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-secondary font-bold">Selected: {selectedBuilding.code}</span>
+                </div>
+              </div>
+
+            </div>
+          )}
+
+          {/* 3. MASTER PLAN & ZONING (Comprehensive Master Blueprint of IIT Bhubaneswar) */}
+          {mapMode === 'masterplan' && (
+            <div className="relative rounded-3xl overflow-hidden border border-outline-variant/30 bg-[#070e1f] shadow-2xl h-[500px] flex flex-col">
+              
+              {/* Header Bar */}
+              <div className="p-3.5 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/30 flex items-center justify-between z-20">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center">
+                    <Layers className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="text-xs font-bold text-white font-display">IIT Bhubaneswar Comprehensive Master Plan</h4>
+                    <span className="text-[10px] text-surface-variant">Master layout showing academic spine, residential quarters &amp; sports infrastructure</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 bg-surface-container p-1 rounded-xl border border-outline-variant/30">
+                  <button
+                    onClick={() => setRoadmapZoom(Math.max(1, roadmapZoom - 0.25))}
+                    className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white"
+                  >
+                    <ZoomOut className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="text-[10px] font-mono font-bold text-secondary px-1">
+                    {Math.round(roadmapZoom * 100)}%
+                  </span>
+                  <button
+                    onClick={() => setRoadmapZoom(Math.min(2, roadmapZoom + 0.25))}
+                    className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white"
+                  >
+                    <ZoomIn className="w-3.5 h-3.5" />
+                  </button>
+                  <button
+                    onClick={() => setRoadmapZoom(1)}
+                    className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-surface-container-high text-surface-variant hover:text-white"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </div>
+
+              {/* Master Plan Canvas */}
+              <div className="relative flex-1 overflow-auto bg-[#040814] p-3 flex items-center justify-center">
+                <div 
+                  className="relative transition-transform duration-200"
+                  style={{
+                    width: `${roadmapZoom * 100}%`,
+                    minWidth: '650px',
+                    maxWidth: '1200px'
+                  }}
+                >
+                  <img
+                    src="/iit-bbs-masterplan.png"
+                    alt="Master Plan IIT Bhubaneswar"
+                    className="w-full h-auto rounded-2xl border border-outline-variant/20 shadow-2xl select-none"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = '/campus-gallery.png';
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Master Plan Zoning Quick Cards */}
+              <div className="p-3 bg-surface-container-lowest/95 backdrop-blur-md border-t border-outline-variant/30 grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {MASTERPLAN_ZONES.map((zone) => (
+                  <div 
+                    key={zone.id}
+                    className={`p-2 rounded-xl bg-gradient-to-br ${zone.color} border ${zone.border} text-left transition-all hover:scale-[1.02] cursor-pointer`}
+                    onClick={() => {
+                      const firstBuildingCode = zone.buildings.split(',')[0].trim();
+                      const match = buildings.find(b => b.code === firstBuildingCode || b.id === firstBuildingCode);
+                      if (match) setSelectedBuilding(match);
+                    }}
+                  >
+                    <span className="text-[11px] font-bold text-white block truncate">{zone.name}</span>
+                    <span className="text-[9px] text-surface-variant font-mono block truncate">{zone.buildings}</span>
+                  </div>
+                ))}
+              </div>
+
             </div>
           )}
 

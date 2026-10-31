@@ -1135,12 +1135,6 @@
       "day": "FRI",
       "start_period": 8,
       "room_id": "CR-201"
-    },
-    {
-      "session_id": "CS202-T2",
-      "day": "MON",
-      "start_period": 5,
-      "room_id": "AUD"
     }
   ],
   "fest_week": {

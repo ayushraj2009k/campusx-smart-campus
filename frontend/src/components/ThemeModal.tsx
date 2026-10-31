@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Moon, Sun, Check, Sparkles, Monitor, Palette, Type, Layout, 
   Flag, ShieldCheck, Flame, Compass, ChevronRight, X, Smartphone,
-  Radio, Sliders, ToggleLeft, ToggleRight
+  Radio, Sliders, ToggleLeft, ToggleRight, Cpu
 } from 'lucide-react';
 import { useTheme, UIMode, Appearance, ColorTheme, Typography, NavStyle } from '../context/ThemeContext';
 
