@@ -33,9 +33,13 @@ export const MasterTimetable: React.FC<MasterTimetableProps> = ({ onOpenNavigati
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/timetables/current');
-      if (!res.ok) {
-        throw new Error('Failed to load master timetable from server');
+      let res = await fetch('/api/timetables/current').catch(() => null);
+      if (!res || !res.ok) {
+        // Fallback to static verified schedule on Vercel
+        res = await fetch('/data/current_timetable.json').catch(() => null);
+      }
+      if (!res || !res.ok) {
+        throw new Error('Failed to load master timetable');
       }
       const data = await res.json();
       setTimetable(data);

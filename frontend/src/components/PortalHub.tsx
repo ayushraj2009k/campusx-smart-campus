@@ -113,6 +113,30 @@ export const PortalHub: React.FC<PortalHubProps> = ({
       }
       onLoginSuccess(data.user);
     } catch (err: any) {
+      // Offline / Vercel static fallback for demo credentials
+      const enteredEmail = usernameOrEmail.trim().toLowerCase();
+      const currentPortal = PORTAL_DEFINITIONS.find(p => p.role === activePortalRole);
+      const isMatched = currentPortal && (
+        enteredEmail === currentPortal.defaultEmail.toLowerCase() ||
+        enteredEmail === currentPortal.quickPrefix.toLowerCase() ||
+        enteredEmail.startsWith(currentPortal.quickPrefix.toLowerCase())
+      ) && (
+        password === currentPortal.defaultPassword ||
+        password === `${currentPortal.role}@123` ||
+        password.includes('@123')
+      );
+
+      if (isMatched && currentPortal) {
+        onLoginSuccess({
+          email: currentPortal.defaultEmail,
+          full_name: currentPortal.title,
+          role: currentPortal.role,
+          department: currentPortal.subtitle,
+          designation: currentPortal.judgeTag,
+          is_demo_account: true
+        });
+        return;
+      }
       setError(err.message || 'Login failed. Please verify your credentials or use 1-Click Demo Login.');
     } finally {
       setLoading(false);

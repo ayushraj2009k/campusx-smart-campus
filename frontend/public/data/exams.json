@@ -1,0 +1,951 @@
+{
+  "exams": [
+    {
+      "exam_id": "EX-MA101",
+      "day": "THU",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "MA101"
+      ],
+      "course_titles": [
+        "Calculus and Linear Algebra"
+      ],
+      "groups": [
+        "Y1-A",
+        "Y1-B",
+        "Y1-C",
+        "Y1-D"
+      ],
+      "size": 360,
+      "rooms": [
+        "AUD",
+        "CR-204",
+        "LH-2"
+      ],
+      "room_names": [
+        "Main Auditorium",
+        "Classroom B-204",
+        "Lecture Hall 2"
+      ]
+    },
+    {
+      "exam_id": "EX-PH101",
+      "day": "TUE",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "PH101"
+      ],
+      "course_titles": [
+        "Engineering Physics"
+      ],
+      "groups": [
+        "Y1-A",
+        "Y1-B",
+        "Y1-C",
+        "Y1-D"
+      ],
+      "size": 360,
+      "rooms": [
+        "AUD",
+        "LH-2",
+        "LH-6"
+      ],
+      "room_names": [
+        "Main Auditorium",
+        "Lecture Hall 2",
+        "Lecture Hall 6"
+      ]
+    },
+    {
+      "exam_id": "EX-CS101",
+      "day": "FRI",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CS101"
+      ],
+      "course_titles": [
+        "Programming in C"
+      ],
+      "groups": [
+        "Y1-A",
+        "Y1-B",
+        "Y1-C",
+        "Y1-D"
+      ],
+      "size": 360,
+      "rooms": [
+        "AUD",
+        "CR-101",
+        "LH-1"
+      ],
+      "room_names": [
+        "Main Auditorium",
+        "Classroom A-101",
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-HS101",
+      "day": "SAT",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "HS101"
+      ],
+      "course_titles": [
+        "Communicative English"
+      ],
+      "groups": [
+        "Y1-A",
+        "Y1-B",
+        "Y1-C",
+        "Y1-D"
+      ],
+      "size": 360,
+      "rooms": [
+        "AUD",
+        "LH-2",
+        "LH-6"
+      ],
+      "room_names": [
+        "Main Auditorium",
+        "Lecture Hall 2",
+        "Lecture Hall 6"
+      ]
+    },
+    {
+      "exam_id": "EX-CS201",
+      "day": "MON",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CS201"
+      ],
+      "course_titles": [
+        "Data Structures"
+      ],
+      "groups": [
+        "CSE-2"
+      ],
+      "size": 80,
+      "rooms": [
+        "LH-1"
+      ],
+      "room_names": [
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-CS202",
+      "day": "SAT",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CS202"
+      ],
+      "course_titles": [
+        "Discrete Mathematics"
+      ],
+      "groups": [
+        "CSE-2"
+      ],
+      "size": 80,
+      "rooms": [
+        "LH-2"
+      ],
+      "room_names": [
+        "Lecture Hall 2"
+      ]
+    },
+    {
+      "exam_id": "EX-CS203",
+      "day": "FRI",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "CS203"
+      ],
+      "course_titles": [
+        "Digital Logic Design"
+      ],
+      "groups": [
+        "CSE-2"
+      ],
+      "size": 80,
+      "rooms": [
+        "LH-1"
+      ],
+      "room_names": [
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-CS204",
+      "day": "WED",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "CS204"
+      ],
+      "course_titles": [
+        "Object-Oriented Programming"
+      ],
+      "groups": [
+        "CSE-2"
+      ],
+      "size": 80,
+      "rooms": [
+        "AUD"
+      ],
+      "room_names": [
+        "Main Auditorium"
+      ]
+    },
+    {
+      "exam_id": "EX-EC201",
+      "day": "SAT",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EC201"
+      ],
+      "course_titles": [
+        "Signals and Systems"
+      ],
+      "groups": [
+        "ECE-2"
+      ],
+      "size": 70,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-EC202",
+      "day": "TUE",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "EC202"
+      ],
+      "course_titles": [
+        "Network Theory"
+      ],
+      "groups": [
+        "ECE-2"
+      ],
+      "size": 70,
+      "rooms": [
+        "LH-1"
+      ],
+      "room_names": [
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-EC203",
+      "day": "FRI",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EC203"
+      ],
+      "course_titles": [
+        "Electronic Devices"
+      ],
+      "groups": [
+        "ECE-2"
+      ],
+      "size": 70,
+      "rooms": [
+        "AUD"
+      ],
+      "room_names": [
+        "Main Auditorium"
+      ]
+    },
+    {
+      "exam_id": "EX-EC204",
+      "day": "WED",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "EC204"
+      ],
+      "course_titles": [
+        "Probability and Random Processes"
+      ],
+      "groups": [
+        "ECE-2"
+      ],
+      "size": 70,
+      "rooms": [
+        "LH-2"
+      ],
+      "room_names": [
+        "Lecture Hall 2"
+      ]
+    },
+    {
+      "exam_id": "EX-EE201",
+      "day": "TUE",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EE201"
+      ],
+      "course_titles": [
+        "Circuit Analysis"
+      ],
+      "groups": [
+        "EE-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-EE202",
+      "day": "WED",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EE202"
+      ],
+      "course_titles": [
+        "Electrical Machines I"
+      ],
+      "groups": [
+        "EE-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "LH-3"
+      ],
+      "room_names": [
+        "Lecture Hall 3"
+      ]
+    },
+    {
+      "exam_id": "EX-EE203",
+      "day": "SAT",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "EE203"
+      ],
+      "course_titles": [
+        "Electrical Measurements"
+      ],
+      "groups": [
+        "EE-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "LH-4"
+      ],
+      "room_names": [
+        "Lecture Hall 4"
+      ]
+    },
+    {
+      "exam_id": "EX-EE204",
+      "day": "FRI",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EE204"
+      ],
+      "course_titles": [
+        "Electromagnetic Fields"
+      ],
+      "groups": [
+        "EE-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-ME201",
+      "day": "FRI",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "ME201"
+      ],
+      "course_titles": [
+        "Engineering Thermodynamics"
+      ],
+      "groups": [
+        "ME-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "LH-2"
+      ],
+      "room_names": [
+        "Lecture Hall 2"
+      ]
+    },
+    {
+      "exam_id": "EX-ME202",
+      "day": "WED",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "ME202"
+      ],
+      "course_titles": [
+        "Mechanics of Solids"
+      ],
+      "groups": [
+        "ME-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "LH-1"
+      ],
+      "room_names": [
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-ME203",
+      "day": "SAT",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "ME203"
+      ],
+      "course_titles": [
+        "Kinematics of Machines"
+      ],
+      "groups": [
+        "ME-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "LH-5"
+      ],
+      "room_names": [
+        "Lecture Hall 5"
+      ]
+    },
+    {
+      "exam_id": "EX-ME204",
+      "day": "MON",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "ME204"
+      ],
+      "course_titles": [
+        "Manufacturing Processes"
+      ],
+      "groups": [
+        "ME-2"
+      ],
+      "size": 60,
+      "rooms": [
+        "LH-6"
+      ],
+      "room_names": [
+        "Lecture Hall 6"
+      ]
+    },
+    {
+      "exam_id": "EX-CE201",
+      "day": "MON",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "CE201"
+      ],
+      "course_titles": [
+        "Surveying"
+      ],
+      "groups": [
+        "CE-2"
+      ],
+      "size": 50,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-CE202",
+      "day": "FRI",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "CE202"
+      ],
+      "course_titles": [
+        "Fluid Mechanics"
+      ],
+      "groups": [
+        "CE-2"
+      ],
+      "size": 50,
+      "rooms": [
+        "LH-4"
+      ],
+      "room_names": [
+        "Lecture Hall 4"
+      ]
+    },
+    {
+      "exam_id": "EX-CE203",
+      "day": "TUE",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CE203"
+      ],
+      "course_titles": [
+        "Strength of Materials"
+      ],
+      "groups": [
+        "CE-2"
+      ],
+      "size": 50,
+      "rooms": [
+        "SH-2"
+      ],
+      "room_names": [
+        "Seminar Hall 2"
+      ]
+    },
+    {
+      "exam_id": "EX-CE204",
+      "day": "SAT",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CE204"
+      ],
+      "course_titles": [
+        "Engineering Geology"
+      ],
+      "groups": [
+        "CE-2"
+      ],
+      "size": 50,
+      "rooms": [
+        "LH-1"
+      ],
+      "room_names": [
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-HS201",
+      "day": "THU",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "HS201"
+      ],
+      "course_titles": [
+        "Principles of Economics"
+      ],
+      "groups": [
+        "CSE-2",
+        "ECE-2",
+        "EE-2",
+        "ME-2",
+        "CE-2"
+      ],
+      "size": 320,
+      "rooms": [
+        "AUD",
+        "LH-1"
+      ],
+      "room_names": [
+        "Main Auditorium",
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-CS301",
+      "day": "THU",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "CS301"
+      ],
+      "course_titles": [
+        "Operating Systems"
+      ],
+      "groups": [
+        "CSE-3"
+      ],
+      "size": 75,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-CS302",
+      "day": "WED",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CS302"
+      ],
+      "course_titles": [
+        "Database Systems"
+      ],
+      "groups": [
+        "CSE-3"
+      ],
+      "size": 75,
+      "rooms": [
+        "LH-1"
+      ],
+      "room_names": [
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-CS303",
+      "day": "MON",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CS303"
+      ],
+      "course_titles": [
+        "Computer Networks"
+      ],
+      "groups": [
+        "CSE-3"
+      ],
+      "size": 75,
+      "rooms": [
+        "AUD"
+      ],
+      "room_names": [
+        "Main Auditorium"
+      ]
+    },
+    {
+      "exam_id": "EX-EC301",
+      "day": "MON",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EC301"
+      ],
+      "course_titles": [
+        "Communication Systems"
+      ],
+      "groups": [
+        "ECE-3"
+      ],
+      "size": 65,
+      "rooms": [
+        "AUD"
+      ],
+      "room_names": [
+        "Main Auditorium"
+      ]
+    },
+    {
+      "exam_id": "EX-EC302",
+      "day": "THU",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "EC302"
+      ],
+      "course_titles": [
+        "Digital Signal Processing"
+      ],
+      "groups": [
+        "ECE-3"
+      ],
+      "size": 65,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-EC303",
+      "day": "FRI",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "EC303"
+      ],
+      "course_titles": [
+        "VLSI Design"
+      ],
+      "groups": [
+        "ECE-3"
+      ],
+      "size": 65,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-EE301",
+      "day": "SAT",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EE301"
+      ],
+      "course_titles": [
+        "Power Systems"
+      ],
+      "groups": [
+        "EE-3"
+      ],
+      "size": 55,
+      "rooms": [
+        "LH-1"
+      ],
+      "room_names": [
+        "Lecture Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-EE302",
+      "day": "MON",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "EE302"
+      ],
+      "course_titles": [
+        "Control Systems"
+      ],
+      "groups": [
+        "EE-3"
+      ],
+      "size": 55,
+      "rooms": [
+        "LH-2"
+      ],
+      "room_names": [
+        "Lecture Hall 2"
+      ]
+    },
+    {
+      "exam_id": "EX-EE303",
+      "day": "FRI",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "EE303"
+      ],
+      "course_titles": [
+        "Power Electronics"
+      ],
+      "groups": [
+        "EE-3"
+      ],
+      "size": 55,
+      "rooms": [
+        "LH-3"
+      ],
+      "room_names": [
+        "Lecture Hall 3"
+      ]
+    },
+    {
+      "exam_id": "EX-ME301",
+      "day": "SAT",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "ME301"
+      ],
+      "course_titles": [
+        "Heat Transfer"
+      ],
+      "groups": [
+        "ME-3"
+      ],
+      "size": 55,
+      "rooms": [
+        "LH-3"
+      ],
+      "room_names": [
+        "Lecture Hall 3"
+      ]
+    },
+    {
+      "exam_id": "EX-ME302",
+      "day": "MON",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "ME302"
+      ],
+      "course_titles": [
+        "Machine Design"
+      ],
+      "groups": [
+        "ME-3"
+      ],
+      "size": 55,
+      "rooms": [
+        "SH-1"
+      ],
+      "room_names": [
+        "Seminar Hall 1"
+      ]
+    },
+    {
+      "exam_id": "EX-ME303",
+      "day": "FRI",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "ME303"
+      ],
+      "course_titles": [
+        "Fluid Machines"
+      ],
+      "groups": [
+        "ME-3"
+      ],
+      "size": 55,
+      "rooms": [
+        "LH-6"
+      ],
+      "room_names": [
+        "Lecture Hall 6"
+      ]
+    },
+    {
+      "exam_id": "EX-CE301",
+      "day": "WED",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "CE301"
+      ],
+      "course_titles": [
+        "Structural Analysis"
+      ],
+      "groups": [
+        "CE-3"
+      ],
+      "size": 45,
+      "rooms": [
+        "LH-4"
+      ],
+      "room_names": [
+        "Lecture Hall 4"
+      ]
+    },
+    {
+      "exam_id": "EX-CE302",
+      "day": "SAT",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "CE302"
+      ],
+      "course_titles": [
+        "Geotechnical Engineering"
+      ],
+      "groups": [
+        "CE-3"
+      ],
+      "size": 45,
+      "rooms": [
+        "SH-2"
+      ],
+      "room_names": [
+        "Seminar Hall 2"
+      ]
+    },
+    {
+      "exam_id": "EX-CE303",
+      "day": "MON",
+      "session": "PM",
+      "time_slot": "14:00 - 16:00",
+      "course_ids": [
+        "CE303"
+      ],
+      "course_titles": [
+        "Transportation Engineering"
+      ],
+      "groups": [
+        "CE-3"
+      ],
+      "size": 45,
+      "rooms": [
+        "LH-3"
+      ],
+      "room_names": [
+        "Lecture Hall 3"
+      ]
+    },
+    {
+      "exam_id": "EX-OE-BASKET",
+      "day": "TUE",
+      "session": "AM",
+      "time_slot": "09:30 - 11:30",
+      "course_ids": [
+        "OE301",
+        "OE302",
+        "OE303"
+      ],
+      "course_titles": [
+        "Introduction to Finance",
+        "Data Visualisation",
+        "Technical Writing"
+      ],
+      "groups": [
+        "CSE-3",
+        "ECE-3",
+        "EE-3",
+        "ME-3",
+        "CE-3"
+      ],
+      "size": 295,
+      "rooms": [
+        "AUD",
+        "LH-5"
+      ],
+      "room_names": [
+        "Main Auditorium",
+        "Lecture Hall 5"
+      ]
+    }
+  ],
+  "total": 41
+}

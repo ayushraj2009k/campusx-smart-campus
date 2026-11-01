@@ -1,0 +1,21 @@
+{
+  "name": "campusx-smart-campus",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CAMPUSX – AI-Powered Smart Campus Management & Operations Platform for IIT Bhubaneswar",
+  "scripts": {
+    "dev": "npm --prefix frontend run dev",
+    "build": "npm --prefix frontend run build",
+    "lint": "npm --prefix frontend run lint",
+    "preview": "npm --prefix frontend run preview"
+  },
+  "keywords": [
+    "campus-management",
+    "timetable-solver",
+    "iit-bhubaneswar",
+    "hackathon",
+    "smart-campus"
+  ],
+  "author": "CAMPUSX Team",
+  "license": "MIT"
+}

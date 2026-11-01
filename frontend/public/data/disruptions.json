@@ -1,0 +1,319 @@
+{
+  "total_moved": 15,
+  "changes": [
+    {
+      "session_id": "HS101-A-L2",
+      "course_name": "Communicative English",
+      "faculty_id": "F36",
+      "groups": [
+        "Y1-A"
+      ],
+      "before": {
+        "day": "TUE",
+        "start_period": 6,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "TUE",
+        "start_period": 2,
+        "room_id": "LH-1",
+        "room_name": "Lecture Hall 1"
+      },
+      "type": "Time & Room"
+    },
+    {
+      "session_id": "PH101-B-L3",
+      "course_name": "Engineering Physics",
+      "faculty_id": "F21",
+      "groups": [
+        "Y1-B"
+      ],
+      "before": {
+        "day": "MON",
+        "start_period": 4,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "MON",
+        "start_period": 4,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Room Only"
+    },
+    {
+      "session_id": "CS101-B-L1",
+      "course_name": "Programming in C",
+      "faculty_id": "F01",
+      "groups": [
+        "Y1-B"
+      ],
+      "before": {
+        "day": "MON",
+        "start_period": 3,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "MON",
+        "start_period": 3,
+        "room_id": "LH-3",
+        "room_name": "Lecture Hall 3"
+      },
+      "type": "Room Only"
+    },
+    {
+      "session_id": "HS101-B-L1",
+      "course_name": "Communicative English",
+      "faculty_id": "F36",
+      "groups": [
+        "Y1-B"
+      ],
+      "before": {
+        "day": "TUE",
+        "start_period": 4,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "TUE",
+        "start_period": 1,
+        "room_id": "LH-1",
+        "room_name": "Lecture Hall 1"
+      },
+      "type": "Time & Room"
+    },
+    {
+      "session_id": "PH101-C-L2",
+      "course_name": "Engineering Physics",
+      "faculty_id": "F22",
+      "groups": [
+        "Y1-C"
+      ],
+      "before": {
+        "day": "FRI",
+        "start_period": 7,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "MON",
+        "start_period": 3,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Time & Room"
+    },
+    {
+      "session_id": "PH101-C-L3",
+      "course_name": "Engineering Physics",
+      "faculty_id": "F22",
+      "groups": [
+        "Y1-C"
+      ],
+      "before": {
+        "day": "MON",
+        "start_period": 2,
+        "room_id": "LH-2",
+        "room_name": "Lecture Hall 2"
+      },
+      "after": {
+        "day": "MON",
+        "start_period": 2,
+        "room_id": "LH-4",
+        "room_name": "Lecture Hall 4"
+      },
+      "type": "Room Only"
+    },
+    {
+      "session_id": "PH101-D-L3",
+      "course_name": "Engineering Physics",
+      "faculty_id": "F22",
+      "groups": [
+        "Y1-D"
+      ],
+      "before": {
+        "day": "MON",
+        "start_period": 1,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "MON",
+        "start_period": 1,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Room Only"
+    },
+    {
+      "session_id": "CS203-L1",
+      "course_name": "Digital Logic Design",
+      "faculty_id": "F07",
+      "groups": [
+        "CSE-2"
+      ],
+      "before": {
+        "day": "MON",
+        "start_period": 6,
+        "room_id": "LH-1",
+        "room_name": "Lecture Hall 1"
+      },
+      "after": {
+        "day": "WED",
+        "start_period": 5,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Time & Room"
+    },
+    {
+      "session_id": "CS203-L2",
+      "course_name": "Digital Logic Design",
+      "faculty_id": "F07",
+      "groups": [
+        "CSE-2"
+      ],
+      "before": {
+        "day": "MON",
+        "start_period": 5,
+        "room_id": "CR-103",
+        "room_name": "Classroom A-103"
+      },
+      "after": {
+        "day": "TUE",
+        "start_period": 6,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Time & Room"
+    },
+    {
+      "session_id": "EC203-L2",
+      "course_name": "Electronic Devices",
+      "faculty_id": "F11",
+      "groups": [
+        "ECE-2"
+      ],
+      "before": {
+        "day": "TUE",
+        "start_period": 3,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "TUE",
+        "start_period": 1,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Time & Room"
+    },
+    {
+      "session_id": "EC204-L1",
+      "course_name": "Probability and Random Processes",
+      "faculty_id": "F12",
+      "groups": [
+        "ECE-2"
+      ],
+      "before": {
+        "day": "TUE",
+        "start_period": 2,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "TUE",
+        "start_period": 2,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Room Only"
+    },
+    {
+      "session_id": "ME203-L2",
+      "course_name": "Kinematics of Machines",
+      "faculty_id": "F27",
+      "groups": [
+        "ME-2"
+      ],
+      "before": {
+        "day": "TUE",
+        "start_period": 5,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "MON",
+        "start_period": 2,
+        "room_id": "LH-2",
+        "room_name": "Lecture Hall 2"
+      },
+      "type": "Time & Room"
+    },
+    {
+      "session_id": "CE301-L1",
+      "course_name": "Structural Analysis",
+      "faculty_id": "F31",
+      "groups": [
+        "CE-3"
+      ],
+      "before": {
+        "day": "TUE",
+        "start_period": 7,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "TUE",
+        "start_period": 7,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Room Only"
+    },
+    {
+      "session_id": "OE303-L2",
+      "course_name": "Technical Writing",
+      "faculty_id": "F40",
+      "groups": [
+        "CSE-3",
+        "ECE-3",
+        "EE-3",
+        "ME-3",
+        "CE-3"
+      ],
+      "before": {
+        "day": "MON",
+        "start_period": 2,
+        "room_id": "CR-102",
+        "room_name": "Classroom A-102"
+      },
+      "after": {
+        "day": "MON",
+        "start_period": 2,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "Room Only"
+    },
+    {
+      "session_id": "CS202-T2",
+      "course_name": "Added Session (CS202-T2)",
+      "faculty_id": "F06",
+      "groups": [
+        "CSE-2"
+      ],
+      "before": null,
+      "after": {
+        "day": "MON",
+        "start_period": 5,
+        "room_id": "AUD",
+        "room_name": "Main Auditorium"
+      },
+      "type": "New Session"
+    }
+  ]
+}
