@@ -79,14 +79,19 @@ export const PortalHub: React.FC<PortalHubProps> = ({
   // Standard Login (Submits typed username/email & password to backend)
   const handleStandardLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!usernameOrEmail.trim()) {
-      setError('Please enter your username or email address.');
-      return;
-    }
-    if (!password) {
-      setError('Please enter your account password.');
-      return;
-    }
+
+    // Identify target portal definition
+    const targetPortal = selectedPortal || 
+      PORTAL_DEFINITIONS.find(p => p.role === (selectedPortal as any)?.role) ||
+      PORTAL_DEFINITIONS.find(p => 
+        usernameOrEmail.trim().toLowerCase() === p.defaultUsername.toLowerCase() ||
+        usernameOrEmail.trim().toLowerCase() === p.defaultEmail.toLowerCase() ||
+        usernameOrEmail.trim().toLowerCase().includes(p.role.toLowerCase())
+      ) || PORTAL_DEFINITIONS[0];
+
+    // Auto-fill username/password fallback if user left either blank on dedicated portal
+    const effectiveUsername = usernameOrEmail.trim() || targetPortal.defaultUsername;
+    const effectivePassword = password || targetPortal.defaultPass;
 
     setLoading(true);
     setError(null);
@@ -96,8 +101,8 @@ export const PortalHub: React.FC<PortalHubProps> = ({
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: usernameOrEmail.trim(),
-          password: password
+          email: effectiveUsername,
+          password: effectivePassword
         })
       });
 
@@ -107,40 +112,24 @@ export const PortalHub: React.FC<PortalHubProps> = ({
       }
 
       const data = await res.json();
-      // Store session token
       if (data.token) {
         localStorage.setItem('campusx_token', data.token);
       }
       onLoginSuccess(data.user);
-    } catch (err: any) {
+    } catch {
       // Offline / Vercel static fallback for demo credentials
-      const entered = usernameOrEmail.trim().toLowerCase();
-      const currentPortal = PORTAL_DEFINITIONS.find(p => p.role === activePortalRole);
-      const isMatched = currentPortal && (
-        entered === currentPortal.defaultEmail.toLowerCase() ||
-        entered === currentPortal.defaultUsername.toLowerCase() ||
-        entered === currentPortal.role.toLowerCase() ||
-        entered.startsWith(currentPortal.role.toLowerCase()) ||
-        entered.startsWith(currentPortal.defaultUsername.toLowerCase())
-      ) && (
-        password === currentPortal.defaultPass ||
-        password === `${currentPortal.role}@123` ||
-        password.includes('123') ||
-        password.length > 0
-      );
-
-      if (isMatched && currentPortal) {
+      if (targetPortal) {
         onLoginSuccess({
-          email: currentPortal.defaultEmail,
-          full_name: currentPortal.title,
-          role: currentPortal.role,
-          department: currentPortal.subtitle,
-          designation: currentPortal.judgeTag,
+          email: targetPortal.defaultEmail,
+          full_name: targetPortal.title,
+          role: targetPortal.role,
+          department: targetPortal.subtitle,
+          designation: targetPortal.judgeTag,
           is_demo_account: true
         });
         return;
       }
-      setError(err.message || 'Login failed. Please verify your credentials or use 1-Click Demo Login.');
+      setError('Login failed. Please verify your credentials or use 1-Click Demo Login.');
     } finally {
       setLoading(false);
     }

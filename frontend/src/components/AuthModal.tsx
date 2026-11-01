@@ -108,11 +108,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
 
   const handleStandardSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailOrUsername.trim()) {
+    const effectiveEmail = emailOrUsername.trim() || activeAccount?.username || '';
+    const effectivePass = password || activeAccount?.pass || '';
+
+    if (!effectiveEmail) {
       setError('Please enter your username or email.');
       return;
     }
-    if (!password) {
+    if (!effectivePass) {
       setError('Please enter your password.');
       return;
     }
@@ -124,7 +127,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailOrUsername.trim(), password }),
+        body: JSON.stringify({ email: effectiveEmail, password: effectivePass }),
       });
 
       if (!res.ok) {
