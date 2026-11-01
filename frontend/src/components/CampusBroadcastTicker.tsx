@@ -48,7 +48,7 @@ export const CampusBroadcastTicker: React.FC<CampusBroadcastTickerProps> = ({
     },
     {
       type: 'info',
-      tag: 'CIT CAMPUS PLATFORM',
+      tag: 'IIT BHUBANESWAR OPERATIONS',
       icon: Bell,
       color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
       text: 'Autonomous Semester Timetable, Venue Allocation & Emergency Disruption Management for 1,000 Students across 5 Branches',

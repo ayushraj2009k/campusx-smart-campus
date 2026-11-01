@@ -25,7 +25,7 @@ export const ParticipantPortal: React.FC<ParticipantPortalProps> = ({ onOpenNavi
   };
 
   // QR Code Raw Text for Smartphone Scanners
-  const qrRawData = `GATE PASS: Spectra Tech Fest 2026 | Participant: Rohan Sen | Pass ID: CX-SPECTRA-2026-9841 | Access: All Campus Zones | Verified: Chilika Institute of Technology & IIT Bhubaneswar`;
+  const qrRawData = `GATE PASS: Spectra Tech Fest 2026 | Participant: Rohan Sen | Pass ID: CX-SPECTRA-2026-9841 | Access: All Campus Zones | Verified: Indian Institute of Technology Bhubaneswar`;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=280x280&margin=8&data=${encodeURIComponent(qrRawData)}`;
 
   const festEvents = [
@@ -199,7 +199,7 @@ export const ParticipantPortal: React.FC<ParticipantPortalProps> = ({ onOpenNavi
                   <span className="text-xs font-black tracking-wider text-white uppercase font-display block">
                     IIT Bhubaneswar
                   </span>
-                  <span className="text-[10px] text-fuchsia-400 font-mono">Chilika Institute of Technology</span>
+                  <span className="text-[10px] text-fuchsia-400 font-mono">Indian Institute of Technology Bhubaneswar</span>
                 </div>
               </div>
               <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-gradient-to-r from-fuchsia-500/30 to-purple-500/30 text-fuchsia-300 font-bold border border-fuchsia-500/40 shadow-sm">
@@ -506,7 +506,7 @@ export const ParticipantPortal: React.FC<ParticipantPortalProps> = ({ onOpenNavi
                 Post-Event Certificate Verification Ledger
               </h3>
               <p className="text-xs text-surface-variant mt-0.5">
-                Official participation and merit achievement certificates signed by Chilika Institute of Technology
+                Official participation and merit achievement certificates signed by Indian Institute of Technology Bhubaneswar
               </p>
             </div>
           </div>

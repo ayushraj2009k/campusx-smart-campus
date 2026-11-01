@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import { Shield, Users, GraduationCap, Trophy, BookOpen, Ticket, X, Check, Lock, Mail, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Shield, Users, GraduationCap, Trophy, BookOpen, Ticket, 
+  X, Check, Lock, Mail, ArrowRight, Eye, EyeOff, Sparkles, KeyRound, AlertCircle 
+} from 'lucide-react';
 import { UserProfile, UserRole } from '../types';
+import { useTheme } from '../context/ThemeContext';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -9,80 +13,110 @@ interface AuthModalProps {
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSuccess }) => {
+  const { effectiveAppearance } = useTheme();
+  const isDark = effectiveAppearance === 'dark';
+
   const [selectedRole, setSelectedRole] = useState<UserRole>('admin');
-  const [email, setEmail] = useState('admin@campusx.edu');
-  const [password, setPassword] = useState('Admin@CampusX2026!');
-  const [loading, setLoading] = useState(false);
+  // Inputs start completely BLANK as requested by user
+  const [emailOrUsername, setEmailOrUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Safeguard: immediately purge browser autofill for external credentials
+  useEffect(() => {
+    if (
+      emailOrUsername.toLowerCase().includes('sarthi') ||
+      password.includes('9798899483')
+    ) {
+      setEmailOrUsername('');
+      setPassword('');
+      setError(null);
+    }
+  }, [emailOrUsername, password]);
 
   if (!isOpen) return null;
 
   const demoAccounts = [
     {
       role: 'admin' as UserRole,
-      title: 'Admin (Judge Account 1)',
+      title: 'Admin Directorate',
+      username: 'admin@',
       email: 'admin@campusx.edu',
-      pass: 'Admin@CampusX2026!',
+      pass: 'admin@123',
       icon: Shield,
-      badge: 'Directorate / System Controller',
-      color: 'border-blue-500/50 bg-blue-500/10 text-blue-400'
+      badge: 'JUDGE CORE 1',
+      desc: 'CP-SAT solver, minimal moves disruption repair & reset'
     },
     {
       role: 'department_coordinator' as UserRole,
-      title: 'Dept Coordinator (Judge Account 2)',
+      title: 'Dept Coordinator',
+      username: 'coordinator@',
       email: 'coordinator@campusx.edu',
-      pass: 'Coord@CampusX2026!',
+      pass: 'coordinator@123',
       icon: Users,
-      badge: 'Dr. Rajesh Sharma (CSE)',
-      color: 'border-purple-500/50 bg-purple-500/10 text-purple-400'
+      badge: 'JUDGE CORE 2',
+      desc: 'CSE timetable, lab allocations & conflict monitoring'
     },
     {
       role: 'faculty' as UserRole,
-      title: 'Faculty (Judge Account 3)',
+      title: 'Faculty Member',
+      username: 'faculty@',
       email: 'faculty@campusx.edu',
-      pass: 'Faculty@CampusX2026!',
+      pass: 'faculty@123',
       icon: GraduationCap,
-      badge: 'Prof. Anita Roy (F01)',
-      color: 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400'
+      badge: 'JUDGE CORE 3',
+      desc: 'Teaching agenda, leave reports & reschedule requests'
     },
     {
       role: 'club' as UserRole,
-      title: 'Club Representative (Judge Account 4)',
+      title: 'Club Representative',
+      username: 'club@',
       email: 'club@campusx.edu',
-      pass: 'Club@CampusX2026!',
+      pass: 'club@123',
       icon: Trophy,
-      badge: 'Arjun Verma (Dramatics / Fest Lead)',
-      color: 'border-amber-500/50 bg-amber-500/10 text-amber-400'
+      badge: 'JUDGE CORE 4',
+      desc: 'Spectra Week venue booking & natural language parser'
     },
     {
       role: 'student' as UserRole,
-      title: 'Student (Controlled Demo)',
+      title: 'Student Portal',
+      username: 'student@',
       email: 'student@campusx.edu',
-      pass: 'Student@CampusX2026!',
+      pass: 'student@123',
       icon: BookOpen,
-      badge: 'Priya Nayak (3rd Year CSE-3)',
-      color: 'border-cyan-500/50 bg-cyan-500/10 text-cyan-400'
+      badge: 'ECOSYSTEM 5',
+      desc: 'Personalized timetable, exam seating & RFID pass'
     },
     {
       role: 'participant' as UserRole,
-      title: 'Participant (Controlled Demo)',
+      title: 'Participant Portal',
+      username: 'participant@',
       email: 'participant@campusx.edu',
-      pass: 'Guest@CampusX2026!',
+      pass: 'participant@123',
       icon: Ticket,
-      badge: 'Rohan Sen (Spectra Hackathon Delegate)',
-      color: 'border-fuchsia-500/50 bg-fuchsia-500/10 text-fuchsia-400'
+      badge: 'ECOSYSTEM 6',
+      desc: 'Digital gate pass, turnstile QR & venue wayfinding'
     }
   ];
 
-  const handleSelectDemo = (acc: typeof demoAccounts[0]) => {
-    setSelectedRole(acc.role);
-    setEmail(acc.email);
-    setPassword(acc.pass);
+  const handleSelectRole = (role: UserRole) => {
+    setSelectedRole(role);
     setError(null);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleStandardSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!emailOrUsername.trim()) {
+      setError('Please enter your username or email.');
+      return;
+    }
+    if (!password) {
+      setError('Please enter your password.');
+      return;
+    }
+
     setLoading(true);
     setError(null);
 
@@ -90,148 +124,273 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onLoginSu
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: emailOrUsername.trim(), password }),
       });
 
       if (!res.ok) {
         const data = await res.json().catch(() => ({}));
-        throw new Error(data.detail || 'Authentication failed');
+        throw new Error(data.detail || 'Authentication failed. Please verify credentials.');
       }
 
       const data = await res.json();
+      if (data.token) {
+        localStorage.setItem('campusx_token', data.token);
+      }
       onLoginSuccess(data.user);
       onClose();
     } catch (err: any) {
-      // Fallback for offline demo mode
-      const matched = demoAccounts.find((d) => d.email.toLowerCase() === email.toLowerCase());
-      if (matched && password === matched.pass) {
+      setError(err.message || 'Login failed. Please check your username/password.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQuickDemoLogin = async (roleToLogin: UserRole) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/auth/demo-login/${roleToLogin}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || 'Demo login failed');
+      }
+
+      const data = await res.json();
+      if (data.token) {
+        localStorage.setItem('campusx_token', data.token);
+      }
+      onLoginSuccess(data.user);
+      onClose();
+    } catch (err: any) {
+      // Fallback
+      const acc = demoAccounts.find(a => a.role === roleToLogin);
+      if (acc) {
         onLoginSuccess({
-          email: matched.email,
-          full_name: matched.badge,
-          role: matched.role,
-          department: 'Academic Operations',
-          designation: matched.badge,
-          avatar_url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80'
+          email: acc.email,
+          full_name: acc.title,
+          role: acc.role,
+          department: acc.desc,
+          designation: acc.badge,
+          is_demo_account: true
         });
         onClose();
       } else {
-        setError(err.message || 'Login failed. Please use one of the judge demo accounts.');
+        setError(err.message || 'Demo login failed.');
       }
     } finally {
       setLoading(false);
     }
   };
 
+  const activeAccount = demoAccounts.find(a => a.role === selectedRole) || demoAccounts[0];
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-      <div className="relative w-full max-w-xl rounded-2xl bg-surface-container-low border border-outline-variant/30 shadow-2xl p-6 sm:p-8 overflow-hidden text-on-surface">
-        {/* Glow backdrop */}
-        <div className="absolute -top-24 -right-24 w-60 h-60 bg-secondary/15 rounded-full blur-3xl pointer-events-none" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+      <div className={`relative w-full max-w-xl rounded-3xl border shadow-2xl p-6 sm:p-8 overflow-hidden transition-all ${
+        isDark ? 'bg-slate-900 border-slate-800 text-slate-100' : 'bg-white border-slate-200 text-slate-900'
+      }`}>
         
         {/* Modal Header */}
         <div className="flex items-start justify-between mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-primary-container/20 flex items-center justify-center border border-secondary/30">
-              <Lock className="w-5 h-5 text-secondary" />
+            <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border shadow-md ${
+              isDark ? 'bg-blue-600/20 border-blue-500/40 text-blue-400' : 'bg-blue-600 text-white shadow-blue-500/30'
+            }`}>
+              <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-white font-display">Judge Evaluation Sign-In</h2>
-              <p className="text-xs text-on-surface-variant">Select any of the 4 Judge Demo Accounts to evaluate role-specific workflows.</p>
+              <h2 className={`text-xl font-extrabold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                CAMPUSX Portal Authentication
+              </h2>
+              <p className={`text-xs mt-0.5 ${isDark ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                Indian Institute of Technology Bhubaneswar &bull; Authorized Role Access
+              </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-on-surface-variant hover:text-white hover:bg-surface-container-high transition-colors"
+            className={`p-2 rounded-xl transition-colors ${
+              isDark ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+            }`}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* 1-Click Demo Account Quick Selector */}
+        {/* 6 Role Pills Switcher */}
         <div className="mb-6">
-          <label className="text-[11px] font-bold text-secondary uppercase tracking-wider block mb-2 font-mono">
-            Click Any Demo Account (Auto-Fills Credentials)
+          <label className={`block text-[11px] font-mono font-bold uppercase tracking-wider mb-2 ${
+            isDark ? 'text-slate-400' : 'text-slate-600'
+          }`}>
+            Select Portal Role:
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            {demoAccounts.map((acc) => {
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5">
+            {demoAccounts.map(acc => {
               const Icon = acc.icon;
-              const isSelected = email === acc.email;
+              const isSelected = selectedRole === acc.role;
               return (
                 <button
-                  key={acc.email}
+                  key={acc.role}
                   type="button"
-                  onClick={() => handleSelectDemo(acc)}
-                  className={`flex items-start gap-2.5 p-2.5 rounded-xl border text-left transition-all ${
+                  onClick={() => handleSelectRole(acc.role)}
+                  className={`p-2 rounded-xl border flex flex-col items-center gap-1 transition-all ${
                     isSelected
-                      ? `${acc.color} ring-2 ring-secondary/50 shadow-md`
-                      : 'border-outline-variant/20 bg-surface-container-high/40 hover:bg-surface-container-high text-on-surface-variant'
+                      ? isDark ? 'bg-blue-600 text-white border-blue-500 shadow-md' : 'bg-blue-600 text-white border-blue-600 shadow-md'
+                      : isDark ? 'bg-slate-950 border-slate-800 text-slate-400 hover:text-white' : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
                   }`}
                 >
-                  <Icon className="w-4 h-4 mt-0.5 shrink-0" />
-                  <div className="min-w-0">
-                    <span className="text-xs font-semibold text-white block truncate">{acc.title}</span>
-                    <span className="text-[10px] text-on-surface-variant block truncate">{acc.badge}</span>
-                  </div>
+                  <Icon className="w-4 h-4" />
+                  <span className="text-[10px] font-bold truncate max-w-full capitalize">
+                    {acc.role.replace('department_', '')}
+                  </span>
                 </button>
               );
             })}
           </div>
         </div>
 
-        {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Error Alert */}
+        {error && (
+          <div className={`mb-4 p-3.5 rounded-xl border text-xs flex items-center gap-2 ${
+            isDark 
+              ? 'bg-rose-950/40 border-rose-500/40 text-rose-200' 
+              : 'bg-rose-50 border-2 border-rose-400 text-rose-950 font-extrabold shadow-sm'
+          }`}>
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
+            <span>{error}</span>
+          </div>
+        )}
+
+        {/* Quick Demo Credential Pill */}
+        <div className={`mb-4 p-2.5 rounded-xl border flex items-center justify-between gap-2 text-xs ${
+          isDark ? 'bg-slate-950/60 border-slate-800' : 'bg-blue-50/80 border border-blue-200'
+        }`}>
+          <div className="font-mono text-[11px] truncate">
+            <span className="text-blue-600 dark:text-cyan-400 font-extrabold">{activeAccount.username}</span>
+            <span className="opacity-70"> / </span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-extrabold">{activeAccount.pass}</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              setEmailOrUsername(activeAccount.username);
+              setPassword(activeAccount.pass);
+              setError(null);
+            }}
+            className="px-2 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-[10px] shrink-0 shadow-sm"
+          >
+            Auto-fill
+          </button>
+        </div>
+
+        {/* Sign In Form (Inputs start completely BLANK) */}
+        <form onSubmit={handleStandardSubmit} className="space-y-3.5" autoComplete="off">
+          
+          {/* Trap decoys to intercept external browser autofill engines */}
+          <input type="text" name="cx_auth_decoy_u" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+          <input type="password" name="cx_auth_decoy_p" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
           <div>
-            <label className="text-xs font-medium text-on-surface-variant block mb-1">Email Address</label>
+            <label className={`block text-xs font-black font-mono uppercase tracking-wider mb-1.5 ${
+              isDark ? 'text-slate-200' : 'text-slate-950'
+            }`}>
+              Username or Email
+            </label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2" />
+              <Mail className={`w-4 h-4 absolute left-3 top-3 ${isDark ? 'text-slate-500' : 'text-slate-600'}`} />
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant/30 text-sm text-white focus:outline-none focus:border-secondary transition-colors"
+                type="text"
+                name={`cx_modal_user_${selectedRole}`}
+                autoComplete="new-password"
+                value={emailOrUsername}
+                onChange={(e) => setEmailOrUsername(e.target.value)}
+                placeholder={`e.g. ${activeAccount.username} (or ${activeAccount.email})`}
+                className={`w-full pl-9 pr-3 py-2.5 rounded-xl text-xs font-bold border focus:outline-none focus:ring-2 ${
+                  isDark 
+                    ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-500' 
+                    : 'bg-white border-2 border-slate-300 text-slate-950 placeholder-slate-400 focus:ring-blue-600 focus:border-blue-600 shadow-sm'
+                }`}
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-medium text-on-surface-variant block mb-1">Password</label>
+            <label className={`block text-xs font-black font-mono uppercase tracking-wider mb-1.5 ${
+              isDark ? 'text-slate-200' : 'text-slate-950'
+            }`}>
+              Password
+            </label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-on-surface-variant absolute left-3 top-1/2 -translate-y-1/2" />
+              <Lock className={`w-4 h-4 absolute left-3 top-3 ${isDark ? 'text-slate-500' : 'text-slate-600'}`} />
               <input
-                type="password"
+                type="text"
+                name={`cx_modal_pass_${selectedRole}`}
+                autoComplete="new-password"
+                style={!showPassword ? { WebkitTextSecurity: 'disc' } as React.CSSProperties : undefined}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-surface-container border border-outline-variant/30 text-sm text-white focus:outline-none focus:border-secondary transition-colors"
+                placeholder={`e.g. ${activeAccount.pass}`}
+                className={`w-full pl-9 pr-9 py-2.5 rounded-xl text-xs font-bold border focus:outline-none focus:ring-2 ${
+                  isDark 
+                    ? 'bg-slate-950 border-slate-700 text-white placeholder-slate-600 focus:ring-blue-500' 
+                    : 'bg-white border-2 border-slate-300 text-slate-950 placeholder-slate-400 focus:ring-blue-600 focus:border-blue-600 shadow-sm'
+                }`}
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={`absolute right-3 top-3 ${isDark ? 'text-slate-500 hover:text-white' : 'text-slate-600 hover:text-slate-950'}`}
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
-          {error && (
-            <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-xs text-red-400">
-              {error}
-            </div>
-          )}
-
-          <div className="pt-2 flex items-center justify-end gap-3">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-on-surface-variant hover:text-white transition-colors"
-            >
-              Cancel
-            </button>
+          {/* Action Buttons */}
+          <div className="pt-2 space-y-2.5">
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary-container to-secondary text-white text-xs font-semibold shadow-lg shadow-cyan-500/20 hover:scale-105 active:scale-95 transition-all disabled:opacity-50"
+              className="w-full py-3 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-extrabold text-xs shadow-md shadow-blue-600/30 transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
-              <span>{loading ? 'Authenticating...' : 'Enter Portal'}</span>
-              <ArrowRight className="w-4 h-4" />
+              <KeyRound className="w-4 h-4" />
+              <span>Sign In with Credentials</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleQuickDemoLogin(selectedRole)}
+              disabled={loading}
+              className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 transition-all flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>1-Click Demo Login as {activeAccount.title}</span>
             </button>
           </div>
         </form>
+
+        {/* Demo Credential Reference */}
+        <div className={`mt-5 p-3 rounded-2xl border text-xs font-mono flex items-center justify-between ${
+          isDark ? 'bg-slate-950/70 border-slate-800 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+        }`}>
+          <div>
+            <span className="text-slate-500 block text-[9px] uppercase">Judge Username</span>
+            <span className="font-bold text-blue-600">{activeAccount.username}</span>
+          </div>
+          <div>
+            <span className="text-slate-500 block text-[9px] uppercase">Judge Password</span>
+            <span className="font-bold">{activeAccount.pass}</span>
+          </div>
+          <span className="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 font-bold text-[10px]">
+            {activeAccount.badge}
+          </span>
+        </div>
+
       </div>
     </div>
   );

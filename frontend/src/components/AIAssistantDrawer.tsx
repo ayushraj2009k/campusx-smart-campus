@@ -35,9 +35,10 @@ interface Message {
 interface AIAssistantDrawerProps {
   isOpen: boolean;
   onClose: () => void;
-  currentUser: User | null;
+  currentUser?: User | null;
   onNavigateToBuilding?: (buildingId: string) => void;
   onSwitchTab?: (tab: string) => void;
+  onSelectRole?: (role: UserRole) => void;
 }
 
 export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
@@ -45,7 +46,8 @@ export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
   onClose,
   currentUser,
   onNavigateToBuilding,
-  onSwitchTab
+  onSwitchTab,
+  onSelectRole
 }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -217,18 +219,26 @@ export const AIAssistantDrawer: React.FC<AIAssistantDrawerProps> = ({
       if (onSwitchTab) {
         onSwitchTab('navigation');
       }
+      onClose();
     } else if (action.actionType === 'portal' && action.payload) {
-      if (onSwitchTab) {
+      if (onSelectRole) {
+        onSelectRole(action.payload as UserRole);
+      } else if (onSwitchTab) {
         onSwitchTab('portal');
       }
+      onClose();
     } else if (action.actionType === 'timetable') {
       if (onSwitchTab) {
-        onSwitchTab('portal');
+        onSwitchTab('timetable');
       }
+      onClose();
     } else if (action.actionType === 'booking') {
-      if (onSwitchTab) {
+      if (onSelectRole) {
+        onSelectRole('club');
+      } else if (onSwitchTab) {
         onSwitchTab('portal');
       }
+      onClose();
     }
   };
 

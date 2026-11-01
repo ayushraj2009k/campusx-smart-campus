@@ -45,12 +45,18 @@ export const Navbar: React.FC<NavbarProps> = ({
   const isBharat = uiMode === 'bharat';
   const isApple = navStyle === 'apple';
 
+  const isDark = effectiveAppearance === 'dark';
+
   return (
     <>
       <header className={`sticky z-40 transition-all duration-300 ${
         isApple
-          ? 'top-2.5 max-w-6xl mx-auto my-2 rounded-2xl bg-surface-container-lowest/85 backdrop-blur-2xl border border-outline-variant/40 shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-2'
-          : 'top-0 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant/20 shadow-md'
+          ? (isDark 
+              ? 'top-2.5 max-w-6xl mx-auto my-2 rounded-2xl bg-surface-container-lowest/85 backdrop-blur-2xl border border-outline-variant/40 shadow-[0_8px_32px_rgba(0,0,0,0.4)] px-2'
+              : 'top-2.5 max-w-6xl mx-auto my-2 rounded-2xl bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-[0_8px_24px_rgba(0,0,0,0.08)] px-2')
+          : (isDark
+              ? 'top-0 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-b border-outline-variant/20 shadow-md'
+              : 'top-0 w-full bg-white/95 backdrop-blur-xl border-b border-slate-200 shadow-sm')
       }`}>
         <div className={`mx-auto h-16 flex items-center justify-between gap-4 ${
           isApple ? 'px-3 sm:px-4' : 'max-w-7xl px-4 sm:px-6'
@@ -62,10 +68,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               <img src="/campusx-logo.jpg" alt="Logo" className="w-full h-full object-cover rounded-[10px]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-extrabold text-lg tracking-tight text-white font-display flex items-center gap-1">
-                CAMPUS<span className="text-secondary">X</span>
+              <span className={`font-extrabold text-lg tracking-tight font-display flex items-center gap-1 ${
+                isDark ? 'text-white' : 'text-slate-900 font-black'
+              }`}>
+                CAMPUS<span className={isDark ? 'text-secondary' : 'text-blue-600'}>X</span>
               </span>
-              <span className="text-[9px] text-secondary font-mono tracking-wider hidden sm:block uppercase font-bold">
+              <span className={`text-[9px] font-mono tracking-wider hidden sm:block uppercase font-bold ${
+                isDark ? 'text-secondary' : 'text-blue-700'
+              }`}>
                 Indian Institute of Technology Bhubaneswar
               </span>
             </div>
@@ -77,8 +87,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onTabChange('overview')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeTab === 'overview'
-                  ? 'bg-secondary/15 text-secondary border border-secondary/30'
-                  : 'text-surface-variant hover:text-white hover:bg-surface-container-high'
+                  ? (isDark ? 'bg-secondary/15 text-secondary border border-secondary/30' : 'bg-blue-100 text-blue-900 border border-blue-400 font-bold')
+                  : (isDark ? 'text-surface-variant hover:text-white hover:bg-surface-container-high' : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 font-bold')
               }`}
             >
               Overview
@@ -88,8 +98,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onTabChange('portal')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'portal'
-                  ? 'bg-secondary/15 text-secondary border border-secondary/30'
-                  : 'text-surface-variant hover:text-white hover:bg-surface-container-high'
+                  ? (isDark ? 'bg-secondary/15 text-secondary border border-secondary/30' : 'bg-blue-100 text-blue-900 border border-blue-400 font-bold')
+                  : (isDark ? 'text-surface-variant hover:text-white hover:bg-surface-container-high' : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 font-bold')
               }`}
             >
               <Shield className="w-3.5 h-3.5" />
@@ -100,8 +110,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onTabChange('navigation')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'navigation'
-                  ? 'bg-secondary/15 text-secondary border border-secondary/30'
-                  : 'text-surface-variant hover:text-white hover:bg-surface-container-high'
+                  ? (isDark ? 'bg-secondary/15 text-secondary border border-secondary/30' : 'bg-blue-100 text-blue-900 border border-blue-400 font-bold')
+                  : (isDark ? 'text-surface-variant hover:text-white hover:bg-surface-container-high' : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 font-bold')
               }`}
             >
               <Compass className="w-3.5 h-3.5" />
@@ -112,8 +122,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               onClick={() => onTabChange('timetable')}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all flex items-center gap-1.5 ${
                 activeTab === 'timetable'
-                  ? 'bg-secondary/15 text-secondary border border-secondary/30'
-                  : 'text-surface-variant hover:text-white hover:bg-surface-container-high'
+                  ? (isDark ? 'bg-secondary/15 text-secondary border border-secondary/30' : 'bg-blue-100 text-blue-900 border border-blue-400 font-bold')
+                  : (isDark ? 'text-surface-variant hover:text-white hover:bg-surface-container-high' : 'text-slate-700 hover:text-slate-950 hover:bg-slate-100 font-bold')
               }`}
             >
               <Calendar className="w-3.5 h-3.5" />
@@ -128,9 +138,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             <button
               onClick={openAppearanceModal}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border transition-all text-xs font-bold ${
-                isBharat 
-                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20' 
-                  : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20'
+                isDark
+                  ? (isBharat 
+                      ? 'bg-amber-500/10 border-amber-500/30 text-amber-400 hover:bg-amber-500/20' 
+                      : 'bg-cyan-500/10 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20')
+                  : (isBharat
+                      ? 'bg-amber-100 border-amber-400 text-amber-900 hover:bg-amber-200'
+                      : 'bg-blue-100 border-blue-400 text-blue-900 hover:bg-blue-200')
               }`}
               title="Customize UI Architecture, Theme Palette & Typography"
             >
@@ -143,27 +157,35 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Quick Light / Dark Mode Toggle Button */}
             <button
               onClick={() => setAppearance(effectiveAppearance === 'dark' ? 'light' : 'dark')}
-              className="p-2 rounded-xl bg-surface-container hover:bg-surface-container-high border border-outline-variant/30 text-surface-variant hover:text-white transition-all"
+              className={`p-2 rounded-xl border transition-all ${
+                isDark
+                  ? 'bg-surface-container hover:bg-surface-container-high border-outline-variant/30 text-surface-variant hover:text-white'
+                  : 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-800'
+              }`}
               title={`Switch to ${effectiveAppearance === 'dark' ? 'Light' : 'Dark'} Mode`}
             >
               {effectiveAppearance === 'dark' ? (
                 <Sun className="w-4 h-4 text-amber-400" />
               ) : (
-                <Moon className="w-4 h-4 text-cyan-400" />
+                <Moon className="w-4 h-4 text-blue-600" />
               )}
             </button>
 
             {/* AI Assistant Toggle Button */}
             <button
               onClick={onToggleAI}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-medium shadow-sm hover:scale-105 active:scale-95 ${
-                isBharat
-                  ? 'bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-orange-600/20 border-orange-500/40 text-orange-300 hover:bg-orange-500/30'
-                  : 'bg-gradient-to-r from-blue-600/30 via-cyan-500/20 to-purple-600/30 border-secondary/40 text-secondary hover:bg-secondary/20'
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border transition-all text-xs font-semibold shadow-sm hover:scale-105 active:scale-95 ${
+                isDark
+                  ? (isBharat
+                      ? 'bg-gradient-to-r from-orange-500/20 via-amber-500/20 to-orange-600/20 border-orange-500/40 text-orange-300 hover:bg-orange-500/30'
+                      : 'bg-gradient-to-r from-blue-600/30 via-cyan-500/20 to-purple-600/30 border-secondary/40 text-secondary hover:bg-secondary/20')
+                  : (isBharat
+                      ? 'bg-amber-600 hover:bg-amber-700 text-white font-extrabold shadow-sm'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white font-extrabold shadow-sm')
               }`}
               title="Open CampusX AI Assistant"
             >
-              <Sparkles className={`w-3.5 h-3.5 animate-pulse ${isBharat ? 'text-amber-400' : 'text-cyan-400'}`} />
+              <Sparkles className={`w-3.5 h-3.5 ${isDark ? (isBharat ? 'text-amber-400' : 'text-cyan-400') : 'text-white'}`} />
               <span className="hidden sm:inline">Ask AI</span>
             </button>
 
@@ -171,34 +193,59 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="relative">
             <button
               onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high hover:bg-surface-container-highest border border-outline-variant/30 text-xs font-semibold text-white transition-all shadow-sm"
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all shadow-sm ${
+                isDark
+                  ? 'bg-surface-container-high hover:bg-surface-container-highest border-outline-variant/30 text-white'
+                  : 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-900 font-bold'
+              }`}
             >
-              <div className="w-2 h-2 rounded-full bg-secondary animate-pulse" />
-              <span className="capitalize">{user ? user.role.replace('_', ' ') : 'Judge Demo Roles'}</span>
-              <ChevronDown className="w-3.5 h-3.5 text-surface-variant" />
+              <div className={`w-2 h-2 rounded-full ${isDark ? 'bg-secondary' : 'bg-blue-600'} animate-pulse`} />
+              <span className="capitalize">
+                {user?.role ? user.role.replace('_', ' ') : (user?.full_name || 'Judge Demo Roles')}
+              </span>
+              <ChevronDown className="w-3.5 h-3.5 opacity-70" />
             </button>
 
             {roleMenuOpen && (
-              <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-surface-container-low border border-outline-variant/40 shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
-                <div className="px-3 py-1.5 text-[10px] font-bold tracking-wider text-secondary uppercase border-b border-outline-variant/20 mb-1">
-                  Four Primary Judge Roles
+              <div className={`absolute right-0 mt-2 w-64 rounded-2xl border shadow-2xl py-2 z-50 animate-in fade-in zoom-in-95 duration-150 ${
+                isDark
+                  ? 'bg-surface-container-low border-outline-variant/40'
+                  : 'bg-white border-slate-200 text-slate-900 shadow-xl'
+              }`}>
+                <div className={`px-3 py-1.5 text-[10px] font-bold tracking-wider uppercase border-b mb-1 ${
+                  isDark ? 'text-secondary border-outline-variant/20' : 'text-blue-700 border-slate-200 font-extrabold'
+                }`}>
+                  Select Portal Sign-In (Judge Roles)
                 </div>
                 {roles.map((r) => {
                   const Icon = r.icon;
+                  const isActive = user?.role === r.role;
                   return (
                     <button
                       key={r.role}
                       onClick={() => {
-                        onSelectRole(r.role);
                         setRoleMenuOpen(false);
+                        if (isActive) {
+                          onTabChange('portal');
+                        } else {
+                          onSelectRole(r.role);
+                        }
                       }}
-                      className="w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-left hover:bg-surface-container transition-colors"
+                      className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-left transition-colors cursor-pointer ${
+                        isDark ? 'hover:bg-surface-container text-white' : 'hover:bg-slate-100 text-slate-900 font-semibold'
+                      }`}
                     >
                       <Icon className={`w-4 h-4 ${r.color}`} />
-                      <span className="text-white">{r.label}</span>
-                      {user?.role === r.role && (
-                        <span className="ml-auto text-[9px] px-1.5 py-0.5 rounded bg-secondary/20 text-secondary font-mono">
-                          ACTIVE
+                      <span>{r.label}</span>
+                      {isActive ? (
+                        <span className={`ml-auto text-[9px] px-1.5 py-0.5 rounded font-mono font-bold ${
+                          isDark ? 'bg-secondary/20 text-secondary' : 'bg-blue-100 text-blue-800'
+                        }`}>
+                          ACTIVE &bull; OPEN
+                        </span>
+                      ) : (
+                        <span className={`ml-auto text-[10px] font-mono text-blue-600 dark:text-cyan-400 font-bold`}>
+                          Sign In &rarr;
                         </span>
                       )}
                     </button>

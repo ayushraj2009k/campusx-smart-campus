@@ -38,3 +38,10 @@ yarn-error.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Root level loose uploads (tracked in frontend/public)
+/*.jpg
+/*.png
+/*.webp
+/UI OF APP/
+

@@ -37,84 +37,89 @@ export const PromoIntro: React.FC<PromoIntroProps> = ({
   }, [durationSeconds, onFinish]);
 
   const portals = [
-    { role: 'admin' as UserRole, label: 'ADMIN', icon: Shield, color: 'from-blue-600/30 to-blue-500/10', border: 'border-blue-500/40', text: 'text-blue-400' },
-    { role: 'department_coordinator' as UserRole, label: 'COORDINATOR', icon: Users, color: 'from-purple-600/30 to-purple-500/10', border: 'border-purple-500/40', text: 'text-purple-400' },
-    { role: 'faculty' as UserRole, label: 'FACULTY', icon: GraduationCap, color: 'from-emerald-600/30 to-emerald-500/10', border: 'border-emerald-500/40', text: 'text-emerald-400' },
-    { role: 'club' as UserRole, label: 'CLUB', icon: Trophy, color: 'from-amber-600/30 to-amber-500/10', border: 'border-amber-500/40', text: 'text-amber-400' },
-    { role: 'student' as UserRole, label: 'STUDENT', icon: BookOpen, color: 'from-cyan-600/30 to-cyan-500/10', border: 'border-cyan-500/40', text: 'text-cyan-400' },
-    { role: 'participant' as UserRole, label: 'PARTICIPANT', icon: Ticket, color: 'from-fuchsia-600/30 to-fuchsia-500/10', border: 'border-fuchsia-500/40', text: 'text-fuchsia-400' },
+    { role: 'admin' as UserRole, label: 'ADMIN', icon: Shield, color: 'from-blue-600 to-blue-500', border: 'border-blue-400/60', glow: 'hover:shadow-[0_0_20px_rgba(59,130,246,0.6)]', text: 'text-blue-300' },
+    { role: 'department_coordinator' as UserRole, label: 'COORDINATOR', icon: Users, color: 'from-purple-600 to-purple-500', border: 'border-purple-400/60', glow: 'hover:shadow-[0_0_20px_rgba(168,85,247,0.6)]', text: 'text-purple-300' },
+    { role: 'faculty' as UserRole, label: 'FACULTY', icon: GraduationCap, color: 'from-emerald-600 to-emerald-500', border: 'border-emerald-400/60', glow: 'hover:shadow-[0_0_20px_rgba(16,185,129,0.6)]', text: 'text-emerald-300' },
+    { role: 'club' as UserRole, label: 'CLUB', icon: Trophy, color: 'from-amber-600 to-amber-500', border: 'border-amber-400/60', glow: 'hover:shadow-[0_0_20px_rgba(245,158,11,0.6)]', text: 'text-amber-300' },
+    { role: 'student' as UserRole, label: 'STUDENT', icon: BookOpen, color: 'from-cyan-600 to-cyan-500', border: 'border-cyan-400/60', glow: 'hover:shadow-[0_0_20px_rgba(6,182,212,0.6)]', text: 'text-cyan-300' },
+    { role: 'participant' as UserRole, label: 'PARTICIPANT', icon: Ticket, color: 'from-fuchsia-600 to-fuchsia-500', border: 'border-fuchsia-400/60', glow: 'hover:shadow-[0_0_20px_rgba(217,70,239,0.6)]', text: 'text-fuchsia-300' },
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col justify-between items-center bg-[#070e1f] text-on-surface overflow-hidden select-none">
-      {/* Background Neon Ambient Glows */}
-      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-tr from-secondary/20 via-primary-container/25 to-tertiary/20 blur-[140px] pointer-events-none rounded-full animate-pulse-slow"></div>
-      <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-gradient-to-br from-blue-700/15 via-cyan-500/20 to-purple-600/15 blur-[120px] pointer-events-none rounded-full"></div>
+    <div className="fixed inset-0 z-50 flex flex-col justify-between items-center bg-[#050a18] text-white overflow-hidden select-none">
+      {/* High-Tech Background Ambient Cyber Grids & Neon Glows */}
+      <div className="absolute inset-0 bg-[radial-gradient(#1e3a8a_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none" />
+      <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-cyan-500/25 via-blue-600/30 to-purple-600/25 blur-[160px] pointer-events-none rounded-full animate-pulse" />
+      <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[700px] h-[700px] bg-gradient-to-br from-blue-700/20 via-cyan-400/25 to-emerald-500/20 blur-[140px] pointer-events-none rounded-full" />
 
-      {/* Top Header: IIT Bhubaneswar Logo Badge & Skip Button */}
-      <div className="relative z-10 w-full max-w-6xl px-6 py-5 flex items-center justify-between">
-        <div className="flex items-center gap-3 bg-surface-container-low/70 backdrop-blur-md px-4 py-2 rounded-full border border-outline-variant/30 shadow-lg">
+      {/* Top Header: IIT Bhubaneswar Logo Badge & High-Contrast Glowing Skip Button */}
+      <div className="relative z-10 w-full max-w-6xl px-6 py-6 flex items-center justify-between">
+        <div className="flex items-center gap-3.5 bg-slate-900/90 backdrop-blur-xl px-5 py-2.5 rounded-full border-2 border-cyan-500/40 shadow-[0_0_25px_rgba(6,182,212,0.25)]">
           <img
-            src="/iit-logo.png"
+            src="/LOGO OF IIT CAMPUS.png"
             alt="IIT Bhubaneswar Official Logo"
-            onError={(e) => { (e.target as HTMLImageElement).src = '/iit-crest.png'; }}
-            className="w-8 h-8 object-contain"
+            onError={(e) => { (e.target as HTMLImageElement).src = '/iit-logo.png'; }}
+            className="w-9 h-9 object-contain rounded-full bg-white p-0.5 shadow-sm"
           />
           <div className="text-left">
-            <span className="text-[11px] font-bold tracking-widest text-secondary block uppercase">
-              IIT Bhubaneswar
+            <span className="text-xs font-black tracking-widest text-white block uppercase font-display drop-shadow-sm">
+              IIT BHUBANESWAR
             </span>
-            <span className="text-[9px] text-on-surface-variant block tracking-wider">
+            <span className="text-[10px] text-cyan-300 font-mono font-bold block tracking-wider">
               Smart Campus Management Platform
             </span>
           </div>
         </div>
 
+        {/* High-Contrast Crystal-Clear Skip Button with Live Countdown */}
         <button
           onClick={onFinish}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-high/80 hover:bg-surface-container-highest border border-outline-variant/40 text-sm font-medium transition-all hover:scale-105 active:scale-95 shadow-md"
+          className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-slate-900/95 hover:bg-slate-800 border-2 border-cyan-400 text-white font-extrabold text-sm transition-all hover:scale-105 active:scale-95 shadow-[0_0_25px_rgba(34,211,238,0.5)] group cursor-pointer"
         >
-          <span>Skip</span>
-          <span className="text-xs text-secondary font-mono">({timeLeft}s)</span>
-          <ArrowRight className="w-4 h-4 text-secondary" />
+          <span className="tracking-wide text-white drop-shadow-sm font-sans font-black">SKIP INTRO</span>
+          <span className="px-2 py-0.5 rounded-full bg-cyan-500/30 text-cyan-300 font-mono text-xs border border-cyan-400/60 font-black">
+            {timeLeft}s
+          </span>
+          <ArrowRight className="w-4 h-4 text-cyan-300 group-hover:translate-x-1 transition-transform" />
         </button>
       </div>
 
-      {/* Center Cinematic Stage: Official Brand Logo & Tagline */}
+      {/* Center Cinematic Stage: Official Brand Logo & Heavy Tagline */}
       <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl my-auto">
-        {/* Animated Glow Halo */}
+        
+        {/* Animated Glowing Logo Frame */}
         <div className="relative group mb-5">
-          <div className="absolute inset-0 bg-gradient-to-b from-secondary/40 via-primary-container/30 to-tertiary/30 rounded-3xl blur-2xl scale-95 animate-pulse"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-cyan-400 to-purple-500 rounded-3xl blur-2xl opacity-70 animate-pulse" />
           
-          <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-3xl overflow-hidden p-1 bg-gradient-to-b from-secondary/60 via-primary-container to-tertiary/40 shadow-2xl shadow-cyan-500/20 transition-transform duration-700 hover:scale-105">
+          <div className="relative w-40 h-40 sm:w-48 sm:h-48 rounded-3xl overflow-hidden p-1.5 bg-gradient-to-tr from-cyan-400 via-blue-600 to-indigo-600 shadow-[0_0_50px_rgba(6,182,212,0.4)] transition-transform duration-700 hover:scale-105">
             <img
               src="/campusx-logo.jpg"
               alt="CAMPUSX Brand Logo"
-              onError={(e) => { (e.target as HTMLImageElement).src = '/iit-crest.png'; }}
-              className="w-full h-full object-cover rounded-[22px]"
+              onError={(e) => { (e.target as HTMLImageElement).src = '/LOGO OF IIT CAMPUS.png'; }}
+              className="w-full h-full object-cover rounded-[20px]"
             />
           </div>
         </div>
 
-        {/* Project Name & Subtitle */}
-        <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-white mb-2 font-display flex items-center justify-center gap-2">
-          CAMPUS<span className="text-secondary drop-shadow-[0_0_15px_rgba(76,215,246,0.8)]">X</span>
+        {/* Project Name & Heavy Neon Headline */}
+        <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-white mb-2 font-display flex items-center justify-center gap-2">
+          CAMPUS<span className="text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.9)]">X</span>
         </h1>
 
         {/* Tagline Pill */}
-        <div className="inline-flex items-center gap-2 px-5 py-1.5 rounded-full bg-surface-container-high/90 border border-secondary/30 shadow-[0_0_20px_rgba(76,215,246,0.15)] mb-4">
-          <span className="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-          <span className="text-xs sm:text-sm font-bold tracking-[0.2em] text-secondary uppercase font-display">
+        <div className="inline-flex items-center gap-2.5 px-6 py-2 rounded-full bg-slate-900/90 border-2 border-cyan-400/50 shadow-[0_0_25px_rgba(34,211,238,0.3)] mb-4">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+          <span className="text-xs sm:text-sm font-extrabold tracking-[0.2em] text-cyan-300 uppercase font-display">
             ONE CAMPUS. ONE CONNECTED EXPERIENCE.
           </span>
         </div>
 
-        <p className="text-sm text-on-surface-variant max-w-lg mx-auto leading-relaxed">
-          The next-generation enterprise orchestration system for timetables, venues, smart navigation, and academic operations.
+        <p className="text-sm sm:text-base text-slate-200 max-w-xl mx-auto leading-relaxed font-medium mb-2 drop-shadow-sm">
+          Next-generation academic orchestration: automated timetable scheduling, disruption resilience, venue knapsack allocation, and smart campus GIS.
         </p>
 
-        {/* 6 Role Portal Badges (Direct launch preview matching promo image) */}
-        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5 sm:gap-3 mt-6 w-full max-w-3xl">
+        {/* 6 Role Portal Badges with High Contrast and Clear Labels */}
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 sm:gap-3.5 mt-5 w-full max-w-3xl">
           {portals.map((p) => {
             const Icon = p.icon;
             return (
@@ -124,12 +129,12 @@ export const PromoIntro: React.FC<PromoIntroProps> = ({
                   onSelectRole(p.role);
                   onFinish();
                 }}
-                className={`flex flex-col items-center justify-center p-3 rounded-xl bg-surface-container-low/90 backdrop-blur-md border ${p.border} hover:scale-105 transition-all shadow-md group`}
+                className={`flex flex-col items-center justify-center p-3 sm:p-3.5 rounded-2xl bg-slate-900/95 backdrop-blur-md border-2 ${p.border} ${p.glow} hover:scale-105 transition-all shadow-xl group cursor-pointer`}
               >
-                <div className={`w-9 h-9 rounded-lg bg-gradient-to-b ${p.color} flex items-center justify-center mb-1.5 group-hover:shadow-[0_0_12px_rgba(76,215,246,0.4)]`}>
-                  <Icon className={`w-5 h-5 ${p.text}`} />
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-tr ${p.color} flex items-center justify-center mb-2 shadow-md group-hover:scale-110 transition-transform`}>
+                  <Icon className="w-5 h-5 text-white drop-shadow-sm" />
                 </div>
-                <span className="text-[10px] font-bold tracking-wider text-on-surface">
+                <span className="text-[11px] font-black tracking-wider text-white group-hover:text-cyan-300 transition-colors uppercase font-mono">
                   {p.label}
                 </span>
               </button>
@@ -137,31 +142,36 @@ export const PromoIntro: React.FC<PromoIntroProps> = ({
           })}
         </div>
 
-        {/* Campus Navigation Pill & Explore Slogan */}
-        <div className="mt-5 flex flex-col items-center gap-2">
+        {/* Campus Navigation Pill */}
+        <div className="mt-6 flex flex-col items-center gap-2">
           <button
             onClick={onFinish}
-            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-gradient-to-r from-blue-600/40 via-cyan-500/30 to-purple-600/40 border border-secondary/50 text-xs sm:text-sm font-semibold text-secondary hover:bg-secondary/20 transition-all hover:scale-105 shadow-[0_0_15px_rgba(76,215,246,0.25)]"
+            className="inline-flex items-center gap-2.5 px-7 py-2.5 rounded-full bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 border-2 border-cyan-300 text-xs sm:text-sm font-black text-white transition-all hover:scale-105 shadow-[0_0_25px_rgba(34,211,238,0.5)] cursor-pointer tracking-wider"
           >
-            <Compass className="w-4 h-4 animate-spin" style={{ animationDuration: '8s' }} />
-            <span>CAMPUS NAVIGATION</span>
+            <Compass className="w-4 h-4 animate-spin" style={{ animationDuration: '6s' }} />
+            <span>ENTER CAMPUS GIS NAVIGATION</span>
           </button>
           
-          <span className="text-[10px] tracking-[0.25em] text-on-surface-variant/80 uppercase font-mono">
-            EXPLORE · CONNECT · ACHIEVE
+          <span className="text-[10px] tracking-[0.3em] text-cyan-400 font-mono font-bold uppercase mt-1">
+            IIT BHUBANESWAR &bull; SAMANTA HIGH TECH SUITE
           </span>
         </div>
       </div>
 
-      {/* Bottom Progress Bar */}
+      {/* Bottom Progress Bar with Live Status */}
       <div className="relative z-10 w-full max-w-3xl px-6 pb-6">
-        <div className="flex items-center justify-between text-xs text-on-surface-variant mb-1 font-mono">
-          <span>Initializing Campus Grid...</span>
-          <span>{Math.round(progress)}%</span>
+        <div className="flex items-center justify-between text-xs text-slate-200 mb-2 font-mono font-bold">
+          <span className="flex items-center gap-2 text-cyan-300">
+            <Sparkles className="w-3.5 h-3.5 animate-spin text-cyan-400" />
+            <span>INITIALIZING CAMPUS ORCHESTRATION ENGINE...</span>
+          </span>
+          <span className="text-white bg-slate-800 px-2.5 py-0.5 rounded-md border border-cyan-500/40 font-mono font-black">
+            {Math.round(progress)}%
+          </span>
         </div>
-        <div className="w-full h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+        <div className="w-full h-2.5 bg-slate-900 border-2 border-cyan-500/30 rounded-full overflow-hidden shadow-inner">
           <div
-            className="h-full bg-gradient-to-r from-primary-container via-secondary to-tertiary transition-all duration-75 rounded-full"
+            className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-emerald-400 transition-all duration-75 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.9)]"
             style={{ width: `${progress}%` }}
           />
         </div>

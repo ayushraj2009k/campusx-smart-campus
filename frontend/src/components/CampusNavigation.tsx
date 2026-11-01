@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { CampusBuilding } from '../types';
 import { useTheme } from '../context/ThemeContext';
+import { IITRoadmapBlueprint } from './IITRoadmapBlueprint';
 
 interface CampusNavigationProps {
   initialBuilding?: string | null;
@@ -378,6 +379,7 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
   const [googleMapQueryMode, setGoogleMapQueryMode] = useState<'landmark' | 'exact_gps'>('landmark');
   const [roadmapZoom, setRoadmapZoom] = useState<number>(1);
   const [hoveredHotspot, setHoveredHotspot] = useState<RoadmapHotspot | null>(null);
+  const [blueprintStyle, setBlueprintStyle] = useState<'vector' | 'photo'>('vector');
   
   // Floor & Accessibility
   const [selectedFloor, setSelectedFloor] = useState<number>(1);
@@ -984,122 +986,188 @@ export const CampusNavigation: React.FC<CampusNavigationProps> = ({ initialBuild
 
           {/* 2. OFFICIAL ROAD MAP BLUEPRINT (High-Resolution Diagram with Interactive Hotspot Pins) */}
           {mapMode === 'roadmap' && (
-            <div className="relative rounded-3xl overflow-hidden border border-outline-variant/30 bg-[#070e1f] shadow-2xl h-[500px] flex flex-col">
+            <div className={`relative rounded-3xl overflow-hidden border shadow-2xl flex flex-col ${
+              isDark ? 'border-outline-variant/30 bg-[#070e1f]' : 'border-slate-200 bg-white'
+            }`}>
               
-              {/* Header Bar with Zoom & Hotspot Status */}
-              <div className="p-3.5 bg-surface-container-lowest/90 backdrop-blur-md border-b border-outline-variant/30 flex items-center justify-between z-20">
+              {/* Header Bar with Blueprint Mode, Zoom & Hotspot Status */}
+              <div className={`p-3.5 backdrop-blur-md border-b flex flex-wrap items-center justify-between gap-3 z-20 ${
+                isDark ? 'bg-surface-container-lowest/90 border-outline-variant/30' : 'bg-slate-50 border-slate-200'
+              }`}>
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
                     <Compass className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-white font-display">Official Road Map — IIT Bhubaneswar</h4>
-                    <span className="text-[10px] text-surface-variant">Verified campus road diagram with 16 interactive landmark pins</span>
+                    <h4 className={`text-xs font-bold font-display ${isDark ? 'text-white' : 'text-slate-900 font-black'}`}>
+                      Official Campus Road Blueprint — IIT Bhubaneswar
+                    </h4>
+                    <span className={`text-[10px] ${isDark ? 'text-surface-variant' : 'text-slate-600 font-semibold'}`}>
+                      Argul Campus Master Plan &bull; 16 Interactive Landmark Nodes
+                    </span>
                   </div>
                 </div>
 
-                {/* Zoom Controls */}
-                <div className="flex items-center gap-1.5 bg-surface-container p-1 rounded-xl border border-outline-variant/30">
-                  <button
-                    onClick={() => setRoadmapZoom(Math.max(1, roadmapZoom - 0.25))}
-                    className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white transition-all"
-                    title="Zoom Out"
-                  >
-                    <ZoomOut className="w-3.5 h-3.5" />
-                  </button>
-                  <span className="text-[10px] font-mono font-bold text-secondary px-1">
-                    {Math.round(roadmapZoom * 100)}%
-                  </span>
-                  <button
-                    onClick={() => setRoadmapZoom(Math.min(2, roadmapZoom + 0.25))}
-                    className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white transition-all"
-                    title="Zoom In"
-                  >
-                    <ZoomIn className="w-3.5 h-3.5" />
-                  </button>
-                  <button
-                    onClick={() => setRoadmapZoom(1)}
-                    className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-surface-container-high text-surface-variant hover:text-white transition-all"
-                  >
-                    Reset
-                  </button>
+                <div className="flex items-center gap-2">
+                  {/* Style Toggle: Vector HUD vs Signboard Photo */}
+                  <div className={`flex items-center p-1 rounded-xl border text-xs ${
+                    isDark ? 'bg-surface-container border-outline-variant/30' : 'bg-slate-200 border-slate-300'
+                  }`}>
+                    <button
+                      onClick={() => setBlueprintStyle('vector')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                        blueprintStyle === 'vector' 
+                          ? (isDark ? 'bg-secondary text-slate-950 shadow-sm' : 'bg-blue-600 text-white shadow-sm font-extrabold')
+                          : (isDark ? 'text-surface-variant hover:text-white' : 'text-slate-700 hover:text-slate-950 font-bold')
+                      }`}
+                    >
+                      Vector HUD
+                    </button>
+                    <button
+                      onClick={() => setBlueprintStyle('photo')}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all ${
+                        blueprintStyle === 'photo' 
+                          ? (isDark ? 'bg-secondary text-slate-950 shadow-sm' : 'bg-blue-600 text-white shadow-sm font-extrabold')
+                          : (isDark ? 'text-surface-variant hover:text-white' : 'text-slate-700 hover:text-slate-950 font-bold')
+                      }`}
+                    >
+                      Photo Archive
+                    </button>
+                  </div>
+
+                  {/* Zoom Controls */}
+                  <div className={`flex items-center gap-1.5 p-1 rounded-xl border ${
+                    isDark ? 'bg-surface-container border-outline-variant/30' : 'bg-slate-100 border-slate-200'
+                  }`}>
+                    <button
+                      onClick={() => setRoadmapZoom(Math.max(1, roadmapZoom - 0.25))}
+                      className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white transition-all"
+                      title="Zoom Out"
+                    >
+                      <ZoomOut className="w-3.5 h-3.5" />
+                    </button>
+                    <span className="text-[10px] font-mono font-bold text-secondary px-1">
+                      {Math.round(roadmapZoom * 100)}%
+                    </span>
+                    <button
+                      onClick={() => setRoadmapZoom(Math.min(2, roadmapZoom + 0.25))}
+                      className="p-1 rounded-lg hover:bg-surface-container-high text-surface-variant hover:text-white transition-all"
+                      title="Zoom In"
+                    >
+                      <ZoomIn className="w-3.5 h-3.5" />
+                    </button>
+                    <button
+                      onClick={() => setRoadmapZoom(1)}
+                      className={`text-[9px] font-mono px-1.5 py-0.5 rounded transition-all ${
+                        isDark ? 'bg-surface-container-high text-surface-variant hover:text-white' : 'bg-slate-200 text-slate-800 font-bold'
+                      }`}
+                    >
+                      Reset
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              {/* Scrollable / Zoomable Road Map Canvas */}
-              <div className="relative flex-1 overflow-auto bg-[#040814] p-2 flex items-center justify-center">
-                <div 
-                  className="relative transition-transform duration-200"
-                  style={{
-                    width: `${roadmapZoom * 100}%`,
-                    minWidth: '650px',
-                    maxWidth: '1200px'
-                  }}
-                >
-                  <img
-                    src="/iit-bbs-roadmap.png"
-                    alt="Official Road Map IIT Bhubaneswar"
-                    className="w-full h-auto rounded-2xl border border-outline-variant/20 shadow-2xl select-none"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = '/campus-gallery.png';
+              {/* Blueprint Canvas: Either Vector Blueprint HUD or Photographic Reference */}
+              <div className={`relative flex-1 overflow-auto p-3 flex items-center justify-center ${
+                isDark ? 'bg-[#040814]' : 'bg-slate-50'
+              }`}>
+                {blueprintStyle === 'vector' ? (
+                  <div 
+                    className="relative transition-transform duration-200 w-full"
+                    style={{
+                      transform: `scale(${roadmapZoom})`,
+                      transformOrigin: 'center center'
                     }}
-                  />
+                  >
+                    <IITRoadmapBlueprint
+                      hotspots={ROADMAP_HOTSPOTS}
+                      selectedBuildingId={selectedBuilding.id}
+                      selectedBuildingCode={selectedBuilding.code}
+                      onSelectSpot={(spot) => {
+                        const match = buildings.find(b => b.id === spot.id || b.code === spot.code);
+                        if (match) {
+                          setSelectedBuilding(match);
+                          setRouteTo(match.id);
+                        }
+                      }}
+                      hoveredSpot={hoveredHotspot}
+                      onHoverSpot={setHoveredHotspot}
+                      isDark={isDark}
+                    />
+                  </div>
+                ) : (
+                  <div 
+                    className="relative transition-transform duration-200"
+                    style={{
+                      width: `${roadmapZoom * 100}%`,
+                      minWidth: '650px',
+                      maxWidth: '1200px'
+                    }}
+                  >
+                    <img
+                      src="/iit-bbs-roadmap.png"
+                      alt="Official Road Map IIT Bhubaneswar"
+                      className="w-full h-auto rounded-2xl border border-outline-variant/20 shadow-2xl select-none"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src = '/campus-gallery.png';
+                      }}
+                    />
 
-                  {/* Interactive Hotspot Pins Placed on the Road Map */}
-                  {ROADMAP_HOTSPOTS.map((spot) => {
-                    const isSelected = selectedBuilding.id === spot.id || selectedBuilding.code === spot.code;
-                    const isHovered = hoveredHotspot?.id === spot.id;
+                    {/* Interactive Hotspot Pins Placed on the Road Map */}
+                    {ROADMAP_HOTSPOTS.map((spot) => {
+                      const isSelected = selectedBuilding.id === spot.id || selectedBuilding.code === spot.code;
+                      const isHovered = hoveredHotspot?.id === spot.id;
 
-                    const colorClass = 
-                      spot.category === 'academic' ? 'bg-cyan-500 border-cyan-300 text-slate-950' :
-                      spot.category === 'administrative' ? 'bg-purple-500 border-purple-300 text-white' :
-                      spot.category === 'cultural' ? 'bg-fuchsia-500 border-fuchsia-300 text-white' :
-                      spot.category === 'hostel' ? 'bg-amber-500 border-amber-300 text-slate-950' :
-                      'bg-emerald-500 border-emerald-300 text-slate-950';
+                      const colorClass = 
+                        spot.category === 'academic' ? 'bg-cyan-500 border-cyan-300 text-slate-950' :
+                        spot.category === 'administrative' ? 'bg-purple-500 border-purple-300 text-white' :
+                        spot.category === 'cultural' ? 'bg-fuchsia-500 border-fuchsia-300 text-white' :
+                        spot.category === 'hostel' ? 'bg-amber-500 border-amber-300 text-slate-950' :
+                        'bg-emerald-500 border-emerald-300 text-slate-950';
 
-                    return (
-                      <div
-                        key={spot.id}
-                        style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
-                        className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group"
-                        onMouseEnter={() => setHoveredHotspot(spot)}
-                        onMouseLeave={() => setHoveredHotspot(null)}
-                      >
-                        {/* Pin Button */}
-                        <button
-                          onClick={() => {
-                            const match = buildings.find(b => b.id === spot.id || b.code === spot.code);
-                            if (match) {
-                              setSelectedBuilding(match);
-                              setRouteTo(match.id);
-                            }
-                          }}
-                          className={`relative flex items-center justify-center rounded-full p-1 border-2 transition-all duration-200 ${
-                            isSelected 
-                              ? 'scale-125 ring-4 ring-cyan-400/60 shadow-lg shadow-cyan-500/50' 
-                              : 'hover:scale-115 shadow-md'
-                          } ${colorClass}`}
+                      return (
+                        <div
+                          key={spot.id}
+                          style={{ left: `${spot.x}%`, top: `${spot.y}%` }}
+                          className="absolute -translate-x-1/2 -translate-y-1/2 z-20 group"
+                          onMouseEnter={() => setHoveredHotspot(spot)}
+                          onMouseLeave={() => setHoveredHotspot(null)}
                         >
-                          <MapPin className="w-3.5 h-3.5" />
-                          <span className="sr-only">{spot.name}</span>
-                        </button>
+                          <button
+                            onClick={() => {
+                              const match = buildings.find(b => b.id === spot.id || b.code === spot.code);
+                              if (match) {
+                                setSelectedBuilding(match);
+                                setRouteTo(match.id);
+                              }
+                            }}
+                            className={`relative flex items-center justify-center rounded-full p-1 border-2 transition-all duration-200 ${
+                              isSelected 
+                                ? 'scale-125 ring-4 ring-cyan-400/60 shadow-lg shadow-cyan-500/50' 
+                                : 'hover:scale-115 shadow-md'
+                            } ${colorClass}`}
+                          >
+                            <MapPin className="w-3.5 h-3.5" />
+                            <span className="sr-only">{spot.name}</span>
+                          </button>
 
-                        {/* Floating Tooltip Pill */}
-                        <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 rounded-xl bg-slate-950/95 border border-cyan-500/40 backdrop-blur-md shadow-2xl pointer-events-none transition-all duration-200 ${
-                          isHovered || isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-                        }`}>
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="text-[10px] font-mono font-bold text-secondary uppercase">{spot.code}</span>
-                            <span className="text-[8px] font-mono px-1 rounded bg-surface-container text-surface-variant uppercase">{spot.category}</span>
+                          <div className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 rounded-xl bg-slate-950/95 border border-cyan-500/40 backdrop-blur-md shadow-2xl pointer-events-none transition-all duration-200 ${
+                            isHovered || isSelected ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
+                          }`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="text-[10px] font-mono font-bold text-secondary uppercase">{spot.code}</span>
+                              <span className="text-[8px] font-mono px-1 rounded bg-surface-container text-surface-variant uppercase">{spot.category}</span>
+                            </div>
+                            <p className="text-[11px] font-bold text-white leading-tight mb-1">{spot.name}</p>
+                            <p className="text-[9px] text-surface-variant leading-tight">{spot.desc}</p>
                           </div>
-                          <p className="text-[11px] font-bold text-white leading-tight mb-1">{spot.name}</p>
-                          <p className="text-[9px] text-surface-variant leading-tight">{spot.desc}</p>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
 
               {/* Bottom Road Map Legend Bar */}

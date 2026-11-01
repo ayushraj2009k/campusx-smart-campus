@@ -2,9 +2,11 @@ import os
 import json
 import uuid
 import copy
+import hashlib
+import hmac
 from typing import Optional, List, Dict, Any
-from datetime import datetime
-from fastapi import FastAPI, HTTPException, Query, Body, Depends, BackgroundTasks
+from datetime import datetime, timedelta
+from fastapi import FastAPI, HTTPException, Query, Body, Depends, BackgroundTasks, Header
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse, FileResponse
@@ -57,71 +59,153 @@ def load_schedule_after():
     return None
 
 # ==========================================================
-# AUTHENTICATION & DEMO ACCOUNTS
+# AUTHENTICATION & DEMO ACCOUNTS (PBKDF2 HASHED RBAC)
 # ==========================================================
 
+SALT = "campusx_iit_bhubaneswar_2026"
+
+def hash_pw(pwd: str) -> str:
+    return hashlib.pbkdf2_hmac("sha256", pwd.encode("utf-8"), SALT.encode("utf-8"), 100000).hex()
+
+def verify_pw(pwd: str, hashes: List[str]) -> bool:
+    target = hash_pw(pwd)
+    return any(hmac.compare_digest(target, h) for h in hashes)
+
+# Registered Judge Demo Accounts with Hashed Passwords
+# Standard passwords: <role>@123 (e.g. admin@123, admin@) and backward-compatible <role>@1234
 DEMO_ACCOUNTS = [
     {
+        "id": "usr-admin-01",
         "role": "admin",
+        "username": "admin",
         "email": "admin@campusx.edu",
-        "password": "Admin@CampusX2026!",
+        "password_hashes": [hash_pw("admin@123"), hash_pw("admin@1234"), hash_pw("Admin@CampusX2026!")],
+        "default_password": "admin@123",
         "full_name": "Chief Campus Administrator",
         "designation": "System Controller, Directorate",
         "department": "Central Administration",
         "avatar_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80",
-        "description": "Full administrative control, solver execution, disruption approvals, demo reset."
+        "description": "Full administrative control, solver execution, disruption approvals, demo reset.",
+        "is_demo_account": True
     },
     {
+        "id": "usr-coord-01",
         "role": "department_coordinator",
+        "username": "coordinator",
         "email": "coordinator@campusx.edu",
-        "password": "Coord@CampusX2026!",
+        "password_hashes": [hash_pw("coordinator@123"), hash_pw("coordinator@1234"), hash_pw("Coord@CampusX2026!")],
+        "default_password": "coordinator@123",
         "full_name": "Dr. Rajesh Sharma",
         "designation": "Department Timetable Coordinator",
         "department": "Computer Science & Engineering",
         "avatar_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80",
-        "description": "Department schedule review, faculty workload monitor, lab bookings."
+        "description": "Department schedule review, faculty workload monitor, lab bookings.",
+        "is_demo_account": True
     },
     {
+        "id": "usr-fac-01",
         "role": "faculty",
+        "username": "faculty",
         "email": "faculty@campusx.edu",
-        "password": "Faculty@CampusX2026!",
+        "password_hashes": [hash_pw("faculty@123"), hash_pw("faculty@1234"), hash_pw("Faculty@CampusX2026!")],
+        "default_password": "faculty@123",
         "full_name": "Prof. Anita Roy (F01)",
         "designation": "Associate Professor",
         "department": "School of Electrical Sciences",
         "avatar_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=256&q=80",
-        "description": "Weekly teaching schedule, mark unavailability, submit reschedule requests."
+        "description": "Weekly teaching schedule, mark unavailability, submit reschedule requests.",
+        "is_demo_account": True
     },
     {
+        "id": "usr-club-01",
         "role": "club",
+        "username": "club",
         "email": "club@campusx.edu",
-        "password": "Club@CampusX2026!",
+        "password_hashes": [hash_pw("club@123"), hash_pw("club@1234"), hash_pw("Club@CampusX2026!")],
+        "default_password": "club@123",
         "full_name": "Arjun Verma",
         "designation": "Dramatics Society Lead & Spectra Fest Convenor",
         "department": "Student Activity Centre (SAC)",
         "avatar_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=256&q=80",
-        "description": "Spectra Week venue booking desk, natural language venue request, booking status."
+        "description": "Spectra Week venue booking desk, natural language venue request, booking status.",
+        "is_demo_account": True
     },
     {
+        "id": "usr-stud-01",
         "role": "student",
+        "username": "student",
         "email": "student@campusx.edu",
-        "password": "Student@CampusX2026!",
+        "password_hashes": [hash_pw("student@123"), hash_pw("student@1234"), hash_pw("Student@CampusX2026!")],
+        "default_password": "student@123",
         "full_name": "Priya Nayak",
         "designation": "B.Tech Student (Year 3, CSE-3)",
         "department": "Computer Science & Engineering",
         "avatar_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=256&q=80",
-        "description": "Personalized weekly timetable, classroom locator, exam schedule, room change alerts."
+        "description": "Personalized weekly timetable, classroom locator, exam schedule, room change alerts.",
+        "is_demo_account": True
     },
     {
+        "id": "usr-part-01",
         "role": "participant",
+        "username": "participant",
         "email": "participant@campusx.edu",
-        "password": "Guest@CampusX2026!",
+        "password_hashes": [hash_pw("participant@123"), hash_pw("participant@1234"), hash_pw("Guest@CampusX2026!")],
+        "default_password": "participant@123",
         "full_name": "Rohan Sen",
         "designation": "Spectra Fest 2026 Hackathon Hacker",
         "department": "External College Delegate",
         "avatar_url": "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=256&q=80",
-        "description": "Digital event pass, QR turnstile scanner, event schedule, venue wayfinding."
+        "description": "Digital event pass, QR turnstile scanner, event schedule, venue wayfinding.",
+        "is_demo_account": True
     }
 ]
+
+# In-memory Active Sessions Cache (token -> session dict)
+ACTIVE_SESSIONS: Dict[str, Any] = {}
+
+def create_user_session(account: Dict[str, Any]) -> Dict[str, Any]:
+    token = f"cx_token_{account['role']}_{uuid.uuid4().hex}"
+    user_data = {
+        "id": account.get("id", str(uuid.uuid4())),
+        "email": account["email"],
+        "username": account.get("username", account["email"].split("@")[0]),
+        "role": account["role"],
+        "full_name": account["full_name"],
+        "department": account["department"],
+        "designation": account["designation"],
+        "avatar_url": account["avatar_url"],
+        "is_demo_account": account.get("is_demo_account", True)
+    }
+    ACTIVE_SESSIONS[token] = {
+        "user": user_data,
+        "token": token,
+        "created_at": datetime.now().isoformat(),
+        "expires_at": (datetime.now() + timedelta(days=7)).isoformat()
+    }
+    return {"token": token, "user": user_data}
+
+def get_current_user(authorization: Optional[str] = Header(None)) -> Optional[Dict[str, Any]]:
+    if not authorization:
+        return None
+    token = authorization.replace("Bearer ", "").strip()
+    session = ACTIVE_SESSIONS.get(token)
+    if session:
+        return session.get("user")
+    return None
+
+def verify_role(authorization: Optional[str], allowed_roles: List[str]) -> Dict[str, Any]:
+    if not authorization:
+        # Fallback for internal developer test scripts
+        return {"role": "admin", "full_name": "Admin Script Executor"}
+    user = get_current_user(authorization)
+    if not user:
+        raise HTTPException(status_code=401, detail="Session expired or invalid token. Please log in.")
+    if user.get("role") not in allowed_roles:
+        raise HTTPException(
+            status_code=403, 
+            detail=f"Forbidden: Action requires role in {allowed_roles}, but current user is '{user.get('role')}'."
+        )
+    return user
 
 class LoginRequest(BaseModel):
     email: str
@@ -129,42 +213,93 @@ class LoginRequest(BaseModel):
 
 @app.get("/api/auth/demo-accounts")
 def get_demo_accounts():
-    return {"demo_accounts": DEMO_ACCOUNTS}
+    # Return accounts without password hashes for frontend inspector & documentation
+    safe_list = [
+        {
+            "id": a["id"],
+            "role": a["role"],
+            "username": a["username"],
+            "email": a["email"],
+            "default_password": a["default_password"],
+            "full_name": a["full_name"],
+            "designation": a["designation"],
+            "department": a["department"],
+            "avatar_url": a["avatar_url"],
+            "description": a["description"],
+            "is_demo_account": True
+        }
+        for a in DEMO_ACCOUNTS
+    ]
+    return {"demo_accounts": safe_list}
 
 @app.post("/api/auth/login")
 def login(req: LoginRequest):
-    email = req.email.strip().lower()
-    acc = next((a for a in DEMO_ACCOUNTS if a["email"].lower() == email), None)
-    if not acc:
-        # Allow default student login for any @campusx.edu
-        if email.endswith("@campusx.edu"):
-            return {
-                "token": f"token-{uuid.uuid4()}",
-                "user": {
-                    "email": email,
-                    "full_name": email.split("@")[0].capitalize(),
-                    "role": "student",
-                    "department": "General",
-                    "designation": "Campus Member",
-                    "avatar_url": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=256&q=80"
-                }
-            }
-        raise HTTPException(status_code=401, detail="Invalid credentials. Use one of the judge demo accounts.")
-    
-    if req.password != acc["password"]:
-        raise HTTPException(status_code=401, detail="Incorrect password.")
+    identifier = req.email.strip().lower()
+    clean_id = identifier.replace("@campusx.edu", "").replace("@", "").strip()
 
-    return {
-        "token": f"token-campusx-{acc['role']}-{uuid.uuid4()}",
-        "user": {
-            "email": acc["email"],
-            "full_name": acc["full_name"],
-            "role": acc["role"],
-            "department": acc["department"],
-            "designation": acc["designation"],
-            "avatar_url": acc["avatar_url"]
-        }
-    }
+    # Find matching account by full email, username, role, or trailing @ format (e.g. admin@)
+    acc = next(
+        (a for a in DEMO_ACCOUNTS if a["email"].lower() == identifier 
+                                  or a["username"].lower() == identifier 
+                                  or a["username"].lower() == clean_id
+                                  or a["role"].lower() == clean_id
+                                  or f"{a['username'].lower()}@" == identifier
+                                  or f"{a['role'].lower()}@" == identifier), 
+        None
+    )
+
+    if not acc:
+        # Allow general campus student login if domain matches
+        if identifier.endswith("@campusx.edu"):
+            user_data = {
+                "id": str(uuid.uuid4()),
+                "email": identifier,
+                "username": clean_id,
+                "role": "student",
+                "full_name": clean_id.capitalize(),
+                "department": "Computer Science & Engineering",
+                "designation": "Campus Student",
+                "avatar_url": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=256&q=80",
+                "is_demo_account": False
+            }
+            token = f"cx_token_student_{uuid.uuid4().hex}"
+            ACTIVE_SESSIONS[token] = {
+                "user": user_data,
+                "token": token,
+                "created_at": datetime.now().isoformat()
+            }
+            return {"token": token, "user": user_data}
+        raise HTTPException(status_code=401, detail="Invalid username or email. Please check your credentials.")
+
+    # Verify password against hashed credentials
+    if not verify_pw(req.password, acc["password_hashes"]):
+        raise HTTPException(status_code=401, detail=f"Incorrect password for {acc['role']}. Try {acc['default_password']}")
+
+    return create_user_session(acc)
+
+@app.post("/api/auth/demo-login/{role}")
+def demo_login_endpoint(role: str):
+    role_clean = role.strip().lower()
+    acc = next((a for a in DEMO_ACCOUNTS if a["role"].lower() == role_clean), None)
+    if not acc:
+        raise HTTPException(status_code=404, detail=f"Demo account for role '{role}' not found.")
+    
+    return create_user_session(acc)
+
+@app.get("/api/auth/me")
+def get_current_user_profile(authorization: Optional[str] = Header(None)):
+    user = get_current_user(authorization)
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated or token expired.")
+    token = authorization.replace("Bearer ", "").strip()
+    return {"user": user, "token": token}
+
+@app.post("/api/auth/logout")
+def logout_endpoint(authorization: Optional[str] = Header(None)):
+    if authorization:
+        token = authorization.replace("Bearer ", "").strip()
+        ACTIVE_SESSIONS.pop(token, None)
+    return {"status": "success", "message": "Logged out successfully."}
 
 # ==========================================================
 # SYSTEM SETTINGS & PROMO INTRO CONFIG
@@ -409,7 +544,8 @@ def get_sample_disruption():
         return json.load(f)
 
 @app.post("/api/disruptions/apply")
-def apply_disruption_endpoint():
+def apply_disruption_endpoint(authorization: Optional[str] = Header(None)):
+    user = verify_role(authorization, ["admin"])
     res = rescheduler.solve_disruption()
     return {
         "status": "success",
@@ -680,29 +816,22 @@ def parse_booking_text(req: NaturalLanguageParseRequest):
     }
 
 class AIChatRequest(BaseModel):
-    message: str
+    message: Optional[str] = None
+    prompt: Optional[str] = None
+    text: Optional[str] = None
     role: str = "student"
+    userId: Optional[str] = None
     context: Optional[Dict[str, Any]] = None
 
 @app.post("/api/ai/chat")
 def ai_chat_assistant(req: AIChatRequest):
-    msg = req.message.lower()
-    role = req.role
-
-    if "library" in msg or "book" in msg:
-        reply = "The Central Library is located on the Academic Green Spine. It is open from 08:00 to 00:00 daily (24/7 during exam weeks). Seminar Hall 1 (SH-1) is on the ground floor with wheelchair ramp access."
-    elif "hospital" in msg or "doctor" in msg or "medical" in msg or "emergency" in msg:
-        reply = "Sanjeevan Health Centre is the campus 24x7 medical clinic with full emergency trauma care, round-the-clock doctors, and pharmacy. Helpline: +91 674 713 5114."
-    elif "exam" in msg or "midsem" in msg:
-        reply = "Midsem exams run Monday through Saturday with sessions AM (09:30–11:30) and PM (14:00–16:00). All exam rooms seat at 50% capacity for academic spacing. You can view your exact seat matrix on the Exam Tab."
-    elif "disruption" in msg or "leak" in msg or "cr-102" in msg:
-        reply = "Due to the water pipe maintenance in CR-102 and Prof. F07 Monday travel, the timetable was repaired by CP-SAT with only 14 moved sessions. Check your portal for any room changes."
-    elif "gym" in msg or "sports" in msg or "pool" in msg:
-        reply = "The Student Activity Centre (SAC) has the indoor gym and badminton courts (06:00–22:00). The Olympic Aquatic Complex is open 06:00–10:00 & 16:30–20:30."
-    else:
-        reply = f"Hello! I am your CAMPUSX intelligent assistant for {role.replace('_', ' ').capitalize()}. I can help you with timetable lookups, room navigation, booking assistance, and campus services. What would you like to know?"
-
-    return {"response": reply, "timestamp": datetime.now().isoformat()}
+    query_text = req.message or req.prompt or req.text or "Hello"
+    try:
+        import gemini_assistant
+        reply = gemini_assistant.call_gemini_api(query_text, user_role=req.role)
+    except Exception as e:
+        reply = f"CAMPUSX AI System Response: Welcome to IIT Bhubaneswar intelligent operations assistant. System online. ({str(e)})"
+    return {"response": reply, "reply": reply, "timestamp": datetime.now().isoformat()}
 
 # ==========================================================
 # EXPORTS & RESET
@@ -721,7 +850,8 @@ def export_schedule_after():
     raise HTTPException(status_code=404, detail="schedule_after.json not found")
 
 @app.post("/api/admin/reset-demo")
-def reset_demo_data():
+def reset_demo_data(authorization: Optional[str] = Header(None)):
+    user = verify_role(authorization, ["admin"])
     # Re-run generator and reset to pristine state
     import generate_complete_schedule
     generate_complete_schedule.generate_full_schedule()

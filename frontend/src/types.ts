@@ -27,6 +27,8 @@ export interface UserProfile {
   faculty_id?: string;
   club_id?: string;
   student_group_id?: string;
+  is_demo_account?: boolean;
+  token?: string;
   created_at?: string;
 }
 

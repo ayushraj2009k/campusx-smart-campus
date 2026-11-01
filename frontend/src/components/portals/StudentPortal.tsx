@@ -29,7 +29,7 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ onOpenNavigation }
   };
 
   // Real QR Code String for Smartphone Readers
-  const qrRawData = `STUDENT PASS: Chilika Institute of Technology / IIT Bhubaneswar | Student: Priya Nayak | Roll: 23CS01048 | Branch: CSE Year 3 | Status: ACTIVE & ENROLLED | Valid Thru: Dec 2026`;
+  const qrRawData = `STUDENT PASS: Indian Institute of Technology Bhubaneswar | Student: Priya Nayak | Roll: 23CS01048 | Branch: CSE Year 3 | Status: ACTIVE & ENROLLED | Valid Thru: Dec 2026`;
   const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=8&data=${encodeURIComponent(qrRawData)}`;
 
   // Live Exam Countdown (Week 8 Midsems)
@@ -504,8 +504,8 @@ export const StudentPortal: React.FC<StudentPortalProps> = ({ onOpenNavigation }
                       CX
                     </div>
                     <div>
-                      <h4 className="text-sm font-extrabold text-white tracking-wider">CHILIKA INSTITUTE OF TECHNOLOGY</h4>
-                      <p className="text-[10px] text-surface-variant font-mono">IIT Bhubaneswar Academic Collaborative Hub</p>
+                      <h4 className="text-sm font-extrabold text-white tracking-wider">INDIAN INSTITUTE OF TECHNOLOGY BHUBANESWAR</h4>
+                      <p className="text-[10px] text-surface-variant font-mono">Argul Campus &bull; Smart Identity &amp; Access Hub</p>
                     </div>
                   </div>
                   <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-mono text-[10px] font-bold">

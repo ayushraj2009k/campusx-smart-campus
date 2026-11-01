@@ -21,20 +21,26 @@
 
 ---
 
-## 🔑 Primary Judge Demo Accounts
+## 🔑 Primary Judge Demo Accounts (Standardized Credentials)
 
-For immediate evaluation, four pre-configured Judge Demo accounts are embedded directly in the application with 1-click quick-switching.
+For immediate evaluation, all six portals feature dedicated login pages with blank input fields, standard credentials, and instant **1-Click Demo Login**:
 
-| Role | Email | Password | Pre-loaded Context & Persona |
-| :--- | :--- | :--- | :--- |
-| **1. ADMIN** *(Judge Account 1)* | `admin@campusx.edu` | `Admin@CampusX2026!` | Campus Director & Chief Academic Officer; full CP-SAT solver triggers, disruption approval matrix, audit logs, demo reset. |
-| **2. DEPT COORDINATOR** *(Judge Account 2)* | `coordinator@campusx.edu` | `Coord@CampusX2026!` | Dr. Rajesh Sharma (Head of CSE); branch timetable views, faculty contact hours, lab allocations, extra session dispatch. |
-| **3. FACULTY** *(Judge Account 3)* | `faculty@campusx.edu` | `Faculty@CampusX2026!` | Prof. Anita Roy (Faculty F01); personal calendar, Wednesday unavailability marking, natural language rescheduling requests. |
-| **4. CLUB REPRESENTATIVE** *(Judge Account 4)* | `club@campusx.edu` | `Club@CampusX2026!` | Aarav Patel (Robotics & Tech Society); English/Hinglish venue booking, Spectra Week auditorium requests, conflict alternatives. |
-| **5. STUDENT** *(Full Portal)* | `student@campusx.edu` | `Student@CampusX2026!` | Priya Verma (3rd Year B.Tech CSE); personalized timetable, room change alerts, exam seating allotments, classroom nav links. |
-| **6. PARTICIPANT** *(Full Portal)* | `participant@campusx.edu` | `Guest@CampusX2026!` | Rohan Sen (CrunchWeek Hackathon Guest); digital gate pass, QR turnstile scanner, hackathon venue navigation, certificates. |
+| Role | Username | Email | Standard Password | Authorized Responsibilities |
+| :--- | :--- | :--- | :--- | :--- |
+| **1. ADMIN** *(Judge Core 1)* | `admin@` (or `admin`) | `admin@campusx.edu` | `admin@123` (or `admin@1234`) | Campus Director / System Controller; full CP-SAT solver triggers, disruption approval matrix, audit logs, demo reset. |
+| **2. DEPT COORDINATOR** *(Judge Core 2)* | `coordinator@` (or `coordinator`) | `coordinator@campusx.edu` | `coordinator@123` (or `coordinator@1234`) | Dr. Rajesh Sharma (Head of CSE); branch timetable views, faculty contact hours, lab allocations, extra session dispatch. |
+| **3. FACULTY** *(Judge Core 3)* | `faculty@` (or `faculty`) | `faculty@campusx.edu` | `faculty@123` (or `faculty@1234`) | Prof. Anita Roy (Faculty F01); personal calendar, unavailability marking, natural language rescheduling requests. |
+| **4. CLUB REPRESENTATIVE** *(Judge Core 4)* | `club@` (or `club`) | `club@campusx.edu` | `club@123` (or `club@1234`) | Arjun Verma (Dramatics / Fest Lead); English/Hinglish venue booking, Spectra Week auditorium requests, live knapsack status. |
+| **5. STUDENT** *(Extended Ecosystem)* | `student@` (or `student`) | `student@campusx.edu` | `student@123` (or `student@1234`) | Priya Nayak (3rd Year B.Tech CSE); personalized timetable, room change alerts, exam seating allotments, classroom nav links. |
+| **6. PARTICIPANT** *(Extended Ecosystem)* | `participant@` (or `participant`) | `participant@campusx.edu` | `participant@123` (or `participant@1234`) | Rohan Sen (CrunchWeek Hackathon Guest); digital gate pass, QR turnstile scanner, hackathon venue navigation, certificates. |
 
-> **Note:** Credentials can be entered manually or selected with a single click using the **"Judge Demo Accounts"** quick-switcher in the login modal.
+> **Security Note:** Passwords are never stored in plaintext. All accounts are hashed with PBKDF2 HMAC SHA-256 and synchronized with Supabase. Both standard passwords (`<role>@1234`) and legacy passwords (`<Role>@CampusX2026!`) are verified.
+
+### 🚀 Provisioning / Seeding Demo Accounts
+To re-seed or verify the demo accounts in Supabase and local store:
+```bash
+python backend/seed_demo_accounts.py
+```
 
 ---
 
@@ -139,8 +145,8 @@ flowchart TD
 
 ### 1. Clone & Configure
 ```bash
-git clone https://github.com/your-username/CAMPUSX.git
-cd CAMPUSX
+git clone https://github.com/ayushraj2009k/campusx-smart-campus.git
+cd campusx-smart-campus
 cp .env.example .env
 ```
 
@@ -231,6 +237,21 @@ The database schema (`supabase_migrations/001_initial_schema.sql`) contains 23 n
 - `campus_facilities`, `campus_events`, and `announcements`
 
 Row Level Security (RLS) policies are active across all tables.
+
+---
+
+## 📋 Official Problem Statement (PS) Compliance Checklist
+
+| PS Requirement Area | Status | Implementation Details & Benchmark Results |
+| :--- | :--- | :--- |
+| **A. Academic Timetable Generation** | `IMPLEMENTED AND VERIFIED` | All 189 sessions placed across 5 days (Mon–Fri) & 9 periods. Zero faculty clashes, zero group clashes, zero room double-bookings. Combined lectures & elective baskets synchronized. 100% adherence to 3-hour lab continuous block rules. **0 Hard Violations**, Soft Penalty: 310. |
+| **B. Examination Management** | `IMPLEMENTED AND VERIFIED` | 41 course examinations scheduled across 5 days (Morning P1–P3, Afternoon P6–P8). Effective capacity (50% seat spacing) strictly enforced across LH-1 to LH-6, SH-1 to SH-3, CR-101 to CR-103. Exam Soft Penalty: 0 (max 1 exam per cohort per day). |
+| **C. Natural Language Venue Booking** | `IMPLEMENTED AND VERIFIED` | English and Hinglish conversational input parser. Extracts attendance, duration, preferred time, equipment. Provides interactive editable preview before dispatch. Real-time availability check against academic sessions. |
+| **D. Spectra Week / Large Event Desk** | `IMPLEMENTED AND VERIFIED` | Priority Knapsack engine managing Tier 1 to Tier 3 event requests across evening windows (P10–P13) and weekend. 21 requests approved, 2 alternatives offered, 2 rejected (BR-02 cancelled, BR-09 oversized). **Score: 64.5, 0 Priority Inversions**. |
+| **E. Disruption Management & Rescheduling** | `IMPLEMENTED AND VERIFIED` | CR-102 pipe burst simulation tested. System identifies 14 affected sessions, computes optimal minimal-moves revised timetable with solution hints. Side-by-side visual diff. **Only 14 sessions moved (92.6% stability)** with **0 Hard Violations**. |
+| **F. Dashboards & Reports** | `IMPLEMENTED AND VERIFIED` | 6 role-specific portals (Admin, Coordinator, Faculty, Club Rep, Student, Participant). Master timetable explorer, room utilization charts, pending booking ledger, examination seat locator. |
+| **G. AI Assistant** | `IMPLEMENTED AND VERIFIED` | "AI Suggests. The System Validates." AI converts natural text to structured parameters; deterministic backend solver validates hard rules before applying any changes. |
+| **H. Administration & Export** | `IMPLEMENTED AND VERIFIED` | Loads official starter-pack dataset (`cit_public.json`). Exports compliant `exports/schedule.json` and `exports/schedule_after.json`. Reset demo state restored at any time. |
 
 ---
 

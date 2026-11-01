@@ -5,21 +5,28 @@ import {
   MapPin, Clock, Calendar, AlertCircle, ChevronRight, Activity,
   Play, Radio, Layers, Bot, Zap, Flame, ExternalLink, ShieldAlert,
   BarChart3, Eye, TrendingUp, Search, Filter, SlidersHorizontal,
-  CheckCircle, ArrowUpRight, Gauge, RefreshCw, Volume2, Cpu, Check, AlertTriangle
+  CheckCircle, ArrowUpRight, Gauge, RefreshCw, Volume2, Cpu, Check, AlertTriangle,
+  Lock, KeyRound
 } from 'lucide-react';
-import { UserRole } from '../types';
+import { UserRole, UserProfile } from '../types';
 import { useTheme } from '../context/ThemeContext';
 
 interface LandingPageProps {
+  currentUser?: UserProfile | null;
   onSelectRole: (role: UserRole) => void;
+  onOpenLoginPortal?: (role: UserRole) => void;
   onOpenNavigation: () => void;
   onOpenAI: () => void;
+  onOpenPortalWorkspace?: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
+  currentUser,
   onSelectRole,
+  onOpenLoginPortal,
   onOpenNavigation,
   onOpenAI,
+  onOpenPortalWorkspace,
 }) => {
   const { uiMode, setUiMode, effectiveAppearance } = useTheme();
   const isBharat = uiMode === 'bharat';
@@ -343,7 +350,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <img src="/iit-logo.png" alt="IIT Crest" onError={(e) => { (e.target as HTMLImageElement).src = '/campus-gallery.png'; }} className="w-6 h-6 object-contain" />
               <div className="flex flex-wrap items-center gap-2 text-xs">
                 <span className="font-bold text-white uppercase tracking-wider font-mono">
-                  Chilika Institute of Technology (CIT) &bull; Indian Institute of Technology Bhubaneswar
+                  Indian Institute of Technology Bhubaneswar
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
                 <span className="text-secondary font-mono font-bold">1,000 Students &bull; 5 Engineering Branches</span>
@@ -370,9 +377,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Netflix-Style Primary CTA Buttons */}
           <div className="flex flex-wrap items-center gap-3.5">
-            <a
-              href="#portals"
-              className={`flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-sm shadow-xl transition-all transform hover:scale-105 active:scale-95 ${
+            <button
+              type="button"
+              onClick={() => {
+                if (onOpenPortalWorkspace) {
+                  onOpenPortalWorkspace();
+                } else {
+                  const el = document.getElementById('portals');
+                  el?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              className={`flex items-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-sm shadow-xl transition-all transform hover:scale-105 active:scale-95 cursor-pointer ${
                 isBharat
                   ? 'bg-gradient-to-r from-amber-500 via-yellow-500 to-amber-600 text-slate-950 font-extrabold shadow-amber-500/25 hover:shadow-amber-500/40'
                   : 'bg-gradient-to-r from-secondary to-primary-container text-on-secondary shadow-secondary/25 hover:shadow-secondary/40'
@@ -380,7 +395,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             >
               <Play className="w-4 h-4 fill-current" />
               <span>Enter Portal Workspace</span>
-            </a>
+            </button>
 
             <button
               onClick={onOpenNavigation}
@@ -915,36 +930,54 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               const active = details[selectedPeriod] || details['P4'];
 
               return (
-                <div className="mt-4 p-4 rounded-2xl bg-slate-900/80 border border-cyan-500/30 transition-all">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/5 pb-2.5">
+                <div className={`mt-4 p-4 rounded-2xl border transition-all ${
+                  isDark
+                    ? 'bg-slate-900/80 border-cyan-500/30 text-white'
+                    : 'bg-slate-50 border-slate-200 text-slate-900 shadow-sm'
+                }`}>
+                  <div className={`flex flex-wrap items-center justify-between gap-2 border-b pb-2.5 ${
+                    isDark ? 'border-white/5' : 'border-slate-200'
+                  }`}>
                     <div className="flex items-center gap-2">
-                      <span className="font-mono font-extrabold text-sm text-cyan-300">
+                      <span className={`font-mono font-extrabold text-sm ${
+                        isDark ? 'text-cyan-300' : 'text-blue-700'
+                      }`}>
                         {selectedPeriod}
                       </span>
-                      <span className="text-xs text-slate-400 font-mono">({active.time})</span>
+                      <span className={`text-xs font-mono font-semibold ${
+                        isDark ? 'text-slate-400' : 'text-slate-600'
+                      }`}>({active.time})</span>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${active.badgeColor}`}>
                         {active.type}
                       </span>
                     </div>
-                    <span className="text-xs font-mono font-bold text-white">
+                    <span className={`text-xs font-mono font-bold ${
+                      isDark ? 'text-white' : 'text-slate-900'
+                    }`}>
                       {active.load}
                     </span>
                   </div>
 
                   <div className="mt-2.5">
-                    <div className="text-[11px] font-bold text-white mb-1.5 flex items-center gap-1.5">
-                      <Clock className="w-3.5 h-3.5 text-secondary" />
+                    <div className={`text-[11px] font-bold mb-1.5 flex items-center gap-1.5 ${
+                      isDark ? 'text-white' : 'text-slate-950'
+                    }`}>
+                      <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-secondary' : 'text-blue-600'}`} />
                       <span>{active.title}</span>
                     </div>
                     <div className="flex flex-wrap gap-1.5 mb-2">
                       {active.sessions.map((s, idx) => (
-                        <span key={idx} className="px-2 py-0.5 rounded bg-surface-container text-[10px] text-slate-300 border border-white/5">
+                        <span key={idx} className={`px-2 py-0.5 rounded text-[10px] font-medium border ${
+                          isDark 
+                            ? 'bg-surface-container text-slate-300 border-white/5' 
+                            : 'bg-white text-slate-800 border-slate-200 shadow-xs'
+                        }`}>
                           {s}
                         </span>
                       ))}
                     </div>
-                    <div className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3 text-emerald-400 shrink-0" />
+                    <div className="text-[10px] text-emerald-500 font-mono flex items-center gap-1 font-semibold">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
                       <span>{active.constraint}</span>
                     </div>
                   </div>
@@ -973,30 +1006,36 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           } border flex flex-col justify-between`}>
             <div>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-base font-bold text-white font-display flex items-center gap-2">
-                  <Gauge className="w-4 h-4 text-blue-400" />
+                <h3 className={`text-base font-bold font-display flex items-center gap-2 ${
+                  isDark ? 'text-white' : 'text-slate-900'
+                }`}>
+                  <Gauge className={`w-4 h-4 ${isDark ? 'text-blue-400' : 'text-blue-600'}`} />
                   Capacity Allocation Matrix
                 </h3>
                 <span className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold border ${
                   gaugeMode === 'spectra'
-                    ? 'bg-pink-500/20 text-pink-300 border-pink-500/40'
+                    ? (isDark ? 'bg-pink-500/20 text-pink-300 border-pink-500/40' : 'bg-pink-100 text-pink-900 border-pink-300 font-bold')
                     : gaugeMode === 'midsem'
-                      ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                      : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+                      ? (isDark ? 'bg-amber-500/20 text-amber-300 border-amber-500/40' : 'bg-amber-100 text-amber-900 border-amber-300 font-bold')
+                      : (isDark ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold')
                 }`}>
                   {gaugeMode === 'spectra' ? 'WEEK 7 PEAK' : gaugeMode === 'midsem' ? 'EXAM HALVED' : 'REGULAR SEM'}
                 </span>
               </div>
               
               {/* 3 Scenario Mode Switcher Tabs */}
-              <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-slate-900/90 border border-white/10 my-3 text-[11px] font-semibold">
+              <div className={`grid grid-cols-3 gap-1.5 p-1 rounded-xl my-3 text-[11px] font-semibold ${
+                isDark 
+                  ? 'bg-slate-900/90 border border-white/10' 
+                  : 'bg-slate-100 border border-slate-200'
+              }`}>
                 <button
                   type="button"
                   onClick={() => setGaugeMode('standard')}
                   className={`py-1 px-1.5 rounded-lg text-center transition-all ${
                     gaugeMode === 'standard'
-                      ? 'bg-blue-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-blue-600 text-white shadow-md font-bold'
+                      : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-700 hover:text-slate-950 font-bold')
                   }`}
                 >
                   Regular Wk
@@ -1006,8 +1045,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   onClick={() => setGaugeMode('spectra')}
                   className={`py-1 px-1.5 rounded-lg text-center transition-all ${
                     gaugeMode === 'spectra'
-                      ? 'bg-pink-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-pink-600 text-white shadow-md font-bold'
+                      : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-700 hover:text-slate-950 font-bold')
                   }`}
                 >
                   Spectra Wk 7
@@ -1017,8 +1056,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   onClick={() => setGaugeMode('midsem')}
                   className={`py-1 px-1.5 rounded-lg text-center transition-all ${
                     gaugeMode === 'midsem'
-                      ? 'bg-amber-600 text-white shadow-md'
-                      : 'text-slate-400 hover:text-white'
+                      ? 'bg-amber-600 text-white shadow-md font-bold'
+                      : (isDark ? 'text-slate-400 hover:text-white' : 'text-slate-700 hover:text-slate-950 font-bold')
                   }`}
                 >
                   Midsem Wk 8
@@ -1059,7 +1098,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <div className="relative py-2 flex items-center justify-center">
                     <svg className="w-48 h-48 -rotate-90 transform" viewBox="0 0 160 160">
                       {/* Background Track 1 */}
-                      <circle cx="80" cy="80" r="68" fill="none" stroke="#1e293b" strokeWidth="8" />
+                      <circle cx="80" cy="80" r="68" fill="none" stroke={isDark ? "#1e293b" : "#e2e8f0"} strokeWidth="8" />
                       {/* Outer Ring: Lecture Halls */}
                       <circle 
                         cx="80" cy="80" r="68" fill="none" stroke="#00e5ff" strokeWidth="8"
@@ -1068,7 +1107,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       />
 
                       {/* Background Track 2 */}
-                      <circle cx="80" cy="80" r="52" fill="none" stroke="#1e293b" strokeWidth="8" />
+                      <circle cx="80" cy="80" r="52" fill="none" stroke={isDark ? "#1e293b" : "#e2e8f0"} strokeWidth="8" />
                       {/* Middle Ring: Labs */}
                       <circle 
                         cx="80" cy="80" r="52" fill="none" stroke="#2563eb" strokeWidth="8"
@@ -1077,7 +1116,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       />
 
                       {/* Background Track 3 */}
-                      <circle cx="80" cy="80" r="36" fill="none" stroke="#1e293b" strokeWidth="8" />
+                      <circle cx="80" cy="80" r="36" fill="none" stroke={isDark ? "#1e293b" : "#e2e8f0"} strokeWidth="8" />
                       {/* Inner Ring: Fest / Events */}
                       <circle 
                         cx="80" cy="80" r="36" fill="none" stroke="#ff2d78" strokeWidth="8"
@@ -1088,44 +1127,58 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                     {/* Center Metrics */}
                     <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                      <span className="text-2xl font-black font-mono text-white tracking-tight">
+                      <span className={`text-2xl font-black font-mono tracking-tight ${
+                        isDark ? 'text-white' : 'text-slate-900'
+                      }`}>
                         {current.aggregated}
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
+                      <span className={`text-[10px] font-mono uppercase tracking-widest font-bold ${
+                        isDark ? 'text-slate-400' : 'text-slate-600'
+                      }`}>
                         Aggregated
                       </span>
                     </div>
                   </div>
 
                   {/* Scenario Explanation Notice */}
-                  <div className="p-2.5 rounded-xl bg-slate-900/60 border border-white/5 my-2 text-[11px] text-slate-300 leading-relaxed">
-                    <p className="text-surface-variant line-clamp-2">
-                      <strong className="text-white">Rule Logic: </strong>{current.note}
+                  <div className={`p-2.5 rounded-xl border my-2 text-[11px] leading-relaxed ${
+                    isDark ? 'bg-slate-900/60 border-white/5 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-800'
+                  }`}>
+                    <p className="line-clamp-2">
+                      <strong className={isDark ? 'text-white' : 'text-slate-950 font-bold'}>Rule Logic: </strong>{current.note}
                     </p>
                   </div>
 
                   {/* Legend with Dynamic Scenario Metrics */}
-                  <div className="grid grid-cols-3 gap-2 pt-2 border-t border-white/5 text-center">
-                    <div className="p-2 rounded-xl bg-slate-900/60 border border-cyan-500/20">
-                      <div className="text-[10px] text-cyan-300 font-semibold truncate">Lecture Halls</div>
-                      <div className="text-sm font-extrabold text-white font-mono mt-0.5">
+                  <div className={`grid grid-cols-3 gap-2 pt-2 border-t text-center ${
+                    isDark ? 'border-white/5' : 'border-slate-200'
+                  }`}>
+                    <div className={`p-2 rounded-xl border ${
+                      isDark ? 'bg-slate-900/60 border-cyan-500/20' : 'bg-cyan-50/70 border-cyan-200'
+                    }`}>
+                      <div className={`text-[10px] font-bold truncate ${isDark ? 'text-cyan-300' : 'text-cyan-900'}`}>Lecture Halls</div>
+                      <div className={`text-sm font-extrabold font-mono mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         {current.halls.percent}%
                       </div>
-                      <div className="text-[9px] text-slate-400">{current.halls.seats}</div>
+                      <div className={`text-[9px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{current.halls.seats}</div>
                     </div>
-                    <div className="p-2 rounded-xl bg-slate-900/60 border border-blue-500/20">
-                      <div className="text-[10px] text-blue-300 font-semibold truncate">Science Labs</div>
-                      <div className="text-sm font-extrabold text-white font-mono mt-0.5">
+                    <div className={`p-2 rounded-xl border ${
+                      isDark ? 'bg-slate-900/60 border-blue-500/20' : 'bg-blue-50/70 border-blue-200'
+                    }`}>
+                      <div className={`text-[10px] font-bold truncate ${isDark ? 'text-blue-300' : 'text-blue-900'}`}>Science Labs</div>
+                      <div className={`text-sm font-extrabold font-mono mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         {current.labs.percent}%
                       </div>
-                      <div className="text-[9px] text-slate-400">{current.labs.hours}</div>
+                      <div className={`text-[9px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{current.labs.hours}</div>
                     </div>
-                    <div className="p-2 rounded-xl bg-slate-900/60 border border-pink-500/20">
-                      <div className="text-[10px] text-pink-300 font-semibold truncate">Event Venues</div>
-                      <div className="text-sm font-extrabold text-white font-mono mt-0.5">
+                    <div className={`p-2 rounded-xl border ${
+                      isDark ? 'bg-slate-900/60 border-pink-500/20' : 'bg-pink-50/70 border-pink-200'
+                    }`}>
+                      <div className={`text-[10px] font-bold truncate ${isDark ? 'text-pink-300' : 'text-pink-900'}`}>Event Venues</div>
+                      <div className={`text-sm font-extrabold font-mono mt-0.5 ${isDark ? 'text-white' : 'text-slate-900'}`}>
                         {current.events.percent}%
                       </div>
-                      <div className="text-[9px] text-slate-400">{current.events.footfalls}</div>
+                      <div className={`text-[9px] font-semibold ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{current.events.footfalls}</div>
                     </div>
                   </div>
                 </div>
@@ -1136,7 +1189,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         </div>
 
-        {/* --- PART C: CIT CAMPUS OPERATIONS CONSOLE & WORK QUEUE --- */}
+        {/* --- PART C: IIT BHUBANESWAR CAMPUS OPERATIONS CONSOLE & WORK QUEUE --- */}
         <div className="rounded-3xl border border-outline-variant/30 bg-surface-container-low/90 backdrop-blur-xl shadow-2xl p-6 overflow-hidden">
           
           {/* 1. Operational Freshness Banner */}
@@ -1193,14 +1246,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-white font-display">
+                  <span className={`text-sm font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
                     Room Utilisation &amp; Capacity Density
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-[10px] font-mono font-bold text-blue-300">
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-mono font-bold border ${
+                    isDark ? 'bg-blue-500/20 text-blue-300 border-blue-500/30' : 'bg-blue-100 text-blue-900 border-blue-300'
+                  }`}>
                     94.8% OPTIMAL
                   </span>
                 </div>
-                <p className="text-xs text-surface-variant mt-1 leading-relaxed">
+                <p className={`text-xs mt-1 leading-relaxed ${isDark ? 'text-surface-variant' : 'text-slate-600'}`}>
                   100% of scheduled sessions satisfy the &gt;40% room utilization soft constraint with zero cross-lunch breaches.
                 </p>
               </div>
@@ -1211,15 +1266,23 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-4">
             {/* Search Input with Cmd+K Badge */}
             <div className="relative flex-1 max-w-md">
-              <Search className="w-4 h-4 text-surface-variant absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Search className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 ${
+                isDark ? 'text-surface-variant' : 'text-slate-400'
+              }`} />
               <input
                 type="text"
                 value={queueSearch}
                 onChange={(e) => setQueueSearch(e.target.value)}
                 placeholder="Search priority work queue (e.g. CR-102, F07, Spectra, LH-1)..."
-                className="w-full pl-9 pr-14 py-2 rounded-xl bg-surface-container border border-outline-variant/30 text-white placeholder-surface-variant/60 text-xs focus:outline-none focus:border-secondary transition-colors"
+                className={`w-full pl-9 pr-14 py-2 rounded-xl border text-xs focus:outline-none transition-colors ${
+                  isDark
+                    ? 'bg-surface-container border-outline-variant/30 text-white placeholder-surface-variant/60 focus:border-secondary'
+                    : 'bg-white border-slate-300 text-slate-900 placeholder-slate-400 focus:border-blue-500 shadow-sm'
+                }`}
               />
-              <span className="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded bg-surface-container-high text-[10px] font-mono text-surface-variant border border-outline-variant/20">
+              <span className={`absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded text-[10px] font-mono border ${
+                isDark ? 'bg-surface-container-high text-surface-variant border-outline-variant/20' : 'bg-slate-100 text-slate-600 border-slate-200'
+              }`}>
                 ⌘K
               </span>
             </div>
@@ -1237,13 +1300,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   onClick={() => setQueueTab(tab.id)}
                   className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-2 ${
                     queueTab === tab.id
-                      ? 'bg-secondary text-on-secondary shadow-md shadow-secondary/20'
-                      : 'bg-surface-container text-surface-variant hover:text-white'
+                      ? (isDark 
+                          ? 'bg-secondary text-on-secondary shadow-md shadow-secondary/20 font-bold' 
+                          : 'bg-blue-600 text-white shadow-md font-bold')
+                      : (isDark 
+                          ? 'bg-surface-container text-surface-variant hover:text-white' 
+                          : 'bg-slate-100 text-slate-700 hover:text-slate-950 font-bold border border-slate-200')
                   }`}
                 >
                   <span>{tab.label}</span>
                   <span className={`px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold ${
-                    queueTab === tab.id ? 'bg-black/30 text-white' : 'bg-surface-container-high text-white'
+                    queueTab === tab.id ? 'bg-black/30 text-white' : (isDark ? 'bg-surface-container-high text-white' : 'bg-slate-200 text-slate-900')
                   }`}>
                     {tab.count}
                   </span>
@@ -1253,10 +1320,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           {/* 4. Priority Queue Action Table */}
-          <div className="rounded-2xl border border-outline-variant/20 overflow-hidden bg-surface-container-lowest/60">
+          <div className={`rounded-2xl border overflow-hidden ${
+            isDark ? 'border-outline-variant/20 bg-surface-container-lowest/60' : 'border-slate-200 bg-white shadow-md'
+          }`}>
             <div className="overflow-x-auto">
               <table className="w-full text-left text-xs">
-                <thead className="bg-surface-container text-surface-variant font-mono text-[11px] uppercase border-b border-outline-variant/20">
+                <thead className={`font-mono text-[11px] uppercase border-b ${
+                  isDark ? 'bg-surface-container text-surface-variant border-outline-variant/20' : 'bg-slate-100 text-slate-800 border-slate-200 font-bold'
+                }`}>
                   <tr>
                     <th className="py-3 px-4">Item &amp; Cohort</th>
                     <th className="py-3 px-4">Requester</th>
@@ -1266,7 +1337,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     <th className="py-3 px-4 text-right">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-outline-variant/10 text-surface-variant">
+                <tbody className={`divide-y ${
+                  isDark ? 'divide-outline-variant/10 text-surface-variant' : 'divide-slate-200 text-slate-700'
+                }`}>
                   {queueItems
                     .filter((item) => {
                       const matchesTab = queueTab === 'core' 
@@ -1283,35 +1356,45 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       return matchesTab && matchesSearch;
                     })
                     .map((item) => (
-                      <tr key={item.id} className="hover:bg-surface-container-high/40 transition-colors">
+                      <tr key={item.id} className={`transition-colors ${
+                        isDark ? 'hover:bg-surface-container-high/40' : 'hover:bg-slate-50'
+                      }`}>
                         <td className="py-3.5 px-4">
-                          <div className="font-bold text-white font-display text-sm">{item.title}</div>
-                          <div className="text-[11px] text-surface-variant mt-0.5 flex items-center gap-1.5">
-                            <span className="font-mono text-secondary">{item.id}</span>
+                          <div className={`font-bold font-display text-sm ${isDark ? 'text-white' : 'text-slate-950'}`}>{item.title}</div>
+                          <div className={`text-[11px] mt-0.5 flex items-center gap-1.5 ${isDark ? 'text-surface-variant' : 'text-slate-600 font-medium'}`}>
+                            <span className={`font-mono font-bold ${isDark ? 'text-secondary' : 'text-blue-700'}`}>{item.id}</span>
                             <span>&bull;</span>
                             <span>{item.group}</span>
                           </div>
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className="font-medium text-white">{item.requester}</span>
+                          <span className={`font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>{item.requester}</span>
                         </td>
-                        <td className="py-3.5 px-4 font-mono text-[11px] text-white">
+                        <td className={`py-3.5 px-4 font-mono text-[11px] font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>
                           <div className="flex items-center gap-1.5">
-                            <Clock className="w-3.5 h-3.5 text-secondary" />
+                            <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-secondary' : 'text-blue-600'}`} />
                             <span>{item.time}</span>
                           </div>
                         </td>
-                        <td className="py-3.5 px-4 font-medium text-white">
+                        <td className={`py-3.5 px-4 font-semibold ${isDark ? 'text-white' : 'text-slate-800'}`}>
                           <div className="flex items-center gap-1.5">
-                            <MapPin className="w-3.5 h-3.5 text-cyan-400" />
+                            <MapPin className={`w-3.5 h-3.5 ${isDark ? 'text-cyan-400' : 'text-blue-600'}`} />
                             <span>{item.venue}</span>
                           </div>
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border ${item.badgeColor}`}>
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-mono font-bold border ${
+                            isDark 
+                              ? item.badgeColor 
+                              : item.badgeColor.includes('amber')
+                                ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold'
+                                : item.badgeColor.includes('emerald')
+                                  ? 'bg-emerald-100 text-emerald-900 border-emerald-300 font-bold'
+                                  : 'bg-blue-100 text-blue-900 border-blue-300 font-bold'
+                          }`}>
                             {item.badge}
                           </span>
-                          <div className="text-[10px] text-surface-variant mt-1 font-mono">
+                          <div className={`text-[10px] mt-1 font-mono font-medium ${isDark ? 'text-surface-variant' : 'text-slate-600'}`}>
                             {item.status}
                           </div>
                         </td>
@@ -1326,7 +1409,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                                 onOpenAI();
                               }
                             }}
-                            className="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-secondary hover:text-on-secondary text-white font-bold text-xs transition-all inline-flex items-center gap-1.5 shadow-sm"
+                            className={`px-3 py-1.5 rounded-lg font-bold text-xs transition-all inline-flex items-center gap-1.5 shadow-sm ${
+                              isDark
+                                ? 'bg-surface-container-high hover:bg-secondary hover:text-on-secondary text-white'
+                                : 'bg-blue-600 hover:bg-blue-700 text-white font-extrabold shadow'
+                            }`}
                           >
                             <span>{item.action}</span>
                             <ArrowRight className="w-3 h-3" />
@@ -1361,11 +1448,20 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {portalCards.map((portal) => {
             const Icon = portal.icon;
+            const isActiveUser = currentUser?.role === portal.role;
             return (
               <div
                 key={portal.role}
-                onClick={() => onSelectRole(portal.role)}
-                className={`group relative rounded-2xl bg-gradient-to-b ${portal.gradient} border border-outline-variant/30 p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 ${portal.borderGlow} hover:-translate-y-1`}
+                onClick={() => {
+                  if (isActiveUser && onOpenPortalWorkspace) {
+                    onOpenPortalWorkspace();
+                  } else {
+                    onSelectRole(portal.role);
+                  }
+                }}
+                className={`group relative rounded-2xl bg-gradient-to-b ${portal.gradient} border ${
+                  isActiveUser ? 'border-emerald-500/80 shadow-[0_0_30px_rgba(16,185,129,0.3)]' : 'border-outline-variant/30'
+                } p-6 flex flex-col justify-between cursor-pointer transition-all duration-300 ${portal.borderGlow} hover:-translate-y-1`}
               >
                 <div>
                   {/* Top Header: Icon & Judge Badge */}
@@ -1373,9 +1469,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                     <div className="w-12 h-12 rounded-xl bg-surface-container flex items-center justify-center shadow-md">
                       <Icon className={`w-6 h-6 ${portal.accentColor}`} />
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border ${portal.badgeColor}`}>
-                      {portal.judgeTag}
-                    </span>
+                    {isActiveUser ? (
+                      <span className="px-2.5 py-1 rounded-full text-[11px] font-bold border bg-emerald-500/20 text-emerald-300 border-emerald-500/50 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span>ACTIVE NOW</span>
+                      </span>
+                    ) : (
+                      <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold border ${portal.badgeColor}`}>
+                        {portal.judgeTag}
+                      </span>
+                    )}
                   </div>
 
                   <h3 className="text-xl font-bold text-white font-display group-hover:text-secondary transition-colors">
@@ -1399,12 +1502,25 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   </div>
                 </div>
 
-                {/* Enter Workspace Button */}
+                {/* Sign In to Portal Button */}
                 <button
                   type="button"
-                  className="w-full py-2.5 px-4 rounded-xl bg-surface-container-high/90 group-hover:bg-secondary group-hover:text-on-secondary text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (isActiveUser && onOpenPortalWorkspace) {
+                      onOpenPortalWorkspace();
+                    } else {
+                      onSelectRole(portal.role);
+                    }
+                  }}
+                  className={`w-full py-3 px-4 rounded-xl font-extrabold text-xs flex items-center justify-center gap-2 transition-all shadow-md hover:scale-[1.02] cursor-pointer ${
+                    isActiveUser
+                      ? 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-600/30'
+                      : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/25'
+                  }`}
                 >
-                  <span>Enter {portal.title}</span>
+                  <Lock className="w-3.5 h-3.5" />
+                  <span>{isActiveUser ? `Open Active ${portal.title} Workspace` : `Sign In to ${portal.title}`}</span>
                   <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
                 </button>
               </div>

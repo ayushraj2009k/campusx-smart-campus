@@ -34,9 +34,9 @@
     --color-on-surface: #0f172a;
     --color-on-surface-variant: #334155;
     --color-outline: #94a3b8;
-    --color-outline-variant: #e2e8f0;
+    --color-outline-variant: #cbd5e1;
     --card-bg: #ffffff;
-    --border-color: #e2e8f0;
+    --border-color: #cbd5e1;
     --accent-color: #0284c7;
   }
 
@@ -45,16 +45,16 @@
     --color-surface: #ffffff;
     --color-surface-lowest: #ffffff;
     --color-surface-low: #ffffff;
-    --color-surface-container: #f5f0e6;
-    --color-surface-high: #ebdcc8;
-    --color-surface-highest: #decaa8;
-    --color-on-surface: #1e293b;
-    --color-on-surface-variant: #475569;
-    --color-outline: #cbd5e1;
+    --color-surface-container: #f8fafc;
+    --color-surface-high: #e2e8f0;
+    --color-surface-highest: #cbd5e1;
+    --color-on-surface: #0f172a;
+    --color-on-surface-variant: #334155;
+    --color-outline: #94a3b8;
     --color-outline-variant: #fed7aa;
     --card-bg: #ffffff;
     --border-color: #fed7aa;
-    --accent-color: #f97316;
+    --accent-color: #ea580c;
   }
 
   body {
@@ -76,7 +76,7 @@
   html.light h4:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]),
   html.light h5:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]),
   html.light h6:not([class*="text-transparent"]):not([class*="text-amber-"]):not([class*="text-cyan-"]):not([class*="text-red-"]):not([class*="text-emerald-"]) {
-    color: #0f172a;
+    color: #0f172a !important;
   }
 
   /* In light mode, turn white text on white cards into dark slate */
@@ -85,12 +85,98 @@
   }
 
   html.light .text-surface-variant {
-    color: #475569 !important;
+    color: #334155 !important;
+    font-weight: 500;
   }
 
   html.light .text-slate-300,
   html.light .text-slate-400 {
-    color: #475569;
+    color: #334155 !important;
+  }
+
+  /* Enforce readable deep colors for pastel badge text in light mode */
+  html.light [class*="text-amber-300"],
+  html.light [class*="text-amber-400"] {
+    color: #92400e !important;
+  }
+
+  html.light [class*="text-cyan-300"],
+  html.light [class*="text-cyan-400"] {
+    color: #0369a1 !important;
+  }
+
+  html.light [class*="text-emerald-300"],
+  html.light [class*="text-emerald-400"] {
+    color: #047857 !important;
+  }
+
+  html.light [class*="text-purple-300"],
+  html.light [class*="text-purple-400"] {
+    color: #6b21a8 !important;
+  }
+
+  html.light [class*="text-pink-300"],
+  html.light [class*="text-pink-400"] {
+    color: #be185d !important;
+  }
+
+  html.light [class*="text-orange-300"],
+  html.light [class*="text-orange-400"] {
+    color: #c2410c !important;
+  }
+
+  /* Deep contrast text overrides for light mode */
+  html.light p:not([class*="text-white"]):not([class*="text-cyan-"]):not([class*="text-emerald-"]) {
+    color: #1e293b;
+  }
+
+  html.light .text-slate-500 {
+    color: #334155 !important;
+  }
+
+  html.light .text-slate-600 {
+    color: #1e293b !important;
+  }
+
+  html.light .text-slate-700 {
+    color: #0f172a !important;
+  }
+
+  /* Crisp error and alert text in light mode */
+  html.light [class*="text-rose-200"],
+  html.light [class*="text-rose-300"],
+  html.light [class*="text-rose-400"] {
+    color: #881337 !important;
+    font-weight: 700;
+  }
+
+  html.light [class*="text-red-200"],
+  html.light [class*="text-red-300"],
+  html.light [class*="text-red-400"] {
+    color: #991b1b !important;
+    font-weight: 700;
+  }
+
+  /* Form inputs in light mode */
+  html.light input,
+  html.light select,
+  html.light textarea {
+    color: #0f172a !important;
+  }
+  html.light input::placeholder {
+    color: #475569 !important;
+  }
+
+  /* Table styling in light mode */
+  html.light th {
+    color: #0f172a !important;
+    background-color: #f1f5f9 !important;
+    font-weight: 800 !important;
+    border-color: #cbd5e1 !important;
+  }
+
+  html.light td {
+    color: #1e293b !important;
   }
 
   /* Give cards clean shadows in light mode */
