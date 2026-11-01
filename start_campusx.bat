@@ -3,7 +3,7 @@ title CAMPUSX - Smart Campus Management Platform
 echo ==========================================================
 echo        CAMPUSX - SMART CAMPUS MANAGEMENT PLATFORM
 echo          ONE CAMPUS. ONE CONNECTED EXPERIENCE.
-echo              IIT Bhubaneswar - CrunchWeek 2026
+echo       TechZephyr 2026 Web Hackathon - Team itayush756
 echo ==========================================================
 echo.
 echo Starting FastAPI Backend & Production Frontend at http://127.0.0.1:8000 ...

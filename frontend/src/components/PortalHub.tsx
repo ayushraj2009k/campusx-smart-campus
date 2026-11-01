@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Shield, Users, GraduationCap, Trophy, BookOpen, Ticket, 
   ArrowLeft, Lock, Mail, Eye, EyeOff, CheckCircle2, AlertCircle, 
@@ -421,6 +421,33 @@ export const PortalHub: React.FC<PortalHubProps> = ({
             </div>
           </div>
 
+          {/* Hackathon & Developer Attribution */}
+          <div className={`mt-10 p-5 rounded-2xl border text-xs flex flex-col sm:flex-row items-center justify-between gap-4 ${
+            isDark ? 'bg-slate-900/60 border-slate-800 text-slate-400' : 'bg-slate-100/90 border-slate-200 text-slate-700'
+          }`}>
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-500 font-mono">
+                TZ
+              </div>
+              <div>
+                <p className={`font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                  TechZephyr 2026 Web Hackathon
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Problem Statement: Smart Campus Management Platform (CIT Public v1)
+                </p>
+              </div>
+            </div>
+            <div className="text-center sm:text-right text-[11px]">
+              <p className="font-bold text-emerald-500 font-mono">
+                Developed by: Team itayush756
+              </p>
+              <p className={isDark ? 'text-slate-300' : 'text-slate-800'}>
+                Team Leader: <strong className={isDark ? 'text-white' : 'text-slate-950'}>Ayush Raj</strong>
+              </p>
+            </div>
+          </div>
+
         </div>
       ) : (
 
@@ -699,6 +726,12 @@ export const PortalHub: React.FC<PortalHubProps> = ({
                   </li>
                 ))}
               </ul>
+            </div>
+
+            {/* Hackathon & Developer Attribution */}
+            <div className="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px]">
+              <span className="text-slate-500 font-mono">TechZephyr 2026 Web Hackathon</span>
+              <span className="font-bold text-emerald-500 font-mono">Team itayush756 (Lead: Ayush Raj)</span>
             </div>
 
           </div>

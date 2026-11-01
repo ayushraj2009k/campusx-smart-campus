@@ -1,17 +1,18 @@
 # CAMPUSX &mdash; Smart Campus Management Platform
 ### *ONE CAMPUS. ONE CONNECTED EXPERIENCE.*
 
-[![IIT Bhubaneswar Hackathon](https://img.shields.io/badge/IIT%20Bhubaneswar-CrunchWeek%202026-blue.svg)](https://www.iitbbs.ac.in)
+[![TechZephyr 2026 Hackathon](https://img.shields.io/badge/TechZephyr%202026-Web%20Hackathon-blue.svg)](https://github.com/ayushraj2009k/campusx-smart-campus)
+[![Team](https://img.shields.io/badge/Developed%20by-Team%20itayush756-purple.svg)](https://github.com/ayushraj2009k)
+[![Team Leader](https://img.shields.io/badge/Team%20Leader-Ayush%20Raj-emerald.svg)](https://github.com/ayushraj2009k)
 [![Validator](https://img.shields.io/badge/Official%20Validator-0%20Hard%20Violations-brightgreen.svg)](exports/schedule.json)
 [![Priority Inversions](https://img.shields.io/badge/Priority%20Inversions-0-brightgreen.svg)](exports/schedule.json)
 [![Constraint Solver](https://img.shields.io/badge/Engine-Google%20OR--Tools%20CP--SAT-orange.svg)](https://developers.google.com/optimization)
-[![Stack](https://img.shields.io/badge/Stack-React%2019%20%7C%20FastAPI%20%7C%20Supabase%20PostgreSQL-indigo.svg)](https://fastapi.tiangolo.com)
 
 ---
 
 ## 🏛️ Executive Summary
 
-**CAMPUSX** is an enterprise-grade, unified Smart Campus Management Platform engineered for the **IIT Bhubaneswar Hackathon (CrunchWeek 2026)**. Designed to solve complex, high-dimensional campus operational challenges, CAMPUSX harmonizes:
+**CAMPUSX** is an enterprise-grade, unified Smart Campus Management Platform engineered for the **TechZephyr 2026 Web Hackathon** by **Team `itayush756`** (Team Leader: **Ayush Raj**). Designed to solve complex, high-dimensional campus operational challenges, CAMPUSX harmonizes:
 1. **Mathematical Scheduling Optimization:** Google OR-Tools CP-SAT integer programming solver for 189 weekly course sessions, 41 examinations, and 25 venue booking requests with **zero hard violations** and **zero priority inversions**.
 2. **Disruption Repair & High-Stability Rescheduling:** Dynamic recovery engine with warm-start baseline hints that absorbed full-day room maintenance with **only 14 session movements** (92.6% schedule stability).
 3. **Multi-Role Portals:** 6 dedicated role portals (Admin, Department Coordinator, Faculty, Club Representative, Student, and Participant).
@@ -257,7 +258,9 @@ Row Level Security (RLS) policies are active across all tables.
 
 ## 📄 License & Attribution
 
-- **Hackathon:** IIT Bhubaneswar CrunchWeek 2026
+- **Hackathon:** TechZephyr 2026 Web Hackathon
 - **Problem Statement:** Smart Campus Management Platform (CIT Public v1)
-- **Developed by:** CAMPUSX Team
-- **Official Campus Assets:** Indian Institute of Technology Bhubaneswar
+- **Developed by:** Team `itayush756`
+- **Team Leader:** Ayush Raj
+- **Project Name:** CAMPUSX – Unified Smart Campus Operations Platform
+- **Dataset Reference:** Chilika Institute of Technology (CIT Public v1) Starter Pack

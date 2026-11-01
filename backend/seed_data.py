@@ -621,9 +621,9 @@ def seed():
     events = [
         {
             "id": "EVT-HACK-01",
-            "title": "CrunchWeek 2026: 48-Hour National Smart Campus Hackathon",
+            "title": "TechZephyr 2026: 48-Hour Web Hackathon",
             "category": "hackathon",
-            "organizer": "IIT Bhubaneswar Developer Community",
+            "organizer": "Team itayush756 (Team Leader: Ayush Raj)",
             "venue_id": "AUD",
             "building_id": "Admin Block",
             "day": "MON",

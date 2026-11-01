@@ -1,6 +1,6 @@
 # CAMPUSX &mdash; AI Usage & Mathematical Optimization Disclosure
 
-This document provides a transparent and detailed breakdown of artificial intelligence, natural language processing, and mathematical optimization techniques utilized in **CAMPUSX** for the **IIT Bhubaneswar CrunchWeek 2026 Hackathon**.
+This document provides a transparent and detailed breakdown of artificial intelligence, natural language processing, and mathematical optimization techniques utilized in **CAMPUSX** for the **TechZephyr 2026 Web Hackathon** by **Team `itayush756`** (Team Leader: **Ayush Raj**).
 
 ---
 

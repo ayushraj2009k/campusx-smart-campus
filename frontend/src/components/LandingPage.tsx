@@ -1627,6 +1627,39 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         </div>
       </section>
 
+      {/* 7. OFFICIAL HACKATHON & DEVELOPER ATTRIBUTION FOOTER */}
+      <footer className={`mt-14 pt-8 pb-12 border-t text-xs ${
+        isDark ? 'border-slate-800 text-slate-400' : 'border-slate-200 text-slate-600'
+      }`}>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center font-black text-white font-mono shadow-md">
+              CX
+            </div>
+            <div>
+              <p className={`font-extrabold text-sm font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                CAMPUSX &bull; Smart Campus Operations Platform
+              </p>
+              <p className="text-[11px] text-cyan-600 font-semibold">
+                TechZephyr 2026 Web Hackathon
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col md:items-end text-center md:text-right space-y-1">
+            <p className="text-xs font-semibold">
+              Developed by: <span className="font-bold text-emerald-500 font-mono">Team itayush756</span>
+            </p>
+            <p className={`text-xs ${isDark ? 'text-slate-300' : 'text-slate-700'}`}>
+              Team Leader: <strong className={isDark ? 'text-white' : 'text-slate-950'}>Ayush Raj</strong>
+            </p>
+            <p className={`text-[10px] font-mono ${isDark ? 'text-slate-500' : 'text-slate-400'}`}>
+              Problem Statement: Smart Campus Management Platform (CIT Public v1)
+            </p>
+          </div>
+        </div>
+      </footer>
+
     </div>
   );
 };

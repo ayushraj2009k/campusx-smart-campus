@@ -19,7 +19,7 @@ import rescheduler
 
 app = FastAPI(
     title="CAMPUSX API",
-    description="Smart Campus Management Platform for IIT Bhubaneswar - CrunchWeek 2026",
+    description="Smart Campus Management Platform for TechZephyr 2026 Web Hackathon by Team itayush756 (Team Leader: Ayush Raj)",
     version="1.0.0"
 )
 
@@ -687,7 +687,7 @@ def get_facilities():
 @app.get("/api/events")
 def get_events():
     events = [
-        {"id": "EVT-HACK-01", "title": "CrunchWeek 2026: 48-Hour Smart Campus Hackathon", "category": "hackathon", "organizer": "IIT Bhubaneswar Developer Community", "venue": "Main Auditorium (AUD)", "day": "MON", "time": "09:00 - 18:00", "capacity": 500, "registered_count": 340, "banner_url": "/static/Auditorium-1.png", "status": "ongoing"},
+        {"id": "EVT-HACK-01", "title": "TechZephyr 2026: Web Hackathon", "category": "hackathon", "organizer": "Team itayush756 (Lead: Ayush Raj)", "venue": "Main Auditorium (AUD)", "day": "MON", "time": "09:00 - 18:00", "capacity": 500, "registered_count": 340, "banner_url": "/static/Auditorium-1.png", "status": "ongoing"},
         {"id": "EVT-DRAMA-02", "title": "Stage Play: Andha Yug", "category": "cultural", "organizer": "Dramatics Society", "venue": "Seminar Hall 1 (SH-1)", "day": "THU", "time": "18:00 - 21:00", "capacity": 150, "registered_count": 130, "banner_url": "/static/Auditorium-1.png", "status": "upcoming"},
         {"id": "EVT-ROBOTICS-03", "title": "RoboWars & Autonomous Drone Obstacle Race", "category": "technical", "organizer": "Robotics Club", "venue": "Open Air Theatre (OAT)", "day": "FRI", "time": "17:00 - 21:00", "capacity": 800, "registered_count": 650, "banner_url": "/static/Campus-Gallery-12 IIT.png", "status": "upcoming"}
     ]

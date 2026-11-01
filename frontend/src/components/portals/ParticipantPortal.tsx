@@ -31,7 +31,7 @@ export const ParticipantPortal: React.FC<ParticipantPortalProps> = ({ onOpenNavi
   const festEvents = [
     { 
       id: 'EVT-HACK-01', 
-      title: 'CrunchWeek 2026: Smart Campus Hackathon', 
+      title: 'TechZephyr 2026: Web Hackathon', 
       category: 'Hackathon', 
       venue: 'Main Auditorium (AUD)', 
       building: 'Admin Block', 
@@ -513,7 +513,7 @@ export const ParticipantPortal: React.FC<ParticipantPortalProps> = ({ onOpenNavi
 
           <div className="p-5 rounded-2xl bg-surface-container border border-outline-variant/20 space-y-3 text-xs">
             <div className="flex items-center justify-between font-bold text-white text-sm">
-              <span>CrunchWeek 2026: Autonomous Campus Management</span>
+              <span>TechZephyr 2026: Autonomous Campus Management</span>
               <span className="text-emerald-400 font-mono text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
                 Verified Issued
               </span>

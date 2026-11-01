@@ -2,7 +2,7 @@
   "name": "campusx-smart-campus",
   "version": "1.0.0",
   "private": true,
-  "description": "CAMPUSX – AI-Powered Smart Campus Management & Operations Platform for IIT Bhubaneswar",
+  "description": "CAMPUSX – Smart Campus Management Platform for TechZephyr 2026 Web Hackathon",
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
@@ -12,10 +12,10 @@
   "keywords": [
     "campus-management",
     "timetable-solver",
-    "iit-bhubaneswar",
+    "techzephyr-2026",
     "hackathon",
     "smart-campus"
   ],
-  "author": "CAMPUSX Team",
+  "author": "Team itayush756 (Team Leader: Ayush Raj)",
   "license": "MIT"
 }
